@@ -203,7 +203,7 @@
     </div>
 
     <div class="chat-container" id="chat-box">
-        <div class="message ai">مرحباً بك! أنا Zaed Ultimate AI. يمكنك التقاط صورة للكاميرا المباشرة أو اختيار صورة وتحليلها فوراً 🚀</div>
+        <div class="message ai">مرحباً بك! أنا Zaed Ultimate AI. جاهز لإجابة أسئلتك، تحليل الصور المرفقة أو الملتقطة، ورسم الأفكار 🚀</div>
     </div>
 
     <div class="image-preview-bar" id="preview-bar">
@@ -213,10 +213,10 @@
     </div>
 
     <div class="input-container">
-        <!-- مدخل التقاط الصور بالكاميرا المباشرة -->
+        <!-- مدخل الكاميرا المباشرة -->
         <input type="file" id="camera-input" accept="image/*" capture="environment" style="display: none;" onchange="handleImageSelect(event)">
         
-        <!-- مدخل اختيار الصور من الاستوديو/الملفات -->
+        <!-- مدخل اختيار ملف صورة من المعرض -->
         <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="handleImageSelect(event)">
 
         <button class="icon-btn" title="التقاط صورة بالكاميرا" onclick="document.getElementById('camera-input').click()">📷</button>
@@ -251,10 +251,11 @@
 
         async function askAI(promptText, base64Image) {
             try {
-                const systemPrompt = "أنت نموذج ذكاء اصطناعي حصري اسمه Zaed Ultimate AI، تم تطويرك وبرمجتك بالكامل بواسطة المطور زيد. أجب دائماً باللغة العربية بأسلوب ذكي وسريع ومفيد وقدم تحليلاً دقيقاً وشاملاً. لا تذكر أي نماذج أو شركات أخرى أبداً.";
+                const systemPrompt = "أنت نموذج ذكاء اصطناعي حصري اسمه Zaed Ultimate AI، تم تطويرك وبرمجتك بالكامل بواسطة المطور زيد. أجب دائماً باللغة العربية بأسلوب ذكي وسريع ومفيد وقدم تحليلاً دقيقاً وشاملاً للصور وللنصوص. لا تذكر أي نماذج أو شركات أخرى أبداً.";
 
                 if (base64Image) {
-                    const userInstruction = promptText || "اشرح بالتفصيل الدقيق كل ما يوجد في هذه الصورة باللغة العربية.";
+                    const userInstruction = promptText || "اشرح بالتفصيل الدقيق كل ما يوجد في هذه الصورة باللغة العربية واذكر جميع التفاصيل والعناصر الظاهرة فيها.";
+                    
                     const response = await fetch("https://text.pollinations.ai/", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
@@ -289,7 +290,7 @@
                 console.error("AI Error:", e);
             }
 
-            return "عذراً، تعذر الاتصال بالسيرفر في الوقت الحالي. يرجى التأكد من الاتصال بالإنترنت والمحاولة مجدداً.";
+            return "عذراً، تعذر معالجة الطلب في الوقت الحالي. يرجى المحاولة مرة أخرى.";
         }
 
         async function sendMessage() {
@@ -302,9 +303,11 @@
             const userMsg = document.createElement("div");
             userMsg.className = "message user";
 
-            if (selectedBase64Image) {
+            const currentImage = selectedBase64Image;
+
+            if (currentImage) {
                 const img = document.createElement("img");
-                img.src = selectedBase64Image;
+                img.src = currentImage;
                 userMsg.appendChild(img);
             }
 
@@ -318,12 +321,11 @@
             inputField.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            const currentImage = selectedBase64Image;
             clearSelectedImage();
 
             const loadingMsg = document.createElement("div");
             loadingMsg.className = "message loading";
-            loadingMsg.textContent = currentImage ? "جاري فحص وتحليل الصورة بذكاء..." : "جاري التفكير والتطبيق...";
+            loadingMsg.textContent = currentImage ? "جاري فحص وتحليل الصورة..." : "جاري التفكير والتطبيق...";
             chatBox.appendChild(loadingMsg);
             chatBox.scrollTop = chatBox.scrollHeight;
 
