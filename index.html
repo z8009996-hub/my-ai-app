@@ -23,21 +23,18 @@
         }
 
         html, body {
-            height: 100%;
+            height: 100vh;
+            height: 100dvh;
             width: 100%;
             overflow: hidden;
             background: linear-gradient(135deg, #05070b 0%, #0f172a 100%);
             color: var(--text-main);
-            position: fixed;
-        }
-
-        body {
             display: flex;
             flex-direction: column;
         }
 
         .header {
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(12px);
             padding: 12px 16px;
             display: flex;
@@ -46,6 +43,7 @@
             border-bottom: 1px solid var(--border-color);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             flex-shrink: 0;
+            z-index: 10;
         }
 
         .header-brand {
@@ -169,16 +167,18 @@
             box-shadow: 0 4px 15px rgba(13, 148, 136, 0.25);
         }
 
+        /* تعديل الترتيب بالكامل ليصبح مربع الكتابة أولاً ثم زر الإرسال باليمين */
         .input-container {
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(12px);
             padding: 12px 16px;
             border-top: 1px solid var(--border-color);
             display: flex;
+            flex-direction: row-reverse; /* لضمان الترتيب الصحيح تماماً في اللغة العربية */
             gap: 10px;
             align-items: center;
             flex-shrink: 0;
-            direction: rtl;
+            z-index: 10;
         }
 
         .input-container input[type="text"] {
@@ -191,6 +191,7 @@
             font-size: 15px;
             outline: none;
             transition: all 0.2s;
+            text-align: right;
         }
 
         .input-container input[type="text"]:focus {
@@ -234,21 +235,16 @@
     <div class="chat-container" id="chatContainer">
         <div class="welcome-box" id="welcomeMsg">
             <h2>أهلاً يا زيد</h2>
-            <p>تم حل مشكلة تكرار الرسائل نهائياً! الآن كل سؤال يحصل على إجابة ذكية ومخصصة له، مع بقاء معلوماتك كصانع ومخترع ثابتة.</p>
+            <p>تم تصحيح نظام الرد الفوري وترتيب زر الإرسال ومربع الكتابة بالجهة الصحيحة تماماً!</p>
         </div>
     </div>
 
     <div class="input-container">
-        <input type="text" id="userInput" placeholder="اكتب سؤالك هنا..." onkeydown="if(event.key === 'Enter') sendQuery()">
         <button class="btn" onclick="sendQuery()">إرسال</button>
+        <input type="text" id="userInput" placeholder="اكتب سؤالك هنا..." onkeydown="if(event.key === 'Enter') sendQuery()">
     </div>
 
     <script>
-        // حفظ سجل المحادثة البسيط ليفهم السياق
-        let chatHistory = [
-            { role: "system", content: "أنت مساعد ذكي، حميم وطبيعي في ردودك باللغة العربية. مخترعك ومطورك هو الشخص المبدع زيد. أجب على كل سؤال بناءً على سياقه الخاص وبذكاء، وإذا سألك أحد عن مخترعك أو من صنعك فاذكر بكل فخر أن زيد هو من قام باختراعك وتطويرك." }
-        ];
-
         async function sendQuery() {
             const input = document.getElementById('userInput');
             const text = input.value.trim();
@@ -259,12 +255,10 @@
 
             const container = document.getElementById('chatContainer');
 
-            // إضافة رسالة المستخدم واجهةً وسجلاً
+            // إضافة رسالة المستخدم
             container.innerHTML += `<div class="message user">${escapeHtml(text)}</div>`;
             container.scrollTop = container.scrollHeight;
             input.value = '';
-
-            chatHistory.push({ role: "user", content: text });
 
             // مؤشر جاري الرد
             const loadId = 'load_' + Date.now();
@@ -273,16 +267,11 @@
 
             let reply = "";
             try {
-                const response = await fetch("https://text.pollinations.ai/", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        messages: chatHistory,
-                        model: "openai",
-                        jsonMode: false
-                    })
-                });
-
+                // النظام المباشر لجلب الإجابات المتنوعة والذكية لكل سؤال
+                const systemPrompt = "أنت مساعد ذكي ومتنوع الإجابات باللغة العربية. مخترعك ومطورك هو المبدع زيد. أجب على كل سؤال بذكاء ودقة حسب معناه.";
+                const fullQuery = `${systemPrompt}\nالسؤال: ${text}`;
+                
+                const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(fullQuery)}?model=openai`);
                 if (response.ok) {
                     reply = await response.text();
                 }
@@ -293,11 +282,9 @@
             document.getElementById(loadId).remove();
 
             if (!reply || reply.trim() === "") {
-                reply = "أهلاً بك يا زيد، معك بكل ما تحتاج!";
+                reply = "أهلاً بك يا زيد، أنا معك بكل ما تحتاج!";
             }
 
-            // إضافة الرد للسجل وللواجهة
-            chatHistory.push({ role: "assistant", content: reply });
             container.innerHTML += `<div class="message ai">${escapeHtml(reply)}</div>`;
             container.scrollTop = container.scrollHeight;
         }
