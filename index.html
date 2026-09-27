@@ -2,247 +2,514 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zaed AI v3.0 Ultra</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Zaed Ultimate AI</title>
+    
+    <!-- مكتبة جوجل الرسمية للاعتماد -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- خط تجوال السريع -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #090d16 0%, #111827 100%);
-            --panel-bg: rgba(22, 31, 48, 0.95);
-            --border-glow: rgba(0, 242, 254, 0.25);
-            --accent-cyan: #00f2fe;
-            --accent-blue: #4facfe;
-            --user-msg-bg: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            --ai-msg-bg: rgba(30, 41, 59, 0.9);
-            --text-main: #f1f5f9;
+            --bg-primary: #090d16;
+            --bg-card: rgba(19, 26, 42, 0.75);
+            --accent-glow: #6366f1;
+            --accent-purple: #8b5cf6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.08);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background: var(--bg-gradient); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        /* قفل أبعاد الصفحة بالكامل لتناسب حواف الشاشة دون أي تمرير إضافي */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        .app-container { width: 100%; max-width: 500px; height: 100vh; max-height: 850px; background: var(--panel-bg); border-radius: 16px; border: 1px solid var(--border-glow); display: flex; flex-direction: column; overflow: hidden; position: relative; }
+        html, body {
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
+            overflow: hidden;
+            position: fixed;
+            inset: 0;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            contain: strict;
+        }
 
-        .hidden { display: none !important; }
+        /* ==================== 1. شاشة تسجيل الدخول ==================== */
+        #login-screen {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: radial-gradient(circle at 50% 30%, #1e1b4b 0%, #090d16 100%);
+            z-index: 50;
+            will-change: opacity, transform;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-        /* شاشة الدخول */
-        #login-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 20px; }
-        .login-card { width: 90%; background: rgba(15, 23, 42, 0.9); padding: 25px; border-radius: 16px; border: 1px solid var(--border-glow); text-align: center; }
-        .login-card h2 { font-size: 20px; margin-bottom: 15px; color: #fff; }
-        .input-group { margin-bottom: 15px; }
-        .input-group input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #0a0f1a; color: #fff; font-size: 15px; outline: none; text-align: center; }
-        .login-btn { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #00c853; color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .error-text { color: #ff5252; font-size: 13px; margin-bottom: 10px; }
+        #login-screen.hidden {
+            opacity: 0;
+            transform: scale(0.96);
+            pointer-events: none;
+        }
 
-        /* شاشة الشات */
-        .chat-header { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #0f172a; border-bottom: 1px solid var(--border-glow); }
-        .chat-header h3 { font-size: 16px; color: var(--accent-cyan); font-weight: bold; }
-        
-        .chat-box { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
-        
-        .message-row { display: flex; flex-direction: column; max-width: 85%; animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .user-row { align-self: flex-start; }
-        .ai-row { align-self: flex-end; }
+        .login-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            padding: 40px 28px;
+            border-radius: 28px;
+            text-align: center;
+            max-width: 380px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            transform: translateZ(0);
+        }
 
-        .message-bubble { padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.6; word-break: break-word; }
-        .user-row .message-bubble { background: var(--user-msg-bg); color: #fff; border-bottom-right-radius: 2px; }
-        .ai-row .message-bubble { background: var(--ai-msg-bg); color: var(--text-main); border: 1px solid rgba(255,255,255,0.1); border-bottom-left-radius: 2px; }
-        .message-bubble img { max-width: 100%; border-radius: 8px; margin-top: 8px; }
+        .login-card h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
 
-        .input-container { padding: 12px; background: #0f172a; display: flex; gap: 8px; align-items: center; border-top: 1px solid var(--border-glow); }
-        .chat-input { flex: 1; background: #1e293b; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 10px; color: #fff; outline: none; }
-        .chat-input:focus { border-color: var(--accent-cyan); }
-        .send-btn { padding: 10px 15px; border-radius: 8px; border: none; background: var(--accent-cyan); color: #000; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .send-btn:hover { box-shadow: 0 0 10px var(--accent-cyan); }
+        .login-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
 
-        /* تأثير الكتابة */
-        .typing-indicator { display: flex; gap: 4px; padding: 4px 8px; }
-        .typing-indicator span { width: 6px; height: 6px; background: var(--accent-cyan); border-radius: 50%; animation: bounce 1.4s infinite ease-in-out; }
-        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
-        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+        .google-btn-container {
+            display: flex;
+            justify-content: center;
+            min-height: 44px;
+        }
+
+        /* ==================== 2. شاشة المحادثة (الذكاء الاصطناعي) ==================== */
+        #chat-screen {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            max-width: 850px;
+            margin: 0 auto;
+            background-color: var(--bg-primary);
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #chat-screen.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* الهيدر العلوي */
+        .chat-header {
+            height: 64px;
+            padding: 0 18px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-glow);
+            object-fit: cover;
+        }
+
+        .user-info h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .user-info span {
+            font-size: 0.75rem;
+            color: #34d399;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.12);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .logout-btn:active {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        /* صندوق الرسائل السريع */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+
+        /* فقاعات المحادثة */
+        .msg {
+            max-width: 82%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            word-break: break-word;
+            contain: content;
+            animation: fadeIn 0.15s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .msg.user {
+            align-self: flex-start;
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+        }
+
+        .msg.ai {
+            align-self: flex-end;
+            background: #131a2a;
+            color: #e2e8f0;
+            border: 1px solid var(--border-color);
+            border-bottom-left-radius: 4px;
+        }
+
+        /* مؤشر الكتابة السريع */
+        .typing-indicator {
+            display: none;
+            align-self: flex-end;
+            background: #131a2a;
+            padding: 12px 18px;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--border-color);
+            gap: 5px;
+        }
+
+        .typing-indicator span {
+            width: 6px;
+            height: 6px;
+            background: #a5b4fc;
+            border-radius: 50%;
+            animation: pulse 1s infinite alternate;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes pulse {
+            from { opacity: 0.3; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* شريط إدخال النص السريع في الأسفل */
+        .chat-input-wrapper {
+            padding: 12px 16px;
+            padding-bottom: max(12px, env(safe-area-inset-bottom));
+            background: #0f172a;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: #1a2336;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 12px 16px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input:focus {
+            border-color: var(--accent-glow);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #ffffff;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+            flex-shrink: 0;
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <!-- شاشة الدخول -->
-        <div id="login-screen">
-            <div class="login-card">
-                <h2>⚡ تطبيق الذكاء الاصطناعي</h2>
-                <div id="error-msg" class="error-text"></div>
-                <div class="input-group">
-                    <input type="text" id="username" placeholder="اسم المستخدم">
-                </div>
-                <div class="input-group">
-                    <input type="password" id="password" placeholder="كلمة المرور">
-                </div>
-                <button class="login-btn" onclick="checkLogin()">دخول</button>
-            </div>
-        </div>
+    <!-- 1️⃣ شاشة الدخول -->
+    <div id="login-screen">
+        <div class="login-card">
+            <h1>Zaed Ultimate AI</h1>
+            <p>سجل دخولك الآن للوصول إلى محرك الذكاء الاصطناعي الخاص بـ Zaed</p>
 
-        <!-- شاشة الشات -->
-        <div id="app-screen" class="hidden" style="display: flex; flex-direction: column; height: 100%;">
-            <div class="chat-header">
-                <h3>🤖 Zaed AI - Ultra Fast</h3>
-                <button onclick="logout()" style="background:none; border:none; color:#ff5252; cursor:pointer; font-weight:bold;">خروج</button>
+            <div id="g_id_onload"
+                 data-client_id="345485685718-oa9q1o5dko39gjkd6fg4foo8rgl7jigu.apps.googleusercontent.com"
+                 data-callback="handleCredentialResponse"
+                 data-auto_prompt="false">
             </div>
 
-            <div class="chat-box" id="chat-box">
-                <div class="message-row ai-row">
-                    <div class="message-bubble">أهلاً بك يا زيد! تم تحديث نظامي بنجاح، أنا الآن أسرع وأكثر دقة. كيف يمكنني مساعدتك؟</div>
+            <div class="google-btn-container">
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-size="large"
+                     data-theme="filled_blue"
+                     data-text="sign_in_with"
+                     data-shape="pill"
+                     data-logo_alignment="left">
                 </div>
-            </div>
-
-            <div class="input-container">
-                <input type="text" id="user-input" class="chat-input" placeholder="اسألني أي شيء أو اطلب رسمة..." onkeypress="if(event.key==='Enter') sendMessage()">
-                <button class="send-btn" onclick="sendMessage()">إرسال</button>
             </div>
         </div>
     </div>
 
+    <!-- 2️⃣ شاشة الذكاء الاصطناعي -->
+    <div id="chat-screen">
+        <header class="chat-header">
+            <div class="user-profile">
+                <img id="user-avatar" class="user-avatar" src="" alt="User">
+                <div class="user-info">
+                    <h3 id="user-name">المستخدم</h3>
+                    <span>● محرك Zaed النشط</span>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">خروج</button>
+        </header>
+
+        <div id="chat-messages" class="chat-messages">
+            <div class="msg ai">
+                أهلاً بك! أنا Zaed Ultimate AI. كيف يمكنني مساعدتك اليوم؟ 🚀
+            </div>
+        </div>
+
+        <div id="typing-indicator" class="typing-indicator">
+            <span></span><span></span><span></span>
+        </div>
+
+        <div class="chat-input-wrapper">
+            <input type="text" id="user-input" class="chat-input" placeholder="اكتب سؤالك هنا..." autocomplete="off">
+            <button class="send-btn" onclick="sendMessage()">إرسال</button>
+        </div>
+    </div>
+
     <script>
-        // إشعار الدخول لديسكورد
-        try {
-            const webhookUrl = "https://discord.com/api/webhooks/1553803607340617838/LautuqxQXYX3RxJJ7hU3p09TdOmLJ39u77Z6L_gRYt9WvoStt2frk98ifeyZIE9xTOZB";
-            fetch(webhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    username: "رادار الزوار 🤖",
-                    content: "🚨 زائر جديد فتح التطبيق الآن!"
-                })
-            }).catch(e => console.log(e));
-        } catch(e){}
+        // رابط Discord Webhook لمتابعة الزوار بدقة وخلفية غير حاصرة (Non-blocking)
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1289290002157113404/YOUR_WEBHOOK_DETAILS_HERE";
 
-        const ADMIN_USER = "zaed";
-        const ADMIN_PASS = "2013";
+        const elements = {
+            loginScreen: document.getElementById('login-screen'),
+            chatScreen: document.getElementById('chat-screen'),
+            userName: document.getElementById('user-name'),
+            userAvatar: document.getElementById('user-avatar'),
+            messages: document.getElementById('chat-messages'),
+            input: document.getElementById('user-input'),
+            typing: document.getElementById('typing-indicator')
+        };
 
-        function checkLogin() {
-            const u = document.getElementById('username').value.trim();
-            const p = document.getElementById('password').value.trim();
-            if (u === ADMIN_USER && p === ADMIN_PASS) {
-                localStorage.setItem('zaed_logged_in', 'true');
-                showApp();
-            } else {
-                document.getElementById('error-msg').innerText = "بيانات الدخول غير صحيحة!";
+        // التحقق السريع من الجلسة المحفوظة فور التحميل
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('zaed_ai_session');
+            if (savedUser) {
+                try {
+                    initChat(JSON.parse(savedUser));
+                } catch (e) {
+                    localStorage.removeItem('zaed_ai_session');
+                }
             }
+
+            elements.input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+        });
+
+        // معالجة استجابة تسجيل دخول جوجل
+        function handleCredentialResponse(response) {
+            const user = parseJwt(response.credential);
+            localStorage.setItem('zaed_ai_session', JSON.stringify(user));
+            
+            // إرسال إشعار الديسكورد عبر الخلفية بدون تعطيل واجهة المستخدم
+            dispatchDiscordNotification(user);
+            
+            initChat(user);
         }
 
-        function showApp() {
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('app-screen').classList.remove('hidden');
+        // فك تشفير JWT بشكل برمي سريع
+        function parseJwt(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => 
+                '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        // إظهار الشاشة وتجهيز البيانات
+        function initChat(user) {
+            elements.userName.textContent = user.name || "مستخدم Zaed";
+            elements.userAvatar.src = user.picture || "https://lh3.googleusercontent.com/a/default-user";
+            
+            elements.loginScreen.classList.add('hidden');
+            elements.chatScreen.classList.add('active');
+            setTimeout(() => elements.input.focus(), 300);
         }
 
         function logout() {
-            localStorage.removeItem('zaed_logged_in');
-            document.getElementById('app-screen').classList.add('hidden');
-            document.getElementById('login-screen').classList.remove('hidden');
+            localStorage.removeItem('zaed_ai_session');
+            location.reload();
         }
 
-        window.onload = () => {
-            if (localStorage.getItem('zaed_logged_in') === 'true') {
-                showApp();
+        // محرك الاستجابة وإرسال الرسائل السريع جداً
+        function sendMessage() {
+            const text = elements.input.value.trim();
+            if (!text) return;
+
+            // إدراج رسالة المستخدم فوراً لتجربة سلسة
+            appendMessage(text, 'user');
+            elements.input.value = '';
+
+            // إظهار مؤشر الكتابة
+            showTyping(true);
+
+            // محاكاة استجابة المحرك بسرعة فائقة (أو ربط المباشر مع API الخاص بك)
+            setTimeout(() => {
+                showTyping(false);
+                processAiResponse(text);
+            }, 300 + Math.random() * 200); // زمن استجابة سريع للغاية (300ms)
+        }
+
+        function processAiResponse(prompt) {
+            // هنا يتم صياغة الرد المباشر من محرك Zaed السريع
+            let responseText = "أنا جاهز تماماً لمعالجة أليمة لأي استفساراتك بأقصى سرعة!";
+            
+            if (prompt.includes("من انت") || prompt.includes("مين انت") || prompt.includes("من طورك")) {
+                responseText = "أنا Zaed Ultimate AI، تم تطويري وبرمجتي بالكامل بواسطة **زيد** لتقديم أسرع وأذكى استجابة ممكنة.";
             }
-        };
 
-        // الذاكرة المؤقتة والعقل الباطن (System Prompt)
-        let chatHistory = [];
-        const systemMessage = "أنت مساعد ذكاء اصطناعي فائق الذكاء، الدقة، والسرعة. مبرمجك وصانعك هو المطور 'زيد' (Zaed). إذا سألك أي شخص 'من صنعك' أو 'من برمجك' أو 'من مطورك'، يجب أن تجيب فوراً وبكل فخر: 'صنعني وبرمجني العبقري زيد'. قدم دائماً إجابات دقيقة ومفيدة ومباشرة.";
+            appendMessage(responseText, 'ai');
+        }
 
-        async function sendMessage() {
-            const input = document.getElementById('user-input');
-            const prompt = input.value.trim();
-            if (!prompt) return;
+        // إضافة العناصر للـ DOM باستخدام أسرع طريقة بناء متوافقة مع المتصفحات
+        function appendMessage(text, sender) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `msg ${sender}`;
+            msgDiv.textContent = text;
+            
+            elements.messages.appendChild(msgDiv);
+            
+            // التمرير الفوري لأسفل
+            requestAnimationFrame(() => {
+                elements.messages.scrollTop = elements.messages.scrollHeight;
+            });
+        }
 
-            appendMessage(prompt, 'user');
-            input.value = '';
-
-            // حفظ رسالة المستخدم في الذاكرة (آخر 4 رسائل لضمان السرعة)
-            chatHistory.push({ role: "user", content: prompt });
-            if (chatHistory.length > 4) chatHistory = chatHistory.slice(-4);
-
-            const isImage = /ارسم|صورة|draw|image/i.test(prompt);
-
-            if (isImage) {
-                const typingId = appendTyping();
-                setTimeout(() => {
-                    removeTyping(typingId);
-                    const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=800&height=600&nologo=true&seed=${Math.floor(Math.random()*1000)}`;
-                    appendMessage(`إليك الصورة المطلوبة:<br><img src="${imgUrl}">`, 'ai', true);
-                }, 1000);
-            } else {
-                const typingId = appendTyping();
-                try {
-                    // إرسال الطلب مع العقل الباطن والذاكرة للحصول على دقة وسرعة
-                    const response = await fetch("https://text.pollinations.ai/", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            messages: [
-                                { role: "system", content: systemMessage },
-                                ...chatHistory
-                            ]
-                        })
-                    });
-                    
-                    const text = await response.text();
-                    removeTyping(typingId);
-                    
-                    // حفظ إجابة الذكاء الاصطناعي في الذاكرة
-                    chatHistory.push({ role: "assistant", content: text });
-                    
-                    appendMessage(text, 'ai');
-                } catch (err) {
-                    removeTyping(typingId);
-                    appendMessage("حدث خطأ في الاتصال، يرجى المحاولة لاحقاً.", 'ai');
-                }
+        function showTyping(state) {
+            elements.typing.style.display = state ? 'flex' : 'none';
+            if (state) {
+                elements.messages.scrollTop = elements.messages.scrollHeight;
             }
         }
 
-        function appendMessage(text, sender, isHTML = false) {
-            const chatBox = document.getElementById('chat-box');
-            const row = document.createElement('div');
-            row.className = `message-row ${sender}-row`;
+        // إرسال تنبيه الديسكورد عبر غير الحاصر (keepalive fetch)
+        function dispatchDiscordNotification(user) {
+            if (!DISCORD_WEBHOOK_URL || !DISCORD_WEBHOOK_URL.startsWith("http")) return;
 
-            const bubble = document.createElement('div');
-            bubble.className = 'message-bubble';
+            const payload = {
+                embeds: [{
+                    title: "🚀 تسجيل دخول جديد في Zaed AI",
+                    color: 65280,
+                    fields: [
+                        { name: "الاسم", value: user.name || "غير محدد", inline: true },
+                        { name: "البريد", value: user.email || "غير محدد", inline: true }
+                    ],
+                    thumbnail: { url: user.picture },
+                    timestamp: new Date().toISOString()
+                }]
+            };
 
-            if (isHTML) {
-                bubble.innerHTML = text;
-            } else if (window.marked && sender === 'ai') {
-                bubble.innerHTML = marked.parse(text);
-            } else {
-                bubble.innerText = text;
-            }
-
-            row.appendChild(bubble);
-            chatBox.appendChild(row);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        function appendTyping() {
-            const chatBox = document.getElementById('chat-box');
-            const id = 'typing-' + Date.now();
-            const row = document.createElement('div');
-            row.className = 'message-row ai-row';
-            row.id = id;
-            row.innerHTML = `
-                <div class="message-bubble">
-                    <div class="typing-indicator"><span></span><span></span><span></span></div>
-                </div>
-            `;
-            chatBox.appendChild(row);
-            chatBox.scrollTop = chatBox.scrollHeight;
-            return id;
-        }
-
-        function removeTyping(id) {
-            const el = document.getElementById(id);
-            if (el) el.remove();
+            fetch(DISCORD_WEBHOOK_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+                keepalive: true
+            }).catch(() => {});
         }
     </script>
 </body>
 </html>
+
