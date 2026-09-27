@@ -241,7 +241,7 @@
             cursor: pointer;
         }
 
-        /* صندوق الإرسال السفلي الطبيعي (بدون تداخل) */
+        /* صندوق الإرسال السفلي */
         .input-area {
             flex-shrink: 0;
             background-color: #212121;
@@ -283,6 +283,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            position: relative;
         }
 
         .input-main-row textarea {
@@ -307,24 +308,23 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10;
         }
 
         .send-submit-btn, .stop-btn {
-            background-color: #ececec;
-            color: #212121;
+            background-color: #ececec !important;
+            color: #212121 !important;
             border: none;
-            width: 34px;
-            height: 34px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 16px;
             flex-shrink: 0;
-            z-index: 10;
+            pointer-events: auto !important;
         }
 
         .stop-btn {
@@ -401,7 +401,7 @@
                 </div>
             </div>
 
-            <!-- صندوق الإرسال السفلي الآمن -->
+            <!-- صندوق الإرسال السفلي -->
             <div class="input-area">
                 <div class="input-box-wrapper">
                     <div class="preview-container" id="preview-bar">
@@ -411,16 +411,16 @@
                     </div>
                     
                     <div class="input-main-row">
+                        <button class="send-submit-btn" id="send-btn" onclick="sendMessage()">⬆</button>
+                        <button class="stop-btn" id="stop-btn" onclick="stopGenerating()">◼</button>
+
+                        <textarea id="user-input" rows="1" placeholder="أرسل رسالة..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+
                         <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleImage(event)">
                         <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none" onchange="handleImage(event)">
 
                         <button class="tool-icon-btn" onclick="document.getElementById('file-input').click()">📎</button>
                         <button class="tool-icon-btn" onclick="document.getElementById('camera-input').click()">📷</button>
-                        
-                        <textarea id="user-input" rows="1" placeholder="أرسل رسالة..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-                        
-                        <button class="send-submit-btn" id="send-btn" onclick="sendMessage()">⬆</button>
-                        <button class="stop-btn" id="stop-btn" onclick="stopGenerating()">◼</button>
                     </div>
                 </div>
             </div>
@@ -623,4 +623,4 @@
             }
         }
 
-        function 
+        function updateSidebarHistory(text)
