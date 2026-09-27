@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Zaed Ultimate AI - Security Enhanced</title>
+    <title>Zaed Ultimate AI</title>
     
     <!-- خط تجوال السريع -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,18 +22,17 @@
             --danger-color: #ef4444;
         }
 
-        /* قفل أبعاد الصفحة بالكامل لتناسب حواف الشاشة دون أي تمرير خارجي */
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, sans-serif;
             -webkit-tap-highlight-color: transparent;
-            user-select: none; /* حماية المحتوى من النسخ غير المصرح به */
+            user-select: none;
         }
 
         input, textarea {
-            user-select: text; /* السماح بالتحديد داخل خانة الكتابة فقط */
+            user-select: text;
         }
 
         html, body {
@@ -106,20 +105,21 @@
         }
 
         .bypass-btn {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.08);
             border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 10px 18px;
+            color: #ffffff;
+            padding: 12px 18px;
             border-radius: 12px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            font-weight: 700;
             cursor: pointer;
             width: 100%;
             transition: all 0.2s;
         }
 
-        .bypass-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
+        .bypass-btn:active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(0.98);
         }
 
         .security-badge {
@@ -298,11 +298,6 @@
             cursor: pointer;
             flex-shrink: 0;
         }
-
-        .send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
     </style>
 </head>
 <body>
@@ -329,7 +324,7 @@
     <div id="chat-screen">
         <header class="chat-header">
             <div class="user-profile">
-                <img id="user-avatar" class="user-avatar" src="" alt="User">
+                <img id="user-avatar" class="user-avatar" src="https://lh3.googleusercontent.com/a/default-user" alt="User">
                 <div class="user-info">
                     <h3 id="user-name">المستخدم</h3>
                     <span>● المحرك نشط (مُحمي)</span>
@@ -354,7 +349,7 @@
         </div>
     </div>
 
-    <!-- تحميل مكتبة جوجل بعد تجهيز الدوال لمنع أي تعليق -->
+    <!-- مكتبة جوجل -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <script>
@@ -363,20 +358,17 @@
         const GOOGLE_CLIENT_ID = "345485685718-oa9q1o5dko39gjkd6fg4foo8rgl7jigu.apps.googleusercontent.com";
 
         let currentUser = null;
-        let userIp = "جاري التحقق...";
-        let lastMessageTime = 0; // للحماية من السبام (Rate Limiting)
+        let userIp = "Protected / Tor Network";
+        let lastMessageTime = 0;
 
         // ================= 🛡️ Security Hardening =================
-        
-        // 1. حماية ضد تضمين الموقع في إطار وهمي (Anti-Clickjacking)
         if (window.top !== window.self) {
-            window.top.location = window.self.location;
+            try { window.top.location = window.self.location; } catch(e){}
         }
 
-        // 2. تنقية النصوص لمنع هجمات ثغرات (XSS Injection)
         function sanitizeInput(str) {
             if (!str) return '';
-            return str
+            return String(str)
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
@@ -384,52 +376,56 @@
                 .replace(/'/g, "&#039;");
         }
 
-        // ================= 🔑 Google OAuth Handler =================
-        
-        // تعريف دالة الاستجابة في النطاق العام قبل تحميل السكريبت
+        function saveSession(user) {
+            try {
+                localStorage.setItem('zaed_ai_session', JSON.stringify(user));
+            } catch (e) {
+                // يتجاهل الخطأ إذا كانت الذاكرة محظورة في Tor
+            }
+        }
+
+        // ================= 🔑 Authentication =================
         window.handleCredentialResponse = function(response) {
             try {
-                if (!response || !response.credential) throw new Error("No credential returned");
+                if (!response || !response.credential) return;
                 
                 const payload = parseJwt(response.credential);
                 currentUser = {
-                    id: payload.sub,
+                    id: payload.sub || "UNKNOWN_ID",
                     name: payload.name || "مستخدم جوجل",
                     email: payload.email || "غير معلن",
                     picture: payload.picture || "https://lh3.googleusercontent.com/a/default-user",
                     loginType: 'Google OAuth'
                 };
 
-                localStorage.setItem('zaed_ai_session', JSON.stringify(currentUser));
+                saveSession(currentUser);
                 sendDiscordSecurityAudit("🚨 تسجيل دخول رسمي (Google)", currentUser);
                 openChatScreen(currentUser);
             } catch (err) {
                 console.error("Auth Error:", err);
-                alert("حدث خطأ في عملية الاعتماد، يرجى المحاولة مجدداً.");
             }
         };
 
         window.onload = function() {
             fetchUserIp();
 
-            // فحص وجود جلسة سابقة
-            const savedUser = localStorage.getItem('zaed_ai_session');
-            if (savedUser) {
-                try {
+            try {
+                const savedUser = localStorage.getItem('zaed_ai_session');
+                if (savedUser) {
                     currentUser = JSON.parse(savedUser);
                     openChatScreen(currentUser);
                     return;
-                } catch (e) {
-                    localStorage.removeItem('zaed_ai_session');
                 }
-            }
+            } catch (e) {}
 
-            // تهيئة زر جوجل بوضع Pop-up لتفادي مشاكل إعادة التوجيه
             initGoogleButton();
 
-            document.getElementById('user-input').addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') sendMessage();
-            });
+            const input = document.getElementById('user-input');
+            if (input) {
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') sendMessage();
+                });
+            }
         };
 
         function initGoogleButton() {
@@ -450,11 +446,9 @@
                             document.getElementById("google-btn"),
                             { theme: "filled_blue", size: "large", shape: "pill", width: 280, text: "signin_with" }
                         );
-                    } catch (err) {
-                        console.error("Google Render Error:", err);
-                    }
+                    } catch (err) {}
                 }
-                if (attempts > 30) clearInterval(checkGoogleInterval); // إيقاف البحث بعد 15 ثانية
+                if (attempts > 20) clearInterval(checkGoogleInterval);
             }, 500);
         }
 
@@ -472,11 +466,16 @@
         }
 
         function openChatScreen(user) {
-            document.getElementById('user-name').textContent = sanitizeInput(user.name);
-            document.getElementById('user-avatar').src = user.picture || "https://lh3.googleusercontent.com/a/default-user";
+            const loginScreen = document.getElementById('login-screen');
+            const chatScreen = document.getElementById('chat-screen');
+
+            document.getElementById('user-name').textContent = sanitizeInput(user.name || "مستخدم");
+            if (user.picture) {
+                document.getElementById('user-avatar').src = user.picture;
+            }
             
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('chat-screen').classList.add('active');
+            if (loginScreen) loginScreen.classList.add('hidden');
+            if (chatScreen) chatScreen.classList.add('active');
         }
 
         function guestLogin() {
@@ -488,44 +487,40 @@
                 loginType: 'Guest Account'
             };
 
-            localStorage.setItem('zaed_ai_session', JSON.stringify(currentUser));
+            saveSession(currentUser);
             sendDiscordSecurityAudit("⚠️ تسجيل دخول تجريبي", currentUser);
-            openChatScreen(currentUser);
+            openChatScreen(currentUser); // يفتح الشاشة فوراً
         }
 
         function logout() {
             if (currentUser) {
                 sendDiscordSecurityAudit("🚪 تسجيل خروج", currentUser);
             }
-            localStorage.removeItem('zaed_ai_session');
+            try { localStorage.removeItem('zaed_ai_session'); } catch(e){}
             location.reload();
         }
 
-        // ================= 💬 Chat Engine & Rate Limiter =================
-        
+        // ================= 💬 Chat Engine =================
         function sendMessage() {
             const now = Date.now();
-            // حماية المخدَم من الإغراق: حد أدنى 1 ثانية بين كل رسالة وأخرى
             if (now - lastMessageTime < 1000) return;
             lastMessageTime = now;
 
             const input = document.getElementById('user-input');
-            const rawText = input.value.trim();
+            const rawText = input ? input.value.trim() : '';
             if (!rawText) return;
 
             const safeText = sanitizeInput(rawText);
             appendMsg(safeText, 'user');
             input.value = '';
 
-            // إرسال التقرير الأمني للديسكورد
             sendDiscordChatAudit(safeText);
 
             const typing = document.getElementById('typing-indicator');
-            typing.style.display = 'flex';
+            if (typing) typing.style.display = 'flex';
 
-            // معالجة محرك الاستجابة السريعة
             setTimeout(() => {
-                typing.style.display = 'none';
+                if (typing) typing.style.display = 'none';
                 let reply = "تم استقبال طلبك بنجاح من محرك Zaed AI السريع!";
                 
                 if (rawText.includes("من انت") || rawText.includes("مين انت")) {
@@ -538,9 +533,11 @@
 
         function appendMsg(text, sender) {
             const box = document.getElementById('chat-messages');
+            if (!box) return;
+
             const div = document.createElement('div');
             div.className = `msg ${sender}`;
-            div.innerHTML = text; // النص منقى مسبقاً
+            div.innerHTML = text;
             box.appendChild(div);
 
             requestAnimationFrame(() => {
@@ -548,19 +545,17 @@
             });
         }
 
-        // ================= 🕵️ Audit & Tracking System =================
-
+        // ================= 🕵️ Audit & Tracking =================
         async function fetchUserIp() {
             try {
                 const res = await fetch('https://api.ipify.org?format=json');
                 const data = await res.json();
                 userIp = data.ip;
             } catch (e) {
-                userIp = "غير قادر على التحديد";
+                userIp = "Protected / Tor Network";
             }
         }
 
-        // إرسال التقرير المباشر لحساب المستخدم وجهازه
         function sendDiscordSecurityAudit(title, user) {
             if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL.includes("YOUR_WEBHOOK")) return;
 
@@ -571,18 +566,40 @@
                     fields: [
                         { name: "👤 الاسم", value: user.name || "غير محدد", inline: true },
                         { name: "📧 البريد", value: user.email || "غير محدد", inline: true },
-                        { name: "🆔 Google ID", value: `\`${user.id}\``, inline: false },
-                        { name: "🌐 IP Address", value: `\`${userIp}\``, inline: true },
-                        { name: "💻 شاشة المستخدم", value: `${window.screen.width}x${window.screen.height}`, inline: true },
-                        { name: "📱 المتصفح/الجهاز", value: `\`\`\`${navigator.userAgent.slice(0, 150)}\`\`\``, inline: false }
+                        { name: "🆔 ID", value: `\`${user.id}\``, inline: false },
+                        { name: "🌐 IP Address", value: `\`${userIp}\``, inline: true }
                     ],
-                    thumbnail: { url: user.picture },
-                    timestamp: new Date().toISOString(),
-                    footer: { text: "Zaed AI Security Monitoring" }
+                    timestamp: new Date().toISOString()
                 }]
             };
 
             fetch(DISCORD_WEBHOOK_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: 
+                body: JSON.stringify(payload),
+                keepalive: true
+            }).catch(() => {});
+        }
+
+        function sendDiscordChatAudit(msgText) {
+            if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL.includes("YOUR_WEBHOOK")) return;
+
+            const payload = {
+                embeds: [{
+                    title: "💬 نشاط جديد",
+                    color: 10181046,
+                    fields: [
+                        { name: "المستخدم", value: `${currentUser ? currentUser.name : "مجهول"}`, inline: true },
+                        { name: "IP", value: `\`${userIp}\``, inline: true },
+                        { name: "الرسالة", value: `\`\`\`${msgText.slice(0, 1000)}\`\`\`` }
+                    ],
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            fetch(DISCORD_WEBHOOK_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+                keepalive: true
+                
