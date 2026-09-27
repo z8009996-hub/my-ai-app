@@ -203,7 +203,7 @@
     </div>
 
     <div class="chat-container" id="chat-box">
-        <div class="message ai">مرحباً بك! أنا Zaed Ultimate AI. جاهز لإجابة أسئلتك، تحليل الصور المرفقة أو الملتقطة، ورسم الأفكار 🚀</div>
+        <div class="message ai">مرحباً بك! أنا Zaed Ultimate AI. جاهز لإجابة أسئلتك، تحليل صور الكاميرا والمعرض، ورسم الأفكار 🚀</div>
     </div>
 
     <div class="image-preview-bar" id="preview-bar">
@@ -251,11 +251,12 @@
 
         async function askAI(promptText, base64Image) {
             try {
-                const systemPrompt = "أنت نموذج ذكاء اصطناعي حصري اسمه Zaed Ultimate AI، تم تطويرك وبرمجتك بالكامل بواسطة المطور زيد. أجب دائماً باللغة العربية بأسلوب ذكي وسريع ومفيد وقدم تحليلاً دقيقاً وشاملاً للصور وللنصوص. لا تذكر أي نماذج أو شركات أخرى أبداً.";
+                const systemPrompt = "أنت نموذج ذكاء اصطناعي حصري اسمه Zaed Ultimate AI، تم تطويرك وبرمجتك بالكامل بواسطة المطور زيد. أجب دائماً باللغة العربية بأسلوب ذكي وسريع ومفيد وقدم تحليلاً دقيقاً وشاملاً للصور. لا تذكر أي نماذج أو شركات أخرى أبداً.";
 
                 if (base64Image) {
-                    const userInstruction = promptText || "اشرح بالتفصيل الدقيق كل ما يوجد في هذه الصورة باللغة العربية واذكر جميع التفاصيل والعناصر الظاهرة فيها.";
+                    const userInstruction = promptText || "ما اسم الشخص الموجود في هذه الصورة وما هي تفاصيلها؟";
                     
+                    // استخدام نموذج يدعم الرؤية وتحليل الصور بشكل مباشر وقوي
                     const response = await fetch("https://text.pollinations.ai/", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
@@ -270,7 +271,7 @@
                                     ]
                                 }
                             ],
-                            model: "openai"
+                            model: "openai-large"
                         })
                     });
 
@@ -279,7 +280,7 @@
                         if (resultText && resultText.trim().length > 0) return resultText.trim();
                     }
                 } else {
-                    const apiUrl = `https://text.pollinations.ai/${encodeURIComponent(promptText)}?system=${encodeURIComponent(systemPrompt)}`;
+                    const apiUrl = `https://text.pollinations.ai/${encodeURIComponent(promptText)}?system=${encodeURIComponent(systemPrompt)}&model=openai-large`;
                     const response = await fetch(apiUrl);
                     if (response.ok) {
                         const resultText = await response.text();
@@ -290,7 +291,7 @@
                 console.error("AI Error:", e);
             }
 
-            return "عذراً، تعذر معالجة الطلب في الوقت الحالي. يرجى المحاولة مرة أخرى.";
+            return "عذراً، تعذر معالجة الطلب في الوقت الحالي. تأكد من اتصال الإنترنت وحاول مجدداً.";
         }
 
         async function sendMessage() {
@@ -325,7 +326,7 @@
 
             const loadingMsg = document.createElement("div");
             loadingMsg.className = "message loading";
-            loadingMsg.textContent = currentImage ? "جاري فحص وتحليل الصورة..." : "جاري التفكير والتطبيق...";
+            loadingMsg.textContent = currentImage ? "جاري فحص وتحليل الصورة بدقة..." : "جاري التفكير والتطبيق...";
             chatBox.appendChild(loadingMsg);
             chatBox.scrollTop = chatBox.scrollHeight;
 
@@ -341,7 +342,7 @@
                 generatedImgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(cleanPrompt)}?width=1024&height=1024&nologo=true&seed=${Math.floor(Math.random()*100000)}`;
                 replyText = `تم رسم الصورة بواسطة Zaed Ultimate AI بناءً على طلبك: "${cleanPrompt}" 🎨`;
             } else {
-                replyText = await askAI(text, currentImage);
+                replyTest = await askAI(text, currentImage);
             }
 
             chatBox.removeChild(loadingMsg);
