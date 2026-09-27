@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق الذكاء الاصطناعي المطور - Zaed AI</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --panel-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --accent-color: #58a6ff;
+            --btn-green: #238636;
+            --btn-green-hover: #2ea043;
+            --user-msg-bg: #1f6feb;
+            --ai-msg-bg: #21262d;
+            --error-color: #f85149;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        
+        .container { width: 100%; max-width: 480px; height: 100%; max-height: 750px; padding: 20px; background: var(--panel-bg); border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.7); border: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        
+        h2 { text-align: center; margin-bottom: 20px; color: var(--accent-color); font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
+        
+        .screen { display: flex; flex-direction: column; height: 100%; }
+        .hidden { display: none !important; }
+
+        /* شاشة تسجيل الدخول */
+        #login-screen { justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .login-box { width: 100%; max-width: 320px; }
+        input, button { width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: #fff; font-size: 16px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--accent-color); box-shadow: 0 0 8px rgba(88,166,255,0.3); }
+        button { background: var(--btn-green); border: none; font-weight: bold; cursor: pointer; }
+        button:hover { background: var(--btn-green-hover); }
+        .error { color: var(--error-color); margin-bottom: 15px; font-size: 14px; font-weight: 600; min-height: 20px; }
+
+        /* شاشة الشات المتقدمة */
+        .chat-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 12px; }
+        .user-badge { font-size: 13px; background: #30363d; padding: 4px 10px; border-radius: 20px; color: var(--accent-color); }
+        
+        .chat-box { flex: 1; overflow-y: auto; border: 1px solid var(--border-color); padding: 15px; margin-bottom: 15px; border-radius: 12px; background: var(--bg-color); display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+        
+        .message { padding: 10px 14px; border-radius: 12px; max-width: 85%; line-height: 1.5; font-size: 15px; word-wrap: break-word; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .user-msg { background: var(--user-msg-bg); align-self: flex-start; border-bottom-right-radius: 2px; }
+        .ai-msg { background: var(--ai-msg-bg); align-self: flex-end; border: 1px solid var(--border-color); border-bottom-left-radius: 2px; }
+        
+        .chat-input-area { display: flex; gap: 10px; }
+        .chat-input-area input { margin-bottom: 0; flex: 1; }
+        .chat-input-area button { width: 80px; margin-bottom: 0; padding: 0; display: flex; justify-content: center; align-items: center; }
+
+        .typing-indicator span { height: 8px; width: 8px; float: left; margin: 0 2px; background-color: #9e9e9e; border-radius: 50%; display: inline-block; animation: bounce 1.3s infinite ease-in-out; }
+        .typing-indicator span:nth-child(2) { animation-delay: -1.1s; }
+        .typing-indicator span:nth-child(3) { animation-delay: -0.9s; }
+        @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- شاشة تسجيل الدخول -->
+        <div id="login-screen" class="screen">
+            <div class="login-box">
+                <h2>🔐 بوابة التحكم الآمنة</h2>
+                <div id="error-msg" class="error"></div>
+                <input type="text" id="username" placeholder="اسم المستخدم">
+                <input type="password" id="password" placeholder="كلمة المرور">
+                <button onclick="checkLogin()">دخول للوحة الذكية</button>
+            </div>
+        </div>
+
+        <!-- شاشة الذكاء الاصطناعي -->
+        <div id="app-screen" class="screen hidden">
+            <div class="chat-header">
+                <h2>⚡ Zaed AI Engine</h2>
+                <span class="user-badge">مدير النظام: مسجل</span>
+            </div>
+            <div class="chat-box" id="chat-box">
+                <div class="message ai-msg">أهلاً بك يا زيد! تم تفعيل نظام الذكاء الاصطناعي الخاص بك بنجاح بكامل الصلاحيات. كيف أستطيع خدمتِك اليوم؟</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="user-input" placeholder="اكتب سؤالك أو أمرك هنا..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()">إرسال</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // صلاحيات الآدمن المحمية
+        const ADMIN_USER = "zaed";
+        const ADMIN_PASS = "2013";
+
+        function checkLogin() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const errorDiv = document.getElementById('error-msg');
+
+            if (user === ADMIN_USER && pass === ADMIN_PASS) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('app-screen').classList.remove('hidden');
+            } else {
+                errorDiv.innerText = "⚠️ خطأ: بيانات الدخول غير صحيحة!";
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const inputField = document.getElementById('user-input');
+            const chatBox = document.getElementById('chat-box');
+            const text = inputField.value.trim();
+
+            if (!text) return;
+
+            // رسالة المستخدم
+            const userMsg = document.createElement('div');
+            userMsg.className = "message user-msg";
+            userMsg.innerText = text;
+            chatBox.appendChild(userMsg);
+            inputField.value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // إظهار مؤشر الكتابة للذكاء الاصطناعي
+            const typingMsg = document.createElement('div');
+            typingMsg.className = "message ai-msg";
+            typingMsg.id = "typing";
+            typingMsg.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+            chatBox.appendChild(typingMsg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // محاكاة رد ذكي ومتطور
+            setTimeout(() => {
+                document.getElementById('typing').remove();
+                
+                const aiMsg = document.createElement('div');
+                aiMsg.className = "message ai-msg";
+                
+                // ردود ذكية تفاعلية مخصصة
+                if (text.includes('مرحبا') || text.includes('اهلاً')) {
+                    aiMsg.innerText = "أهلاً بك يا بطل زيد! النظام جاهز تماماً لأوامرك البرمجية والذكية.";
+                } else if (text.includes('اسمك') || text.includes('من أنت')) {
+                    aiMsg.innerText = "أنا مساعدك الذكي الخاص المبرمج خصيصاً لإدارة تطبيقاتك وتحليل أفكارك.";
+                } else {
+                    aiMsg.innerText = "لقد استلمت طلبك بنجاح وقمت بمعالجته: \"" + text + "\". الأداء ممتاز والمنظومة تعمل بكفاءة عالية!";
+                }
+
+                chatBox.appendChild(aiMsg);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1200);
+        }
+    </script>
+</body>
+</html>
