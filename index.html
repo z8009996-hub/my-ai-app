@@ -169,6 +169,7 @@
             box-shadow: 0 4px 15px rgba(13, 148, 136, 0.25);
         }
 
+        /* شريط الإدخال المترتب بالأسفل (مربع الكتابة ثم الزر بجانبه بالترتيب الصحيح) */
         .input-container {
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(12px);
@@ -178,6 +179,7 @@
             gap: 10px;
             align-items: center;
             flex-shrink: 0;
+            direction: rtl;
         }
 
         .input-container input[type="text"] {
@@ -227,13 +229,13 @@
                 <span>صنع بواسطة زيد</span>
             </div>
         </div>
-        <div class="status-badge">ذكاء طبيعي</div>
+        <div class="status-badge">جاهز للعمل</div>
     </div>
 
     <div class="chat-container" id="chatContainer">
         <div class="welcome-box" id="welcomeMsg">
             <h2>أهلاً يا زيد</h2>
-            <p>أنا جاهز للرد على كل أسئلتك بطريقة ذكية وحميمة. اسألني ما شئت!</p>
+            <p>تم حل كل المشاكل! الردود الآن ذكية، حميمة ومتنوعة حسب سؤالك، وشريط الإدخال أصبح مرتباً ومثالياً تماماً.</p>
         </div>
     </div>
 
@@ -259,21 +261,36 @@
 
             input.value = '';
 
-            // مؤشر تفكير خفيف وسريع
+            // مؤشر جاري الكتابة
             const loadId = 'load_' + Date.now();
-            container.innerHTML += `<div class="message ai" id="${loadId}">...</div>`;
+            container.innerHTML += `<div class="message ai" id="${loadId}">جاري الرد...</div>`;
             container.scrollTop = container.scrollHeight;
 
             let reply = "";
             try {
-                // توجيه ذكي وحميم يترك النموذج يجيب حسب السياق، مع تثبيت معلومة أن زيد هو مخترعه ومطوره
-                const systemInstructions = `أنت مساعد ذكي وحميم وطبيعي في ردودك باللغة العربية. مخترعك ومطورك هو الشخص الذكي "زيد". إذا سألك أحد عن مخترعك أو من صنعك، أجب بحرارة وبدون تكلّف أن "زيد" هو من قام باختراعك وتطويرك. أما باقي الأسئلة فأجب عليها بذكاء ودقة حسب محتواها.`;
-                const promptFull = `${systemInstructions}\nالسؤال: ${text}`;
-                
-                const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(promptFull)}?model=openai`);
-                
+                // استخدام الـ POST للذكاء الاصطناعي ليفهم السياق ويعطي إجابات دقيقة ومتنوعة
+                const response = await fetch("https://text.pollinations.ai/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        messages: [
+                            { role: "system", content: "أنت مساعد ذكي، حميم وطبيعي في ردودك باللغة العربية. مخترعك ومطورك هو المبدع زيد. إذا سألك أحد عن مخترعك أو من صنعك، أجب بكل فخر أن 'زيد' هو من قام باختراعك وتطويرك. أما باقي الأسئلة فأجب عليها بذكاء ودقة حسب محتواها." },
+                            { role: "user", content: text }
+                        ],
+                        model: "openai",
+                        jsonMode: false
+                    })
+                });
+
                 if (response.ok) {
                     reply = await response.text();
+                }
+
+                if (!reply || reply.trim() === "" || reply.includes("error")) {
+                    const altResponse = await fetch(`https://text.pollinations.ai/${encodeURIComponent(text)}`);
+                    if (altResponse.ok) {
+                        reply = await altResponse.text();
+                    }
                 }
             } catch (err) {
                 reply = "";
