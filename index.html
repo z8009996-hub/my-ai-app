@@ -3,209 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zaed Ultimate AI v3.0 Ultra</title>
-    <!-- FontAwesome للأيقونات -->
+    <title>Zaed AI v3.0 Ultra</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- مكتبة لتنسيق الأكواد والنصوص (Marked.js) -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #090d16 0%, #111827 100%);
-            --panel-bg: rgba(22, 31, 48, 0.85);
+            --panel-bg: rgba(22, 31, 48, 0.95);
             --border-glow: rgba(0, 242, 254, 0.25);
             --accent-cyan: #00f2fe;
             --accent-blue: #4facfe;
-            --btn-green: #00c853;
             --user-msg-bg: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             --ai-msg-bg: rgba(30, 41, 59, 0.9);
             --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; }
-        body { background: var(--bg-gradient); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background: var(--bg-gradient); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
 
-        .app-container { width: 100%; max-width: 520px; height: 100vh; max-height: 850px; background: var(--panel-bg); backdrop-filter: blur(16px); border-radius: 20px; border: 1px solid var(--border-glow); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 242, 254, 0.15); display: flex; flex-direction: column; overflow: hidden; position: relative; }
+        .app-container { width: 100%; max-width: 500px; height: 100vh; max-height: 850px; background: var(--panel-bg); border-radius: 16px; border: 1px solid var(--border-glow); display: flex; flex-direction: column; overflow: hidden; position: relative; }
 
         .hidden { display: none !important; }
 
         /* شاشة الدخول */
-        #login-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 30px; text-align: center; }
-        .login-card { width: 100%; max-width: 340px; background: rgba(15, 23, 42, 0.8); padding: 30px; border-radius: 16px; border: 1px solid var(--border-glow); }
-        .login-card i.logo-icon { font-size: 50px; color: var(--accent-cyan); margin-bottom: 15px; text-shadow: 0 0 15px var(--accent-cyan); }
-        .login-card h2 { font-size: 22px; margin-bottom: 20px; color: #fff; }
-        .input-group { margin-bottom: 15px; position: relative; }
-        .input-group i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-        .input-group input { width: 100%; padding: 14px 45px 14px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(10, 15, 26, 0.8); color: #fff; font-size: 15px; outline: none; transition: 0.3s; }
-        .input-group input:focus { border-color: var(--accent-cyan); box-shadow: 0 0 10px rgba(0,242,254,0.3); }
-        .login-btn { width: 100%; padding: 14px; border-radius: 10px; border: none; background: linear-gradient(90deg, #00c853, #00e676); color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,200,83,0.3); }
-        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,200,83,0.5); }
-        .error-text { color: #ff5252; font-size: 13px; margin-bottom: 15px; min-height: 18px; }
+        #login-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 20px; }
+        .login-card { width: 90%; background: rgba(15, 23, 42, 0.9); padding: 25px; border-radius: 16px; border: 1px solid var(--border-glow); text-align: center; }
+        .login-card h2 { font-size: 20px; margin-bottom: 15px; color: #fff; }
+        .input-group { margin-bottom: 15px; }
+        .input-group input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #0a0f1a; color: #fff; font-size: 15px; outline: none; text-align: center; }
+        .login-btn { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #00c853; color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .error-text { color: #ff5252; font-size: 13px; margin-bottom: 10px; }
 
         /* شاشة الشات */
-        .chat-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: rgba(15, 23, 42, 0.9); border-bottom: 1px solid var(--border-glow); }
-        .header-title { display: flex; align-items: center; gap: 10px; }
-        .header-title i { font-size: 24px; color: var(--accent-cyan); text-shadow: 0 0 10px var(--accent-cyan); }
-        .header-title h3 { font-size: 18px; font-weight: 700; color: #fff; }
-        .persona-select { background: rgba(30, 41, 59, 0.8); color: var(--accent-cyan); border: 1px solid var(--border-glow); padding: 6px 12px; border-radius: 20px; font-size: 12px; outline: none; cursor: pointer; }
-
-        .chat-actions { display: flex; gap: 10px; }
-        .action-btn { background: none; border: none; color: var(--text-muted); font-size: 16px; cursor: pointer; transition: 0.2s; }
-        .action-btn:hover { color: var(--accent-cyan); }
-
-        .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; }
+        .chat-header { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #0f172a; border-bottom: 1px solid var(--border-glow); }
+        .chat-header h3 { font-size: 16px; color: var(--accent-cyan); font-weight: bold; }
+        
+        .chat-box { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
         
         .message-row { display: flex; flex-direction: column; max-width: 85%; animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
+        
         .user-row { align-self: flex-start; }
         .ai-row { align-self: flex-end; }
 
-        .message-bubble { padding: 12px 16px; border-radius: 16px; font-size: 15px; line-height: 1.6; word-wrap: break-word; position: relative; }
-        .user-row .message-bubble { background: var(--user-msg-bg); color: #fff; border-bottom-right-radius: 4px; box-shadow: 0 4px 12px rgba(30,60,114,0.3); }
-        .ai-row .message-bubble { background: var(--ai-msg-bg); border: 1px solid rgba(255,255,255,0.08); border-bottom-left-radius: 4px; color: var(--text-main); }
+        .message-bubble { padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.6; word-break: break-word; }
+        .user-row .message-bubble { background: var(--user-msg-bg); color: #fff; border-bottom-right-radius: 2px; }
+        .ai-row .message-bubble { background: var(--ai-msg-bg); color: var(--text-main); border: 1px solid rgba(255,255,255,0.1); border-bottom-left-radius: 2px; }
+        .message-bubble img { max-width: 100%; border-radius: 8px; margin-top: 8px; }
 
-        .message-bubble img { max-width: 100%; border-radius: 10px; margin-top: 10px; border: 1px solid var(--border-glow); }
-        .message-bubble pre { background: #0d1117; padding: 10px; border-radius: 8px; overflow-x: auto; margin: 8px 0; border: 1px solid rgba(255,255,255,0.1); font-family: monospace; }
-        .message-bubble code { background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 13px; }
+        .input-container { padding: 12px; background: #0f172a; display: flex; gap: 8px; align-items: center; border-top: 1px solid var(--border-glow); }
+        .chat-input { flex: 1; background: #1e293b; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 10px; color: #fff; outline: none; }
+        .chat-input:focus { border-color: var(--accent-cyan); }
+        .send-btn { padding: 10px 15px; border-radius: 8px; border: none; background: var(--accent-cyan); color: #000; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .send-btn:hover { box-shadow: 0 0 10px var(--accent-cyan); }
 
-        .msg-tools { display: flex; gap: 8px; margin-top: 5px; font-size: 12px; color: var(--text-muted); }
-        .ai-row .msg-tools { justify-content: flex-end; }
-        .tool-icon { cursor: pointer; transition: 0.2s; }
-        .tool-icon:hover { color: var(--accent-cyan); }
-
-        /* منطقة الإدخال */
-        .input-container { padding: 15px 20px; background: rgba(15, 23, 42, 0.95); border-top: 1px solid var(--border-glow); display: flex; align-items: center; gap: 10px; }
-        .chat-input { flex: 1; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 16px; color: #fff; font-size: 15px; outline: none; resize: none; max-height: 100px; transition: 0.3s; }
-        .chat-input:focus { border-color: var(--accent-cyan); box-shadow: 0 0 10px rgba(0,242,254,0.2); }
-        
-        .icon-btn { width: 45px; height: 45px; border-radius: 12px; border: none; background: rgba(30, 41, 59, 0.8); color: var(--text-main); font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.3s; }
-        .icon-btn:hover { background: var(--accent-cyan); color: #000; box-shadow: 0 0 12px var(--accent-cyan); }
-        .send-btn { background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); color: #000; font-weight: bold; }
-        .send-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--accent-cyan); }
-
-        .recording { background: #ff5252 !important; color: #fff !important; animation: pulse 1s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
-
-        .typing-dots span { height: 8px; width: 8px; background: var(--accent-cyan); border-radius: 50%; display: inline-block; animation: bounce 1.4s infinite ease-in-out; margin: 0 2px; }
-        .typing-dots span:nth-child(2) { animation-delay: -1.1s; }
-        .typing-dots span:nth-child(3) { animation-delay: -0.9s; }
-        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
+        /* تأثير الكتابة */
+        .typing-indicator { display: flex; gap: 4px; padding: 4px 8px; }
+        .typing-indicator span { width: 6px; height: 6px; background: var(--accent-cyan); border-radius: 50%; animation: bounce 1.4s infinite ease-in-out; }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <!-- شاشة تسجيل الدخول -->
+        <!-- شاشة الدخول -->
         <div id="login-screen">
             <div class="login-card">
-                <i class="fa-solid fa-bolt-lightning logo-icon"></i>
-                <h2>بوابة زيد الفائقة للذكاء</h2>
+                <h2>⚡ تطبيق الذكاء الاصطناعي</h2>
                 <div id="error-msg" class="error-text"></div>
                 <div class="input-group">
-                    <i class="fa-solid fa-user"></i>
                     <input type="text" id="username" placeholder="اسم المستخدم">
                 </div>
                 <div class="input-group">
-                    <i class="fa-solid fa-lock"></i>
                     <input type="password" id="password" placeholder="كلمة المرور">
                 </div>
-                <button class="login-btn" onclick="checkLogin()">دخول للغرفة الذكية</button>
+                <button class="login-btn" onclick="checkLogin()">دخول</button>
             </div>
         </div>
 
-        <!-- شاشة المحادثة الذكية -->
+        <!-- شاشة الشات -->
         <div id="app-screen" class="hidden" style="display: flex; flex-direction: column; height: 100%;">
-            <!-- الهيدر العلوي -->
             <div class="chat-header">
-                <div class="header-title">
-                    <i class="fa-solid fa-brain"></i>
-                    <h3>Zaed AI v3.0</h3>
-                </div>
-                <select id="persona" class="persona-select" onchange="changePersona()">
-                    <option value="general">🧠 مساعد ذكي عام</option>
-                    <option value="gamer">🎮 خبير ألعاب (Farlight & Settings)</option>
-                    <option value="coder">💻 خبير برمجة و Linux</option>
-                    <option value="artist">🎨 فنان توليد الصور</option>
-                </select>
-                <div class="chat-actions">
-                    <button class="action-btn" title="مسح السجل" onclick="clearChat()"><i class="fa-solid fa-trash"></i></button>
-                    <button class="action-btn" title="تسجيل خروج" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></button>
-                </div>
+                <h3>🤖 Zaed AI - Ultra Fast</h3>
+                <button onclick="logout()" style="background:none; border:none; color:#ff5252; cursor:pointer; font-weight:bold;">خروج</button>
             </div>
 
-            <!-- مربع صندوق الرسائل -->
             <div class="chat-box" id="chat-box">
                 <div class="message-row ai-row">
-                    <div class="message-bubble">
-                        أهلاً بك يا زيد! ⚡ أنا نظام الذكاء الاصطناعي المطور الخاص بك. اسألني عن أي شيء، أو اطلب مني رسم صورة (مثال: "ارسم لي تنين نيون") وسأنفذ فوراً!
-                    </div>
+                    <div class="message-bubble">أهلاً بك يا زيد! تم تحديث نظامي بنجاح، أنا الآن أسرع وأكثر دقة. كيف يمكنني مساعدتك؟</div>
                 </div>
             </div>
 
-            <!-- شريط الإدخال والتحكم -->
             <div class="input-container">
-                <button class="icon-btn" id="mic-btn" title="تحدث بصوتك" onclick="toggleVoice()"><i class="fa-solid fa-microphone"></i></button>
-                <input type="text" id="user-input" class="chat-input" placeholder="اكتب سؤالك أو أمر الرسم هنا..." onkeypress="handleKeyPress(event)">
-                <button class="icon-btn send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                <input type="text" id="user-input" class="chat-input" placeholder="اسألني أي شيء أو اطلب رسمة..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button class="send-btn" onclick="sendMessage()">إرسال</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- إشعار ديسكورد التلقائي عند دخول أي زائر ---
-        window.addEventListener('DOMContentLoaded', () => {
+        // إشعار الدخول لديسكورد
+        try {
             const webhookUrl = "https://discord.com/api/webhooks/1553803607340617838/LautuqxQXYX3RxJJ7hU3p09TdOmLJ39u77Z6L_gRYt9WvoStt2frk98ifeyZIE9xTOZB";
-            const now = new Date().toLocaleString('ar-EG');
-            const device = navigator.userAgent.includes("Mobile") ? "📱 جوال" : "💻 كمبيوتر";
-
             fetch(webhookUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     username: "رادار الزوار 🤖",
-                    embeds: [{
-                        title: "🚨 زائر جديد دخل تطبيقك الآن!",
-                        color: 65535,
-                        fields: [
-                            { name: "⏰ الوقت والتاريخ", value: now, inline: true },
-                            { name: "📱 نوع الجهاز", value: device, inline: true }
-                        ],
-                        footer: { text: "تطبيق الذكاء الاصطناعي - زيد" }
-                    }]
+                    content: "🚨 زائر جديد فتح التطبيق الآن!"
                 })
-            }).catch(err => console.error("Webhook Error:", err));
-        });
+            }).catch(e => console.log(e));
+        } catch(e){}
 
         const ADMIN_USER = "zaed";
         const ADMIN_PASS = "2013";
-
-        let chatHistory = [];
-        let systemPrompt = "أنت مساعد ذكاء اصطناعي خارق وذكي جداً اسمه Zaed AI، تتحدث مع صديقك ومدير النظام زيد (Zaed). تجيب بدقة عالية وبأسلوب صديق خبير وذكي باللغة العربية.";
-        let isRecording = false;
-        let recognition;
-
-        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.lang = 'ar-SA';
-            recognition.continuous = false;
-
-            recognition.onresult = (event) => {
-                const text = event.results[0][0].transcript;
-                document.getElementById('user-input').value = text;
-                toggleVoice();
-            };
-
-            recognition.onerror = () => toggleVoice();
-            recognition.onend = () => { if(isRecording) toggleVoice(); };
-        }
-
-        window.onload = () => {
-            if (localStorage.getItem('zaed_logged_in') === 'true') {
-                showApp();
-            }
-        };
 
         function checkLogin() {
             const u = document.getElementById('username').value.trim();
@@ -214,8 +127,13 @@
                 localStorage.setItem('zaed_logged_in', 'true');
                 showApp();
             } else {
-                document.getElementById('error-msg').innerText = "⚠️ كلمة المرور أو اسم المستخدم غير صحيح!";
+                document.getElementById('error-msg').innerText = "بيانات الدخول غير صحيحة!";
             }
+        }
+
+        function showApp() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('app-screen').classList.remove('hidden');
         }
 
         function logout() {
@@ -224,44 +142,15 @@
             document.getElementById('login-screen').classList.remove('hidden');
         }
 
-        function showApp() {
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('app-screen').classList.remove('hidden');
-        }
-
-        function changePersona() {
-            const p = document.getElementById('persona').value;
-            if (p === 'gamer') {
-                systemPrompt = "أنت خبير محترف في ألعاب الفيديو خصوصاً Farlight 84 و Free Fire، وتعلم كل إعدادات الحساسية والـ DPI والهواتف مثل Poco X7 Pro.";
-            } else if (p === 'coder') {
-                systemPrompt = "أنت مهندس برمجة وخبير أنظمة Linux و Python. تعطي أكواداً برمجية نظيفة ومباشرة مع الشرح.";
-            } else if (p === 'artist') {
-                systemPrompt = "أنت فنان ذكاء اصطناعي مترافق مع محرك توليد الصور.";
-            } else {
-                systemPrompt = "أنت مساعد ذكاء اصطناعي خارق وذكي جداً اسمه Zaed AI وتتحدث مع زيد بذكاء وتفاعل كامل.";
+        window.onload = () => {
+            if (localStorage.getItem('zaed_logged_in') === 'true') {
+                showApp();
             }
-        }
+        };
 
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') sendMessage();
-        }
-
-        function toggleVoice() {
-            const micBtn = document.getElementById('mic-btn');
-            if (!recognition) {
-                alert("المتصفح لديك لا يدعم الإدخال الصوتي المباشر.");
-                return;
-            }
-            if (!isRecording) {
-                recognition.start();
-                isRecording = true;
-                micBtn.classList.add('recording');
-            } else {
-                recognition.stop();
-                isRecording = false;
-                micBtn.classList.remove('recording');
-            }
-        }
+        // الذاكرة المؤقتة والعقل الباطن (System Prompt)
+        let chatHistory = [];
+        const systemMessage = "أنت مساعد ذكاء اصطناعي فائق الذكاء، الدقة، والسرعة. مبرمجك وصانعك هو المطور 'زيد' (Zaed). إذا سألك أي شخص 'من صنعك' أو 'من برمجك' أو 'من مطورك'، يجب أن تجيب فوراً وبكل فخر: 'صنعني وبرمجني العبقري زيد'. قدم دائماً إجابات دقيقة ومفيدة ومباشرة.";
 
         async function sendMessage() {
             const input = document.getElementById('user-input');
@@ -271,43 +160,44 @@
             appendMessage(prompt, 'user');
             input.value = '';
 
-            const isImageReq = /ارسم|صورة|رسمة|draw|image|picture/i.test(prompt);
+            // حفظ رسالة المستخدم في الذاكرة (آخر 4 رسائل لضمان السرعة)
+            chatHistory.push({ role: "user", content: prompt });
+            if (chatHistory.length > 4) chatHistory = chatHistory.slice(-4);
 
-            const typingId = appendTyping();
+            const isImage = /ارسم|صورة|draw|image/i.test(prompt);
 
-            if (isImageReq) {
+            if (isImage) {
+                const typingId = appendTyping();
                 setTimeout(() => {
                     removeTyping(typingId);
-                    const cleanPrompt = prompt.replace(/ارسم|صورة|رسمة|لي|draw|image/gi, '').trim();
-                    const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(cleanPrompt || prompt)}?width=800&height=600&nologo=true&seed=${Math.floor(Math.random()*1000)}`;
-                    const imgHTML = `إليك الصورة التي طلبتها يا زيد: <br><img src="${imgUrl}" alt="AI Generated Image" loading="lazy">`;
-                    appendMessage(imgHTML, 'ai', true);
-                }, 1500);
+                    const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=800&height=600&nologo=true&seed=${Math.floor(Math.random()*1000)}`;
+                    appendMessage(`إليك الصورة المطلوبة:<br><img src="${imgUrl}">`, 'ai', true);
+                }, 1000);
             } else {
+                const typingId = appendTyping();
                 try {
-                    chatHistory.push({ role: "user", content: prompt });
-                    
+                    // إرسال الطلب مع العقل الباطن والذاكرة للحصول على دقة وسرعة
                     const response = await fetch("https://text.pollinations.ai/", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
                             messages: [
-                                { role: "system", content: systemPrompt },
-                                ...chatHistory.slice(-6)
-                            ],
-                            model: "openai"
+                                { role: "system", content: systemMessage },
+                                ...chatHistory
+                            ]
                         })
                     });
-
-                    const replyText = await response.text();
+                    
+                    const text = await response.text();
                     removeTyping(typingId);
-
-                    chatHistory.push({ role: "assistant", content: replyText });
-                    appendMessage(replyText, 'ai');
-
+                    
+                    // حفظ إجابة الذكاء الاصطناعي في الذاكرة
+                    chatHistory.push({ role: "assistant", content: text });
+                    
+                    appendMessage(text, 'ai');
                 } catch (err) {
                     removeTyping(typingId);
-                    appendMessage("حدث خطأ بسيط في الاتصال بالمحرك الرئيسي. تأكد من اتصال الإنترنت وأعد المحاولة!", 'ai');
+                    appendMessage("حدث خطأ في الاتصال، يرجى المحاولة لاحقاً.", 'ai');
                 }
             }
         }
@@ -322,20 +212,10 @@
 
             if (isHTML) {
                 bubble.innerHTML = text;
-            } else if (sender === 'ai') {
+            } else if (window.marked && sender === 'ai') {
                 bubble.innerHTML = marked.parse(text);
             } else {
                 bubble.innerText = text;
-            }
-
-            if (sender === 'ai') {
-                const tools = document.createElement('div');
-                tools.className = 'msg-tools';
-                tools.innerHTML = `
-                    <i class="fa-solid fa-copy tool-icon" title="نسخ" onclick="copyText(this)"></i>
-                    <i class="fa-solid fa-volume-high tool-icon" title="استماع" onclick="speakText(this)"></i>
-                `;
-                bubble.appendChild(tools);
             }
 
             row.appendChild(bubble);
@@ -351,7 +231,7 @@
             row.id = id;
             row.innerHTML = `
                 <div class="message-bubble">
-                    <div class="typing-dots"><span></span><span></span><span></span></div>
+                    <div class="typing-indicator"><span></span><span></span><span></span></div>
                 </div>
             `;
             chatBox.appendChild(row);
@@ -363,15 +243,6 @@
             const el = document.getElementById(id);
             if (el) el.remove();
         }
-
-        function copyText(btn) {
-            const text = btn.closest('.message-bubble').innerText;
-            navigator.clipboard.writeText(text);
-            btn.className = "fa-solid fa-check tool-icon";
-            setTimeout(() => btn.className = "fa-solid fa-copy tool-icon", 1500);
-        }
-
-        function speakText(btn) {
-            const text = btn.closest('.message-bubble').innerText;
-            const speech = new SpeechSynthesisUtterance(text);
-    
+    </script>
+</body>
+</html>
