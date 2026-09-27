@@ -12,49 +12,55 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
-        body {
+        html, body {
+            height: 100%;
+            width: 100%;
             background-color: #212121;
             color: #ececec;
+            overflow: hidden;
+            position: fixed;
+        }
+
+        .app-container {
             display: flex;
             height: 100vh;
             width: 100vw;
-            overflow: hidden;
             position: relative;
         }
 
-        /* الشريط الجانبي المحسّن والمتجاوب */
+        /* الشريط الجانبي (Sidebar) */
         .sidebar {
             width: 260px;
             background-color: #171717;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 10px;
+            padding: 12px;
             border-left: 1px solid #2f2f2f;
-            height: 100vh;
-            position: relative;
-            z-index: 100;
-            transition: transform 0.3s ease;
-            flex-shrink: 0;
+            height: 100%;
+            position: absolute;
+            right: -260px;
+            top: 0;
+            z-index: 1000;
+            transition: right 0.3s ease;
         }
 
-        .sidebar.hidden {
-            display: none;
+        .sidebar.open {
+            right: 0;
         }
 
         .sidebar-top {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            height: 100%;
-            overflow: hidden;
+            gap: 12px;
+            height: calc(100% - 60px);
         }
 
         .top-action-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 5px;
+            gap: 8px;
         }
 
         .new-chat-btn {
@@ -69,7 +75,6 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
-            transition: background 0.2s;
         }
 
         .new-chat-btn:hover {
@@ -86,17 +91,12 @@
             font-size: 18px;
         }
 
-        .icon-toggle-btn:hover {
-            background-color: #212121;
-        }
-
         .history-list {
             flex: 1;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 4px;
-            margin-top: 5px;
         }
 
         .history-item {
@@ -120,7 +120,6 @@
             padding-top: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
         }
 
         .user-profile {
@@ -128,7 +127,6 @@
             align-items: center;
             gap: 10px;
             padding: 8px;
-            border-radius: 8px;
             width: 100%;
         }
 
@@ -145,26 +143,27 @@
             font-size: 14px;
         }
 
-        /* المحتوى الرئيسي للدردشة */
+        /* المحتوى الرئيسي */
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            height: 100%;
+            width: 100%;
             background-color: #212121;
             position: relative;
-            overflow: hidden;
-            min-width: 0;
         }
 
         .chat-header {
-            padding: 12px 20px;
+            padding: 12px 16px;
             font-size: 16px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 15px;
+            justify-content: space-between;
             background-color: #212121;
+            border-bottom: 1px solid #2f2f2f;
+            height: 55px;
             flex-shrink: 0;
         }
 
@@ -173,8 +172,7 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding-bottom: 140px;
+            padding: 10px 0 110px 0;
             width: 100%;
         }
 
@@ -182,13 +180,13 @@
             width: 100%;
             display: flex;
             justify-content: center;
-            padding: 20px;
+            padding: 15px 16px;
         }
 
         .message-row.ai {
             background-color: #2f2f2f;
-            border-bottom: 1px solid #222;
             border-top: 1px solid #222;
+            border-bottom: 1px solid #222;
         }
 
         .message-content {
@@ -196,27 +194,27 @@
             max-width: 768px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             font-size: 15px;
-            line-height: 1.7;
+            line-height: 1.6;
         }
 
         .msg-header-row {
             display: flex;
-            gap: 16px;
+            gap: 12px;
             align-items: flex-start;
         }
 
         .msg-avatar {
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             flex-shrink: 0;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .msg-avatar.ai {
@@ -238,14 +236,14 @@
         .msg-text img {
             max-width: 100%;
             border-radius: 8px;
-            margin-top: 10px;
+            margin-top: 8px;
             display: block;
         }
 
         .msg-actions {
             display: flex;
             gap: 10px;
-            margin-right: 48px;
+            margin-right: 42px;
             font-size: 13px;
             color: #8e8ea0;
         }
@@ -255,64 +253,53 @@
             border: none;
             color: #8e8ea0;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
 
-        .msg-action-btn:hover {
-            color: #ececec;
-        }
-
-        /* صندوق الإدخال الثابت في الأسفل */
+        /* صندوق الإدخال المثبت أسفل الشاشة تماماً */
         .input-area {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
-            background: linear-gradient(180deg, rgba(33,33,33,0) 0%, rgba(33,33,33,0.9) 50%, #212121 100%);
-            padding: 15px 20px;
+            background: linear-gradient(180deg, rgba(33,33,33,0) 0%, #212121 40%);
+            padding: 10px 16px 20px 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            z-index: 10;
+            z-index: 50;
         }
 
         .input-box-wrapper {
             width: 100%;
             max-width: 768px;
             background-color: #2f2f2f;
-            border-radius: 24px;
+            border-radius: 20px;
             border: 1px solid #424242;
-            padding: 10px 14px;
+            padding: 8px 12px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.3);
-        }
-
-        .input-box-wrapper:focus-within {
-            border-color: #666;
+            gap: 6px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
         }
 
         .preview-container {
             display: none;
             align-items: center;
             gap: 10px;
-            padding-bottom: 5px;
+            padding-bottom: 4px;
             border-bottom: 1px solid #424242;
         }
 
         .preview-container img {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             object-fit: cover;
-            border-radius: 6px;
+            border-radius: 4px;
         }
 
         .input-main-row {
             display: flex;
-            align-items: flex-end;
+            align-items: center;
             gap: 8px;
         }
 
@@ -324,8 +311,8 @@
             font-size: 15px;
             resize: none;
             outline: none;
-            max-height: 150px;
-            line-height: 1.5;
+            max-height: 120px;
+            line-height: 1.4;
             padding-top: 4px;
         }
 
@@ -335,31 +322,25 @@
             color: #b4b4b4;
             cursor: pointer;
             font-size: 18px;
-            padding: 6px;
-            border-radius: 50%;
+            padding: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .tool-icon-btn:hover {
-            color: #fff;
-            background-color: #3f3f3f;
         }
 
         .send-submit-btn, .stop-btn {
             background-color: #ececec;
             color: #212121;
             border: none;
-            width: 34px;
-            height: 34px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             font-weight: bold;
-            font-size: 15px;
+            font-size: 14px;
             flex-shrink: 0;
         }
 
@@ -374,89 +355,91 @@
             justify-content: center;
             height: 100%;
             text-align: center;
-            gap: 15px;
+            gap: 10px;
             padding: 20px;
+            margin: auto;
         }
 
         .welcome-screen h1 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 600;
         }
 
-        /* تعديلات خاصة للهواتف والشاشات الصغيرة لضمان عدم خراب الحجم */
-        @media (max-width: 768px) {
-            .sidebar {
-                position: absolute;
-                height: 100vh;
-                right: 0;
-                transform: translateX(100%);
-                z-index: 1000;
-            }
-            .sidebar.mobile-open {
-                transform: translateX(0);
-            }
-            #open-sidebar-btn {
-                display: block !important;
-            }
+        /* طبقة عتمة خلف القائمة عند فتحها بالجوال */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        .sidebar-overlay.active {
+            display: block;
         }
     </style>
 </head>
 <body>
 
-    <!-- الشريط الجانبي (Sidebar) -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-top">
-            <div class="top-action-row">
-                <button class="new-chat-btn" onclick="startNewChat()">
-                    <span>＋</span> محادثة جديدة
-                </button>
-                <button class="icon-toggle-btn" title="إغلاق القائمة" onclick="toggleSidebar()">✕</button>
-            </div>
-            <div class="history-list" id="history-list">
-                <!-- سجل المحادثات -->
-            </div>
-        </div>
-        <div class="sidebar-footer">
-            <div class="user-profile">
-                <div class="user-avatar">ز</div>
-                <div style="font-size: 14px; font-weight: 500;">زيد (Zaed)</div>
-            </div>
-        </div>
-    </div>
+    <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-    <!-- المحتوى الرئيسي -->
-    <div class="main-content">
-        <div class="chat-header">
-            <button class="icon-toggle-btn" id="open-sidebar-btn" title="فتح القائمة" onclick="toggleSidebar()">📂</button>
-            <span>Zaed Ultimate AI <span style="font-size: 12px; color: #19c37d; font-weight: normal;">● متصل</span></span>
-        </div>
-
-        <div class="chat-container" id="chat-box">
-            <div class="welcome-screen" id="welcome-screen">
-                <h1>كيف يمكنني مساعدتك اليوم يا زيد؟</h1>
-            </div>
-        </div>
-
-        <!-- صندوق الإدخال -->
-        <div class="input-area">
-            <div class="input-box-wrapper">
-                <div class="preview-container" id="preview-bar">
-                    <img id="preview-img" src="" alt="معاينة">
-                    <span style="font-size: 13px; color: #b4b4b4; flex:1;">تم إرفاق الصورة بنجاح</span>
-                    <button onclick="clearImage()" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:16px;">✕</button>
+    <div class="app-container">
+        <!-- الشريط الجانبي -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-top">
+                <div class="top-action-row">
+                    <button class="new-chat-btn" onclick="startNewChat()">
+                        <span>＋</span> محادثة جديدة
+                    </button>
+                    <button class="icon-toggle-btn" onclick="toggleSidebar()">✕</button>
                 </div>
-                
-                <div class="input-main-row">
-                    <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleImage(event)">
-                    <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none" onchange="handleImage(event)">
+                <div class="history-list" id="history-list"></div>
+            </div>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">ز</div>
+                    <div style="font-size: 14px; font-weight: 500;">زيد (Zaed)</div>
+                </div>
+            </div>
+        </div>
 
-                    <button class="tool-icon-btn" title="إرفاق صورة" onclick="document.getElementById('file-input').click()">📎</button>
-                    <button class="tool-icon-btn" title="التقاط بالكاميرا" onclick="document.getElementById('camera-input').click()">📷</button>
+        <!-- المحتوى الرئيسي -->
+        <div class="main-content">
+            <div class="chat-header">
+                <button class="icon-toggle-btn" onclick="toggleSidebar()">📂</button>
+                <span>Zaed Ultimate AI <span style="font-size: 11px; color: #19c37d;">●</span></span>
+                <div style="width: 24px;"></div>
+            </div>
+
+            <div class="chat-container" id="chat-box">
+                <div class="welcome-screen" id="welcome-screen">
+                    <h1>كيف يمكنني مساعدتك اليوم يا زيد؟</h1>
+                </div>
+            </div>
+
+            <!-- صندوق الإرسال السفلي -->
+            <div class="input-area">
+                <div class="input-box-wrapper">
+                    <div class="preview-container" id="preview-bar">
+                        <img id="preview-img" src="" alt="معاينة">
+                        <span style="font-size: 12px; color: #b4b4b4; flex:1;">تم إرفاق الصورة</span>
+                        <button onclick="clearImage()" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:14px;">✕</button>
+                    </div>
                     
-                    <textarea id="user-input" rows="1" placeholder="أرسل رسالة إلى Zaed Ultimate AI..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-                    
-                    <button class="send-submit-btn" id="send-btn" onclick="sendMessage()">⬆</button>
-                    <button class="stop-btn" id="stop-btn" onclick="stopGenerating()">◼</button>
+                    <div class="input-main-row">
+                        <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleImage(event)">
+                        <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none" onchange="handleImage(event)">
+
+                        <button class="tool-icon-btn" onclick="document.getElementById('file-input').click()">📎</button>
+                        <button class="tool-icon-btn" onclick="document.getElementById('camera-input').click()">📷</button>
+                        
+                        <textarea id="user-input" rows="1" placeholder="أرسل رسالة..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+                        
+                        <button class="send-submit-btn" id="send-btn" onclick="sendMessage()">⬆</button>
+                        <button class="stop-btn" id="stop-btn" onclick="stopGenerating()">◼</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -473,16 +456,14 @@
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth <= 768) {
-                sidebar.classList.toggle('mobile-open');
-            } else {
-                sidebar.classList.toggle('hidden');
-            }
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
         }
 
         function autoResize(textarea) {
             textarea.style.height = 'auto';
-            textarea.style.height = textarea.scrollHeight + 'px';
+            textarea.style.height = Math.min(textarea.scrollHeight, 100) + 'px';
         }
 
         function handleImage(e) {
@@ -547,7 +528,7 @@
                 <div class="message-content">
                     <div class="msg-header-row">
                         <div class="msg-avatar ai">Z</div>
-                        <div class="msg-text">جاري التفكير وتحليل الطلب...</div>
+                        <div class="msg-text">جاري التفكير...</div>
                     </div>
                 </div>`;
             chatBox.appendChild(loadRow);
@@ -568,9 +549,7 @@
         }
 
         function stopGenerating() {
-            if (activeController) {
-                activeController.abort();
-            }
+            if (activeController) activeController.abort();
             resetGeneratingState();
         }
 
@@ -588,13 +567,10 @@
             const avatarLetter = sender === 'user' ? 'ز' : 'Z';
             let imgTag = imgUrl ? `<img src="${imgUrl}">` : '';
 
-            let actionsHtml = '';
-            if (sender === 'ai') {
-                actionsHtml = `
-                    <div class="msg-actions">
-                        <button class="msg-action-btn" onclick="copyText(this)">📋 نسخ</button>
-                    </div>`;
-            }
+            let actionsHtml = sender === 'ai' ? `
+                <div class="msg-actions">
+                    <button class="msg-action-btn" onclick="copyText(this)">📋 نسخ</button>
+                </div>` : '';
 
             row.innerHTML = `
                 <div class="message-content">
@@ -618,7 +594,7 @@
 
         async function askZaedAI(prompt, imgBase64, signal) {
             try {
-                const systemPrompt = "أنت نموذج ذكاء اصطناعي حصري اسمه Zaed Ultimate AI، تم تطويرك وبرمجتك بالكامل بواسطة المطور زيد. أجب دائماً باللغة العربية بأسلوب ذكي وسريع ومفيد ودقيق جداً. لا تذكر أي نماذج أو شركات أخرى أبداً.";
+                const systemPrompt = "أنت نموذج ذكاء اصطناعي حصري اسمه Zaed Ultimate AI، تم تطويرك بالكامل بواسطة المطور زيد. أجب دائماً باللغة العربية بأسلوب ذكي وسريع ومفيد ودقيق جداً.";
 
                 if (imgBase64) {
                     const res = await fetch("https://text.pollinations.ai/", {
@@ -639,4 +615,17 @@
                     if (res.ok) return await res.text();
                 } else {
                     const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}?system=${encodeURIComponent(systemPrompt)}&model=openai-large`, { signal });
-    
+                    if (res.ok) return await res.text();
+                }
+            } catch (err) {
+                if (err.name === 'AbortError') return "تم إيقاف التوليد.";
+                console.error(err);
+            }
+            return "عذراً يا زيد، حدث خطأ في الاتصال.";
+        }
+
+        function saveToStorage(sender, text, img = null) {
+            let hist = JSON.parse(localStorage.getItem('chat_msgs')) || [];
+            hist.push({ sender, text, img });
+            localStorage.setItem('chat_msgs', JSON.stringify(hist));
+            if (sender === 'user') up
