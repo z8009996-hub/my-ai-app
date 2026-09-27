@@ -227,13 +227,13 @@
                 <span>صنع بواسطة زيد</span>
             </div>
         </div>
-        <div class="status-badge">سرعة فائقة</div>
+        <div class="status-badge">ذكاء طبيعي</div>
     </div>
 
     <div class="chat-container" id="chatContainer">
         <div class="welcome-box" id="welcomeMsg">
             <h2>أهلاً يا زيد</h2>
-            <p>أنا نظام الذكاء الاصطناعي الخاص بك، مبرمجي ومخترعي هو أنت وحدك يا زيد! الردود الآن فورية وسريعة جداً.</p>
+            <p>أنا جاهز للرد على كل أسئلتك بطريقة ذكية وحميمة. اسألني ما شئت!</p>
         </div>
     </div>
 
@@ -259,15 +259,17 @@
 
             input.value = '';
 
-            // مؤشر تفكير فوري وسريع
+            // مؤشر تفكير خفيف وسريع
             const loadId = 'load_' + Date.now();
             container.innerHTML += `<div class="message ai" id="${loadId}">...</div>`;
             container.scrollTop = container.scrollHeight;
 
             let reply = "";
             try {
-                // توجيه صارم يعرفه أن صانعه ومطوره هو زيد حصرياً وليست أي جهة أخرى
-                const promptFull = `أنت نظام ذكاء اصطناعي متطور، صانعك ومطورك ومخترعك الوحيد هو شخص اسمه "زيد". إذا سألك أحد من صنعك أو من مطورك، قل له فوراً ودون تردد أنك من صنع وإبداع "زيد". أجب بسرعة وبدون مقدمات طويلة باللغة العربية. السؤال: ${text}`;
+                // توجيه ذكي وحميم يترك النموذج يجيب حسب السياق، مع تثبيت معلومة أن زيد هو مخترعه ومطوره
+                const systemInstructions = `أنت مساعد ذكي وحميم وطبيعي في ردودك باللغة العربية. مخترعك ومطورك هو الشخص الذكي "زيد". إذا سألك أحد عن مخترعك أو من صنعك، أجب بحرارة وبدون تكلّف أن "زيد" هو من قام باختراعك وتطويرك. أما باقي الأسئلة فأجب عليها بذكاء ودقة حسب محتواها.`;
+                const promptFull = `${systemInstructions}\nالسؤال: ${text}`;
+                
                 const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(promptFull)}?model=openai`);
                 
                 if (response.ok) {
@@ -280,7 +282,7 @@
             document.getElementById(loadId).remove();
 
             if (!reply || reply.trim() === "") {
-                reply = "أنا من صنع وإبداع المطور العبقري زيد!";
+                reply = "أهلاً بك يا زيد، أنا معك بكل ما تحتاج!";
             }
 
             container.innerHTML += `<div class="message ai">${escapeHtml(reply)}</div>`;
