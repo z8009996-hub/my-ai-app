@@ -9,586 +9,258 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: Tahoma, Arial, sans-serif;
         }
 
-        html, body {
+        body, html {
             height: 100%;
-            width: 100%;
             background-color: #212121;
-            color: #ececec;
+            color: #ffffff;
             overflow: hidden;
         }
 
-        .app-container {
+        .app {
             display: flex;
-            height: 100%;
-            width: 100%;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
             position: relative;
         }
 
-        /* الشريط الجانبي */
-        .sidebar {
-            width: 260px;
+        /* رأس الصفحة */
+        .header {
+            padding: 15px;
             background-color: #171717;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 12px;
-            border-left: 1px solid #2f2f2f;
-            height: 100%;
-            position: absolute;
-            right: -260px;
-            top: 0;
-            z-index: 9999;
-            transition: right 0.3s ease;
-        }
-
-        .sidebar.open {
-            right: 0;
-        }
-
-        .sidebar-top {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            height: calc(100% - 60px);
-        }
-
-        .top-action-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-        }
-
-        .new-chat-btn {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex: 1;
-            background-color: transparent;
-            border: 1px solid #3d3d3d;
-            color: #ececec;
-            padding: 10px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .icon-toggle-btn {
-            background: transparent;
-            border: none;
-            color: #ececec;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
             font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid #333;
         }
 
-        .history-list {
+        /* منطقة عرض المحادثة */
+        .chat-area {
             flex: 1;
             overflow-y: auto;
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 15px;
         }
 
-        .history-item {
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            color: #b4b4b4;
-            cursor: pointer;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .welcome-msg {
+            text-align: center;
+            margin: auto;
+            font-size: 20px;
+            color: #888;
         }
 
-        .sidebar-footer {
-            border-top: 1px solid #2f2f2f;
-            padding-top: 10px;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px;
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            background-color: #19c37d;
-            color: #fff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        /* المحتوى الرئيسي */
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            height: 100%;
-            width: 100%;
-            background-color: #212121;
-        }
-
-        .chat-header {
-            padding: 12px 16px;
-            font-size: 16px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: #212121;
-            border-bottom: 1px solid #2f2f2f;
-            height: 50px;
-            flex-shrink: 0;
-        }
-
-        .chat-container {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-        }
-
-        .message-row {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            padding: 12px 0;
-        }
-
-        .message-row.ai {
-            background-color: #2f2f2f;
-            border-top: 1px solid #222;
-            border-bottom: 1px solid #222;
-        }
-
-        .message-content {
-            width: 100%;
-            max-width: 768px;
-            padding: 0 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .msg-header-row {
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-        }
-
-        .msg-avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
-            font-size: 13px;
-        }
-
-        .msg-avatar.ai {
-            background-color: #19c37d;
-            color: white;
-        }
-
-        .msg-avatar.user {
-            background-color: #5436da;
-            color: white;
-        }
-
-        .msg-text {
-            flex: 1;
-            white-space: pre-wrap;
+        .msg {
+            padding: 12px 15px;
+            border-radius: 10px;
+            max-width: 85%;
+            line-height: 1.5;
             word-break: break-word;
         }
 
-        .msg-text img {
+        .msg.user {
+            background-color: #2f2f2f;
+            align-self: flex-start;
+            border: 1px solid #444;
+        }
+
+        .msg.ai {
+            background-color: #1e3a8a;
+            align-self: flex-end;
+        }
+
+        .msg img {
             max-width: 100%;
             border-radius: 8px;
-            margin-top: 8px;
+            margin-bottom: 8px;
             display: block;
         }
 
-        .msg-actions {
+        /* شريط الإدخال السفلي الثابت والمبسط */
+        .footer-input {
+            background-color: #171717;
+            padding: 10px 15px 20px 15px;
+            border-top: 1px solid #333;
             display: flex;
+            flex-direction: column;
             gap: 10px;
-            margin-right: 42px;
-            font-size: 13px;
-            color: #8e8ea0;
         }
 
-        .msg-action-btn {
-            background: transparent;
-            border: none;
-            color: #8e8ea0;
-            cursor: pointer;
-        }
-
-        /* صندوق الإرسال السفلي */
-        .input-area {
-            flex-shrink: 0;
-            background-color: #212121;
-            padding: 10px 12px 16px 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border-top: 1px solid #2f2f2f;
-        }
-
-        .input-box-wrapper {
-            width: 100%;
-            max-width: 768px;
-            background-color: #2f2f2f;
-            border-radius: 20px;
-            border: 1px solid #424242;
-            padding: 8px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .preview-container {
+        .preview-box {
             display: none;
             align-items: center;
             gap: 10px;
-            padding-bottom: 4px;
-            border-bottom: 1px solid #424242;
+            background: #2a2a2a;
+            padding: 5px 10px;
+            border-radius: 6px;
         }
 
-        .preview-container img {
-            width: 35px;
-            height: 35px;
+        .preview-box img {
+            width: 40px;
+            height: 40px;
             object-fit: cover;
             border-radius: 4px;
         }
 
-        .input-main-row {
+        .input-row {
             display: flex;
             align-items: center;
-            gap: 8px;
-            position: relative;
+            gap: 10px;
+            background-color: #2f2f2f;
+            border-radius: 25px;
+            padding: 5px 10px 5px 15px;
+            border: 1px solid #555;
         }
 
-        .input-main-row textarea {
+        .input-row textarea {
             flex: 1;
             background: transparent;
             border: none;
-            color: #ececec;
-            font-size: 15px;
-            resize: none;
-            outline: none;
-            max-height: 100px;
-            line-height: 1.4;
-        }
-
-        .tool-icon-btn {
-            background: transparent;
-            border: none;
-            color: #b4b4b4;
-            cursor: pointer;
-            font-size: 18px;
-            padding: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .send-submit-btn, .stop-btn {
-            background-color: #ececec !important;
-            color: #212121 !important;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-weight: bold;
+            color: #fff;
             font-size: 16px;
-            flex-shrink: 0;
-            pointer-events: auto !important;
+            outline: none;
+            resize: none;
+            max-height: 100px;
+            padding: 8px 0;
         }
 
-        .stop-btn {
-            display: none;
-        }
-
-        .welcome-screen {
+        /* زر الإرسال الواضح والبارز */
+        .send-btn {
+            background-color: #10a37f;
+            color: white;
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            font-size: 18px;
+            font-weight: bold;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100%;
-            text-align: center;
-            gap: 10px;
-            padding: 20px;
-            margin: auto;
+            cursor: pointer;
+            flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
-        .welcome-screen h1 {
+        .action-btn {
+            background: none;
+            border: none;
+            color: #aaa;
             font-size: 20px;
-            font-weight: 600;
-        }
-
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0,0,0,0.5);
-            z-index: 998;
-        }
-        .sidebar-overlay.active {
-            display: block;
+            cursor: pointer;
+            padding: 5px;
         }
     </style>
 </head>
 <body>
 
-    <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+    <div class="app">
+        <div class="header">Zaed Ultimate AI</div>
 
-    <div class="app-container">
-        <!-- الشريط الجانبي -->
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-top">
-                <div class="top-action-row">
-                    <button class="new-chat-btn" onclick="startNewChat()">
-                        <span>＋</span> محادثة جديدة
-                    </button>
-                    <button class="icon-toggle-btn" onclick="toggleSidebar()">✕</button>
-                </div>
-                <div class="history-list" id="history-list"></div>
-            </div>
-            <div class="sidebar-footer">
-                <div class="user-profile">
-                    <div class="user-avatar">ز</div>
-                    <div style="font-size: 14px; font-weight: 500;">زيد (Zaed)</div>
-                </div>
-            </div>
+        <div class="chat-area" id="chat-area">
+            <div class="welcome-msg" id="welcome">كيف يمكنني مساعدتك اليوم يا زيد؟</div>
         </div>
 
-        <!-- المحتوى الرئيسي -->
-        <div class="main-content">
-            <div class="chat-header">
-                <button class="icon-toggle-btn" onclick="toggleSidebar()">📂</button>
-                <span>Zaed Ultimate AI <span style="font-size: 11px; color: #19c37d;">●</span></span>
-                <div style="width: 24px;"></div>
+        <div class="footer-input">
+            <div class="preview-box" id="preview-box">
+                <img id="preview-img" src="" alt="صورة مرفقة">
+                <span style="font-size: 13px; flex: 1;">تم إرفاق الصورة بنجاح</span>
+                <button onclick="removeImage()" style="background:none; border:none; color:#ff4444; font-size:16px; cursor:pointer;">✕</button>
             </div>
 
-            <div class="chat-container" id="chat-box">
-                <div class="welcome-screen" id="welcome-screen">
-                    <h1>كيف يمكنني مساعدتك اليوم يا زيد؟</h1>
-                </div>
-            </div>
+            <div class="input-row">
+                <!-- أزرار المرفقات -->
+                <button class="action-btn" onclick="document.getElementById('file-input').click()">📎</button>
+                <button class="action-btn" onclick="document.getElementById('camera-input').click()">📷</button>
 
-            <!-- صندوق الإرسال السفلي -->
-            <div class="input-area">
-                <div class="input-box-wrapper">
-                    <div class="preview-container" id="preview-bar">
-                        <img id="preview-img" src="" alt="معاينة">
-                        <span style="font-size: 12px; color: #b4b4b4; flex:1;">تم إرفاق الصورة</span>
-                        <button onclick="clearImage()" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:14px;">✕</button>
-                    </div>
-                    
-                    <div class="input-main-row">
-                        <button class="send-submit-btn" id="send-btn" onclick="sendMessage()">⬆</button>
-                        <button class="stop-btn" id="stop-btn" onclick="stopGenerating()">◼</button>
+                <input type="file" id="file-input" accept="image/*" style="display:none" onchange="loadImage(event)">
+                <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none" onchange="loadImage(event)">
 
-                        <textarea id="user-input" rows="1" placeholder="أرسل رسالة..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+                <textarea id="user-input" rows="1" placeholder="اكتب رسالتك هنا..."></textarea>
 
-                        <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleImage(event)">
-                        <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none" onchange="handleImage(event)">
-
-                        <button class="tool-icon-btn" onclick="document.getElementById('file-input').click()">📎</button>
-                        <button class="tool-icon-btn" onclick="document.getElementById('camera-input').click()">📷</button>
-                    </div>
-                </div>
+                <!-- زر الإرسال -->
+                <button class="send-btn" id="send-btn" onclick="sendMsg()">⬆</button>
             </div>
         </div>
     </div>
 
     <script>
-        let currentImageBase64 = null;
-        let isGenerating = false;
-        let activeController = null;
+        let base64Image = null;
 
-        window.onload = function() {
-            loadHistory();
-        };
-
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('active');
-        }
-
-        function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 100) + 'px';
-        }
-
-        function handleImage(e) {
+        function loadImage(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(evt) {
-                    currentImageBase64 = evt.target.result;
-                    document.getElementById('preview-img').src = currentImageBase64;
-                    document.getElementById('preview-bar').style.display = 'flex';
+                    base64Image = evt.target.result;
+                    document.getElementById('preview-img').src = base64Image;
+                    document.getElementById('preview-box').style.display = 'flex';
                 };
                 reader.readAsDataURL(file);
             }
         }
 
-        function clearImage() {
-            currentImageBase64 = null;
+        function removeImage() {
+            base64Image = null;
             document.getElementById('file-input').value = '';
             document.getElementById('camera-input').value = '';
-            document.getElementById('preview-bar').style.display = 'none';
+            document.getElementById('preview-box').style.display = 'none';
         }
 
-        function startNewChat() {
-            localStorage.removeItem('chat_msgs');
-            location.reload();
-        }
-
-        function handleKey(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        }
-
-        async function sendMessage() {
-            if (isGenerating) return;
+        async function sendMsg() {
             const input = document.getElementById('user-input');
             const text = input.value.trim();
-            if (!text && !currentImageBase64) return;
+            if (!text && !base64Image) return;
 
-            const welcome = document.getElementById('welcome-screen');
+            const welcome = document.getElementById('welcome');
             if (welcome) welcome.style.display = 'none';
 
-            appendMessage('user', text, currentImageBase64);
-            saveToStorage('user', text, currentImageBase64);
+            const chatArea = document.getElementById('chat-area');
 
-            const imgToSend = currentImageBase64;
+            // إضافة رسالة المستخدم
+            let imgTag = base64Image ? `<img src="${base64Image}">` : '';
+            chatArea.innerHTML += `<div class="msg user">${imgTag}${escapeHtml(text)}</div>`;
+            chatArea.scrollTop = chatArea.scrollHeight;
+
+            const currentText = text;
+            const currentImg = base64Image;
+
+            // تصفير الحقول
             input.value = '';
-            input.style.height = 'auto';
-            clearImage();
+            removeImage();
 
-            isGenerating = true;
-            document.getElementById('send-btn').style.display = 'none';
-            document.getElementById('stop-btn').style.display = 'flex';
+            // رسالة الانتظار
+            const loadId = 'load_' + Date.now();
+            chatArea.innerHTML += `<div class="msg ai" id="${loadId}">جاري التفكير...</div>`;
+            chatArea.scrollTop = chatArea.scrollHeight;
 
-            const chatBox = document.getElementById('chat-box');
-            const loadingId = 'load_' + Date.now();
-            const loadRow = document.createElement('div');
-            loadRow.className = 'message-row ai';
-            loadRow.id = loadingId;
-            loadRow.innerHTML = `
-                <div class="message-content">
-                    <div class="msg-header-row">
-                        <div class="msg-avatar ai">Z</div>
-                        <div class="msg-text">جاري التفكير...</div>
-                    </div>
-                </div>`;
-            chatBox.appendChild(loadRow);
-            chatBox.scrollTop = chatBox.scrollHeight;
+            // جلب الرد من الذكاء الاصطناعي
+            let aiReply = await getAIResponse(currentText, currentImg);
 
-            activeController = new AbortController();
-            let reply = await askZaedAI(text, imgToSend, activeController.signal);
+            document.getElementById(loadId).remove();
 
-            const rowToRemove = document.getElementById(loadingId);
-            if (rowToRemove) rowToRemove.remove();
-
-            if (reply) {
-                appendMessage('ai', reply);
-                saveToStorage('ai', reply);
-            }
-
-            resetGeneratingState();
+            // إضافة رد الذكاء الاصطناعي
+            chatArea.innerHTML += `<div class="msg ai">${escapeHtml(aiReply)}</div>`;
+            chatArea.scrollTop = chatArea.scrollHeight;
         }
 
-        function stopGenerating() {
-            if (activeController) activeController.abort();
-            resetGeneratingState();
-        }
-
-        function resetGeneratingState() {
-            isGenerating = false;
-            document.getElementById('send-btn').style.display = 'flex';
-            document.getElementById('stop-btn').style.display = 'none';
-        }
-
-        function appendMessage(sender, text, imgUrl = null) {
-            const chatBox = document.getElementById('chat-box');
-            const row = document.createElement('div');
-            row.className = `message-row ${sender}`;
-
-            const avatarLetter = sender === 'user' ? 'ز' : 'Z';
-            let imgTag = imgUrl ? `<img src="${imgUrl}">` : '';
-
-            let actionsHtml = sender === 'ai' ? `
-                <div class="msg-actions">
-                    <button class="msg-action-btn" onclick="copyText(this)">📋 نسخ</button>
-                </div>` : '';
-
-            row.innerHTML = `
-                <div class="message-content">
-                    <div class="msg-header-row">
-                        <div class="msg-avatar ${sender}">${avatarLetter}</div>
-                        <div class="msg-text">${imgTag}${escapeHtml(text)}</div>
-                    </div>
-                    ${actionsHtml}
-                </div>
-            `;
-            chatBox.appendChild(row);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        function copyText(btn) {
-            const textContent = btn.closest('.message-content').querySelector('.msg-text').innerText;
-            navigator.clipboard.writeText(textContent);
-            btn.textContent = '✓ تم النسخ';
-            setTimeout(() => btn.textContent = '📋 نسخ', 2000);
-        }
-
-        async function askZaedAI(prompt, imgBase64, signal) {
+        async function getAIResponse(prompt, img) {
             try {
-                const systemPrompt = "أنت نموذج ذكاء اصطناعي حصري اسمه Zaed Ultimate AI، تم تطويرك بالكامل بواسطة المطور زيد. أجب دائماً باللغة العربية بأسلوب ذكي وسريع ومفيد ودقيق جداً.";
-
-                if (imgBase64) {
+                const sys = "أنت نموذج ذكاء اصطناعي اسمك Zaed Ultimate AI، طوّرك زيد. أجب دائماً بالعربية بدقة.";
+                if (img) {
                     const res = await fetch("https://text.pollinations.ai/", {
                         method: "POST",
-                        signal: signal,
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
                             messages: [
-                                { role: "system", content: systemPrompt },
+                                { role: "system", content: sys },
                                 { role: "user", content: [
-                                    { type: "text", text: prompt || "ما الذي تراه في هذه الصورة؟" },
-                                    { type: "image_url", image_url: { url: imgBase64 } }
+                                    { type: "text", text: prompt || "ما هذا؟" },
+                                    { type: "image_url", image_url: { url: img } }
                                 ]}
                             ],
                             model: "openai-large"
@@ -596,31 +268,20 @@
                     });
                     if (res.ok) return await res.text();
                 } else {
-                    const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}?system=${encodeURIComponent(systemPrompt)}&model=openai-large`, { signal });
+                    const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}?system=${encodeURIComponent(sys)}&model=openai-large`);
                     if (res.ok) return await res.text();
                 }
-            } catch (err) {
-                if (err.name === 'AbortError') return "تم إيقاف التوليد.";
-                console.error(err);
+            } catch (e) {
+                console.error(e);
             }
-            return "عذراً يا زيد، حدث خطأ في الاتصال.";
+            return "عذراً يا زيد، حدث خطأ في الاتصال بالخادم.";
         }
 
-        function saveToStorage(sender, text, img = null) {
-            let hist = JSON.parse(localStorage.getItem('chat_msgs')) || [];
-            hist.push({ sender, text, img });
-            localStorage.setItem('chat_msgs', JSON.stringify(hist));
-            if (sender === 'user') updateSidebarHistory(text);
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
+    </script>
+</body>
+</html>
 
-        function loadHistory() {
-            let hist = JSON.parse(localStorage.getItem('chat_msgs')) || [];
-            if (hist.length > 0) {
-                const welcome = document.getElementById('welcome-screen');
-                if (welcome) welcome.style.display = 'none';
-                hist.forEach(h => appendMessage(h.sender, h.text, h.img));
-                hist.filter(h => h.sender === 'user').forEach(h => updateSidebarHistory(h.text));
-            }
-        }
-
-        function updateSidebarHistory(text)
