@@ -21,7 +21,6 @@
             justify-content: space-between;
         }
 
-        /* الهيدر العلوي */
         .header {
             background-color: #141923;
             padding: 15px 20px;
@@ -64,7 +63,6 @@
             display: inline-block;
         }
 
-        /* منطقة المحادثة */
         .chat-container {
             flex: 1;
             overflow-y: auto;
@@ -84,7 +82,6 @@
             white-space: pre-wrap;
         }
 
-        /* رسائل الذكاء الاصطناعي */
         .message.ai {
             background-color: #1a202c;
             color: #e2e8f0;
@@ -93,7 +90,6 @@
             border: 1px solid #2d3748;
         }
 
-        /* رسائل المستخدم */
         .message.user {
             background-color: #6366f1;
             color: #ffffff;
@@ -108,7 +104,6 @@
             display: block;
         }
 
-        /* رسالة الانتظار */
         .message.loading {
             background-color: #1a202c;
             color: #a0aec0;
@@ -116,7 +111,6 @@
             font-style: italic;
         }
 
-        /* معاينة الصورة المرفقة قبل الإرسال */
         .image-preview-bar {
             display: none;
             padding: 10px 20px;
@@ -146,7 +140,6 @@
             font-size: 12px;
         }
 
-        /* منطقة الإدخال بالأسفل */
         .input-container {
             padding: 15px 20px;
             background-color: #141923;
@@ -179,11 +172,6 @@
             padding: 12px 15px;
             cursor: pointer;
             font-size: 18px;
-            transition: background 0.2s;
-        }
-
-        .attach-btn:hover {
-            background-color: #3b475d;
         }
 
         .send-btn {
@@ -194,55 +182,47 @@
             border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .send-btn:hover {
-            background-color: #4f46e5;
         }
     </style>
 </head>
 <body>
 
-    <!-- الهيدر العلوي -->
     <div class="header">
         <div class="avatar">Z</div>
         <div class="status-info">
             <h2>Zaed Ultimate AI</h2>
-            <p><span class="status-dot"></span> متصل (يدعم الصور والتحليل)</p>
+            <p><span class="status-dot"></span> النظام متصل وجاهز</p>
         </div>
     </div>
 
-    <!-- حاوية الرسائل -->
     <div class="chat-container" id="chat-box">
-        <div class="message ai">أهلاً بك! أنا Zaed Ultimate AI. يمكنك الحديث معي، رفـع صور لتحليلها 📷، أو طلـب رسم صورة 🎨!</div>
+        <div class="message ai">مرحباً بك! أنا Zaed Ultimate AI. جاهز لإجابة أسئلتك، تحليل الصور، ورسم الأفكار 🚀</div>
     </div>
 
-    <!-- شريط معاينة الصورة قبل الإرسال -->
     <div class="image-preview-bar" id="preview-bar">
         <img id="preview-img" src="" alt="المعاينة">
         <span style="font-size: 13px; color: #a0aec0;">صورة جاهزة للتحليل...</span>
         <button class="remove-btn" onclick="clearSelectedImage()">✕</button>
     </div>
 
-    <!-- حقل الكتابة والزر والملحقات -->
     <div class="input-container">
-        <!-- زر اختيار الصورة -->
-        <button class="attach-btn" title="إرفاق صورة للتحليل" onclick="document.getElementById('image-input').click()">📷</button>
+        <button class="attach-btn" title="إرفاق صورة" onclick="document.getElementById('image-input').click()">📷</button>
         <input type="file" id="image-input" accept="image/*" style="display: none;" onchange="handleImageSelect(event)">
-
-        <input type="text" id="user-input" placeholder="اكتب سؤالك أو 'ارسم سيارة رياضية'..." onkeydown="if(event.key === 'Enter') sendMessage()">
+        <input type="text" id="user-input" placeholder="اسألني أي شيء أو اطلب 'ارسم صورة'..." onkeydown="if(event.key === 'Enter') sendMessage()">
         <button class="send-btn" onclick="sendMessage()">إرسال</button>
     </div>
 
-    <!-- كود الجافاسكربت المحسّن -->
     <script>
-        let selectedBase64Image = null;
+        // مفتاح الـ API الخاص بك
+        const GEMINI_API_KEY = "AQ.Ab8RN6Lp5t_RatMYQFyi_aZ01-fjqSs4hllg4OzKXUYRnbzvzA";
 
-        // عند اختيار صورة من جهاز المستخدم
+        let selectedBase64Image = null;
+        let selectedMimeType = "image/jpeg";
+
         function handleImageSelect(event) {
             const file = event.target.files[0];
             if (file) {
+                selectedMimeType = file.type || "image/jpeg";
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     selectedBase64Image = e.target.result;
@@ -253,63 +233,54 @@
             }
         }
 
-        // إلغاء تحديد الصورة
         function clearSelectedImage() {
             selectedBase64Image = null;
             document.getElementById('image-input').value = '';
             document.getElementById('preview-bar').style.display = 'none';
         }
 
-        // 1. دالة جلب النص/التحليل
-        async function getAIResponse(userQuery) {
-            try {
-                const systemPrompt = "أنت ذكاء اصطناعي ذكي وسريع اسمه Zaed Ultimate AI، طورك وبرمجك المطور زيد. أجب دائماً باللغة العربية بأسلوب ذكي ومفيد.";
-                const apiUrl = `https://text.pollinations.ai/${encodeURIComponent(userQuery)}?system=${encodeURIComponent(systemPrompt)}`;
-                
-                const response = await fetch(apiUrl);
-                if (response.ok) {
-                    const aiText = await response.text();
-                    if (aiText && aiText.trim().length > 0) return aiText.trim();
-                }
-            } catch (e) {
-                console.error("AI Fetch Error:", e);
+        async function askAI(promptText, base64Image) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+            
+            const parts = [];
+            // إخفاء أي أثر لأي نموذج آخر وتحديد الهوية كـ Zaed Ultimate AI
+            const systemInstruction = "أنت نموذج ذكاء اصطناعي حصري اسمه Zaed Ultimate AI، تم تطويرك وبرمجتك بالكامل بواسطة المطور زيد. أجب دائماً باللغة العربية بأسلوب ذكي وسريع ومفيد. لا تذكر أبداً أي شركات أو نماذج ذكاء اصطناعي أخرى تحت أي ظرف.";
+
+            if (promptText) {
+                parts.push({ text: `${systemInstruction}\n\nسؤال المستخدم: ${promptText}` });
+            } else {
+                parts.push({ text: `${systemInstruction}\n\nاشرح ما يوجد في هذه الصورة بالتفصيل.` });
             }
 
-            return "أنا هنا لمساعدتك! يمكنك أن تسألني عن أي موضوع وسأجيبك فوراً.";
-        }
+            if (base64Image) {
+                const cleanBase64 = base64Image.split(',')[1];
+                parts.push({
+                    inlineData: {
+                        mimeType: selectedMimeType,
+                        data: cleanBase64
+                    }
+                });
+            }
 
-        // 2. دالة تحليل الصور (Vision)
-        async function analyzeImage(base64Data, userQuery) {
             try {
-                const promptText = userQuery || "اشرح بالتفصيل ما بداخل هذه الصورة باللغة العربية.";
-                const response = await fetch("https://text.pollinations.ai/", {
+                const response = await fetch(url, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        messages: [
-                            {
-                                role: "user",
-                                content: [
-                                    { type: "text", text: promptText },
-                                    { type: "image_url", image_url: { url: base64Data } }
-                                ]
-                            }
-                        ],
-                        model: "openai"
-                    })
+                    body: JSON.stringify({ contents: [{ parts: parts }] })
                 });
 
-                if (response.ok) {
-                    const resultText = await response.text();
-                    if (resultText && resultText.trim().length > 0) return resultText.trim();
+                const data = await response.json();
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    return data.candidates[0].content.parts[0].text;
+                } else if (data.error) {
+                    return "حدث خطأ أثناء معالجة الطلب، يرجى المحاولة لاحقاً.";
                 }
             } catch (e) {
-                console.error("Vision API Error:", e);
+                console.error(e);
             }
-            return "عذراً، تعذر تحليل الصورة في الوقت الحالي. تأكد من جودة الاتصال بالإنترنت حاول مجدداً.";
+            return "عذراً، حدث خطأ في الاتصال بالشبكة.";
         }
 
-        // دالة إرسال الرسائل والمعالجة
         async function sendMessage() {
             const inputField = document.getElementById("user-input");
             const chatBox = document.getElementById("chat-box");
@@ -317,7 +288,6 @@
 
             if (!text && !selectedBase64Image) return;
 
-            // 1. إظهار رسالة المستخدم في الشاشة
             const userMsg = document.createElement("div");
             userMsg.className = "message user";
 
@@ -337,42 +307,32 @@
             inputField.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // احتفاظ بنفس البيانات ثم تفريغ الخانة
             const currentImage = selectedBase64Image;
             clearSelectedImage();
 
-            // 2. إظهار مؤشر الانتظار
             const loadingMsg = document.createElement("div");
             loadingMsg.className = "message loading";
-            loadingMsg.textContent = currentImage ? "جاري قراءة وتحليل الصورة..." : "جاري التفكير والتحليل...";
+            loadingMsg.textContent = "جاري التفكير والتطبيق...";
             chatBox.appendChild(loadingMsg);
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // 3. اتخاذ القرار: هل الطلب تحليل صورة أم توليد صورة أم سؤال عادي؟
             let replyText = "";
             let generatedImgUrl = null;
 
             const lowerText = text.toLowerCase();
-            const isImageGen = !currentImage && (lowerText.startsWith("ارسم") || lowerText.includes("صورة ل") || lowerText.includes("توليد صورة") || lowerText.startsWith("draw"));
+            const isImageGen = !currentImage && (lowerText.startsWith("ارسم") || lowerText.includes("صورة ل") || lowerText.includes("توليد صورة"));
 
-            if (currentImage) {
-                // حالة 1: تحليل صورة تم رفعها
-                replyText = await analyzeImage(currentImage, text);
-            } else if (isImageGen) {
-                // حالة 2: توليد صورة بناءً على الوصف
-                loadingMsg.textContent = "جاري رسم الصورة بالذكاء الاصطناعي... 🎨";
+            if (isImageGen) {
+                loadingMsg.textContent = "جاري رسم الصورة... 🎨";
                 let cleanPrompt = text.replace(/ارسم|توليد صورة|صورة لـ|صورة/g, "").trim() || text;
                 generatedImgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(cleanPrompt)}?width=1024&height=1024&nologo=true&seed=${Math.floor(Math.random()*100000)}`;
-                replyText = `تفضل! هذه هي الصورة بناءً على طلبك: "${cleanPrompt}" 🎨`;
+                replyText = `تم رسم الصورة بواسطة Zaed Ultimate AI بناءً على طلبك: "${cleanPrompt}" 🎨`;
             } else {
-                // حالة 3: سؤال نصي عادي
-                replyText = await getAIResponse(text);
+                replyText = await askAI(text, currentImage);
             }
 
-            // إزالة مؤشر التحميل
             chatBox.removeChild(loadingMsg);
 
-            // عرض رد الذكاء الاصطناعي
             const aiMsg = document.createElement("div");
             aiMsg.className = "message ai";
             
@@ -383,7 +343,6 @@
             if (generatedImgUrl) {
                 const aiImg = document.createElement("img");
                 aiImg.src = generatedImgUrl;
-                aiImg.alt = "AI Generated Image";
                 aiMsg.appendChild(aiImg);
             }
 
