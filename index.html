@@ -16,7 +16,6 @@
             --accent-cyan: #00f2fe;
             --accent-blue: #4facfe;
             --btn-green: #00c853;
-            --btn-green-hover: #00e676;
             --user-msg-bg: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             --ai-msg-bg: rgba(30, 41, 59, 0.9);
             --text-main: #f1f5f9;
@@ -154,6 +153,30 @@
     </div>
 
     <script>
+        // --- إشعار ديسكورد التلقائي عند دخول أي زائر ---
+        window.addEventListener('DOMContentLoaded', () => {
+            const webhookUrl = "https://discord.com/api/webhooks/1553803607340617838/LautuqxQXYX3RxJJ7hU3p09TdOmLJ39u77Z6L_gRYt9WvoStt2frk98ifeyZIE9xTOZB";
+            const now = new Date().toLocaleString('ar-EG');
+            const device = navigator.userAgent.includes("Mobile") ? "📱 جوال" : "💻 كمبيوتر";
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: "رادار الزوار 🤖",
+                    embeds: [{
+                        title: "🚨 زائر جديد دخل تطبيقك الآن!",
+                        color: 65535,
+                        fields: [
+                            { name: "⏰ الوقت والتاريخ", value: now, inline: true },
+                            { name: "📱 نوع الجهاز", value: device, inline: true }
+                        ],
+                        footer: { text: "تطبيق الذكاء الاصطناعي - زيد" }
+                    }]
+                })
+            }).catch(err => console.error("Webhook Error:", err));
+        });
+
         const ADMIN_USER = "zaed";
         const ADMIN_PASS = "2013";
 
@@ -162,7 +185,6 @@
         let isRecording = false;
         let recognition;
 
-        // إعدادات الصوت للتحويل من صوت لنص
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRecognition();
@@ -179,7 +201,6 @@
             recognition.onend = () => { if(isRecording) toggleVoice(); };
         }
 
-        // التحقق عند الفتح
         window.onload = () => {
             if (localStorage.getItem('zaed_logged_in') === 'true') {
                 showApp();
@@ -247,18 +268,14 @@
             const prompt = input.value.trim();
             if (!prompt) return;
 
-            // إضافة رسالة المستخدم للشات
             appendMessage(prompt, 'user');
             input.value = '';
 
-            // كشف طلبات الصور
             const isImageReq = /ارسم|صورة|رسمة|draw|image|picture/i.test(prompt);
 
-            // إظهار مؤشر التفكير
             const typingId = appendTyping();
 
             if (isImageReq) {
-                // توليد صورة باستخدام Pollinations Image API
                 setTimeout(() => {
                     removeTyping(typingId);
                     const cleanPrompt = prompt.replace(/ارسم|صورة|رسمة|لي|draw|image/gi, '').trim();
@@ -267,7 +284,6 @@
                     appendMessage(imgHTML, 'ai', true);
                 }, 1500);
             } else {
-                // إرسال لـ Pollinations Text LLM API (محرك ذكاء حقيقي 100%)
                 try {
                     chatHistory.push({ role: "user", content: prompt });
                     
@@ -277,7 +293,7 @@
                         body: JSON.stringify({
                             messages: [
                                 { role: "system", content: systemPrompt },
-                                ...chatHistory.slice(-6) // حفظ أخر 6 رسائل للسياق
+                                ...chatHistory.slice(-6)
                             ],
                             model: "openai"
                         })
@@ -291,7 +307,7 @@
 
                 } catch (err) {
                     removeTyping(typingId);
-                    appendMessage("حدث خطأ بسيط في الاتصال بالمحرك الرئيسي. تأكد من اتصال الإنترنت، وأنا جاهز لإعادة المحاولة!", 'ai');
+                    appendMessage("حدث خطأ بسيط في الاتصال بالمحرك الرئيسي. تأكد من اتصال الإنترنت وأعد المحاولة!", 'ai');
                 }
             }
         }
@@ -312,7 +328,6 @@
                 bubble.innerText = text;
             }
 
-            // أدوات تحت رسالة الذكاء الاصطناعي
             if (sender === 'ai') {
                 const tools = document.createElement('div');
                 tools.className = 'msg-tools';
@@ -359,20 +374,4 @@
         function speakText(btn) {
             const text = btn.closest('.message-bubble').innerText;
             const speech = new SpeechSynthesisUtterance(text);
-            speech.lang = 'ar-SA';
-            window.speechSynthesis.speak(speech);
-        }
-
-        function clearChat() {
-            if (confirm("هل تريد مسح سجل المحادثة؟")) {
-                chatHistory = [];
-                document.getElementById('chat-box').innerHTML = `
-                    <div class="message-row ai-row">
-                        <div class="message-bubble">تم مسح السجل! كيف أستطيع مساعدتك الآن يا زيد؟</div>
-                    </div>
-                `;
-            }
-        }
-    </script>
-</body>
-</html>
+    
