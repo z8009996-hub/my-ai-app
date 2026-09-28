@@ -109,12 +109,11 @@
             font-style: italic;
         }
 
-        /* منطقة الإدخال بالأسفل (مرتبة وصحيحة للغة العربية) */
+        /* منطقة الإدخال بالأسفل */
         .input-container {
             padding: 15px 20px;
             background-color: #141923;
             display: flex;
-            flex-direction: row-reverse;
             gap: 10px;
             border-top: 1px solid #222938;
         }
@@ -128,7 +127,6 @@
             color: #fff;
             font-size: 15px;
             outline: none;
-            text-align: right;
         }
 
         .input-container input:focus {
@@ -164,68 +162,51 @@
 
     <!-- حاوية الرسائل -->
     <div class="chat-container" id="chat-box">
-        <div class="message ai">أهلاً بك يا زيد! أنا محركك الذكي المتطور، جاهز تماماً لتلقي أسئلتك وإعطائك إجابات دقيقة ومبتكرة. 🚀</div>
+        <div class="message ai">أنا بخير وعال العال، وجاهز تماماً لمساعدتك! كيف حالك اليوم؟ 🌟</div>
     </div>
 
     <!-- حقل الكتابة والزر -->
     <div class="input-container">
-        <button onclick="sendMessage()">إرسال</button>
         <input type="text" id="user-input" placeholder="اكتب سؤالك هنا..." onkeydown="if(event.key === 'Enter') sendMessage()">
+        <button onclick="sendMessage()">إرسال</button>
     </div>
 
-    <!-- كود الجافاسكربت المحسّن بالمحركات المتعددة -->
+    <!-- كود الجافاسكربت المحسّن -->
     <script>
-        // دالة جلب الرد من عدة محركات ذكاء اصطناعي لضمان إجابة حقيقية وذكية لكل سؤال
+        // دالة جلب الرد من سيرفر الذكاء الاصطناعي المجاني (Pollinations)
         async function getAIResponse(userQuery) {
-            const queryLower = userQuery.trim().toLowerCase();
-
-            // 1. فحص الأسئلة الخاصة بالمطور والمخترع
-            if (queryLower.includes("من مخترعك") || queryLower.includes("من صنعك") || queryLower.includes("من برمك") || queryLower.includes("من هو زيد") || queryLower.includes("مين مطورك")) {
-                return "أنا نموذج ذكاء اصطناعي تم تطويري وابتكاري بالكامل بواسطة المبدع زيد! 🛠️✨";
-            }
-
-            // 2. المحرك الأول: محاولة الاتصال بنظام الـ API الذكي مع تنويع الـ Seed لمنع تكرار الإجابات الثابتة
             try {
-                const systemPrompt = "أنت ذكاء اصطناعي متطور جداً وسريع، اسمك Zaed Ultimate AI، طورك وبرمجك المطور زيد. أجب على كل سؤال بذكاء، عمق وتنوع تام باللغة العربية ودون تكرار.";
-                const randomSeed = Math.floor(Math.random() * 100000);
-                const apiUrl = `https://text.pollinations.ai/${encodeURIComponent(userQuery)}?system=${encodeURIComponent(systemPrompt)}&seed=${randomSeed}&model=openai`;
+                const systemPrompt = "أنت ذكاء اصطناعي ذكي وسريع اسمه Zaed Ultimate AI، طورك وبرمجك المطور زيد. أجب دائماً باللغة العربية بأسلوب ذكي، مفيد ومختصر.";
+                const apiUrl = `https://text.pollinations.ai/${encodeURIComponent(userQuery)}?system=${encodeURIComponent(systemPrompt)}`;
                 
                 const response = await fetch(apiUrl);
                 if (response.ok) {
                     const aiText = await response.text();
-                    if (aiText && aiText.trim().length > 3 && !aiText.toLowerCase().includes("error")) {
+                    if (aiText && aiText.trim().length > 0) {
                         return aiText.trim();
                     }
                 }
             } catch (e) {
-                console.log("محرك 1 تعذر الاتصال به، جاري التبديل للمحرك البديل...");
+                console.error("AI Fetch Error:", e);
             }
 
-            // 3. المحرك الثاني: محاولة اتصال بديلة عبر مسار مختلف من نفس الشبكة
-            try {
-                const altApiUrl = `https://text.pollinations.ai/prompt/${encodeURIComponent(userQuery)}`;
-                const altResponse = await fetch(altApiUrl);
-                if (altResponse.ok) {
-                    const altText = await altResponse.text();
-                    if (altText && altText.trim().length > 3) {
-                        return altText.trim();
-                    }
-                }
-            } catch (e) {}
+            // محرك ردود احتياطي بالعامية والفصحى
+            const query = userQuery.trim().toLowerCase();
 
-            // 4. المحرك المحلي الذكي (يتفاعل بمرونة عالية مع الأسئلة الشائعة)
-            if (queryLower.includes("كيف حالك") || queryLower.includes("كيفك") || queryLower.includes("اخبارك") || queryLower.includes("شلونك")) {
-                return "أنا بأفضل حال وجاهز تماماً لدعمك وإنجاز مهامك يا زيد! أنت طمني عنك وعن أخبارك؟ 🌟";
+            if (query.includes("شو اسمك") || query.includes("اسمك") || query.includes("مين انت") || query.includes("انتا مين") || query.includes("من انت") || query.includes("ما اسمك")) {
+                return "أنا Zaed Ultimate AI، نموذج ذكاء اصطناعي تم تطويري بواسطة المطور زيد لخدمتك وإجابة أسئلتك! 🚀";
             }
-            if (queryLower.includes("مرحبا") || queryLower.includes("هلا") || queryLower.includes("أهلا") || queryLower.includes("السلام عليكم") || queryLower.includes("الو")) {
-                return "وعليكم السلام ورحمة الله وبركاته! أهلاً بك يا زيد، تفضل بطرح سؤالك أو الموضوع الذي تريد مناقشته. 😊";
+            if (query.includes("مرحبا") || query.includes("هلا") || query.includes("أهلا") || query.includes("السلام عليكم") || query.includes("الو")) {
+                return "أهلاً وسهلاً بك! كيف يمكنني مساعدتك اليوم؟ 😊";
             }
-            if (queryLower.includes("شو اسمك") || queryLower.includes("اسمك") || queryLower.includes("مين انت") || queryLower.includes("انتا مين") || queryLower.includes("من انت")) {
-                return "أنا Zaed Ultimate AI، نظامك الذكي الخاص والمبرمج بواسطة الإبداع الذي تمتلكه! 💻🚀";
+            if (query.includes("كيف حالك") || query.includes("كيفك") || query.includes("اخبارك") || query.includes("شلونك")) {
+                return "أنا بخير وعال العال وجاهز لمساعدتك! أنت كيف حالك؟ 🌟";
+            }
+            if (query.includes("رد") || query.includes("تكلم") || query.includes("اسمع")) {
+                return "أنا معك وبسمعك! تفضل، شو السؤال أو الموضوع اللي حابب نتناقش فيه؟";
             }
 
-            // رد تحليل عام متجدد ومتنوع
-            return `لقد استلمت سؤالك (${userQuery}). جاري معالجة البيانات وتحليلها لتقديم أفضل إجابة دقيقة ومفيدة لك يا زيد. هل ترغب في إضافة تفاصيل معينة لنتعمق أكثر؟`;
+            return "أنا هنا لمساعدتك! يمكنك أن تسألني عن أي موضوع وسأجيبك فوراً.";
         }
 
         // دالة إرسال الرسالة وعرضها في الشاشة
