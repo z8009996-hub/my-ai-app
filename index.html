@@ -2,1264 +2,791 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zide — Search</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zide AI</title>
 
 <style>
-:root {
-    --bg: #080b12;
-    --panel: rgba(17, 22, 34, .78);
-    --panel-2: #111827;
-    --text: #f5f7ff;
-    --muted: #8993a8;
-    --border: rgba(255,255,255,.08);
-
-    --primary: #6575ff;
-    --purple: #9b5cff;
-    --cyan: #24d9ff;
-    --success: #35df91;
-    --danger: #ff5c77;
-
-    --shadow:
-        0 25px 80px rgba(0,0,0,.45);
+*{box-sizing:border-box}
+:root{
+ --bg:#070a11;
+ --panel:#101624;
+ --border:rgba(255,255,255,.09);
+ --text:#f5f7ff;
+ --muted:#8792a8;
+ --primary:#6577ff;
+ --purple:#ad55ff;
 }
-
-* {
-    box-sizing: border-box;
+body{
+ margin:0;
+ min-height:100vh;
+ background:
+ radial-gradient(circle at 15% 0%,rgba(101,119,255,.2),transparent 32%),
+ radial-gradient(circle at 90% 15%,rgba(173,85,255,.17),transparent 30%),
+ var(--bg);
+ color:var(--text);
+ font-family:Arial,system-ui,sans-serif;
 }
-
-html {
-    scroll-behavior: smooth;
+.app{min-height:100vh}
+header{
+ height:64px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:0 22px;
+ position:fixed;
+ top:0;
+ right:0;
+ left:0;
+ z-index:10;
+ background:rgba(7,10,17,.8);
+ backdrop-filter:blur(20px);
+ border-bottom:1px solid var(--border);
 }
-
-body {
-    margin: 0;
-    min-height: 100vh;
-
-    font-family:
-        Inter,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-
-    color: var(--text);
-
-    background:
-        radial-gradient(
-            circle at 15% 15%,
-            rgba(101,117,255,.18),
-            transparent 28%
-        ),
-        radial-gradient(
-            circle at 85% 20%,
-            rgba(155,92,255,.15),
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 50% 100%,
-            rgba(36,217,255,.08),
-            transparent 35%
-        ),
-        var(--bg);
+.logo{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ font-size:23px;
+ font-weight:900;
 }
-
-/* ================================
-   HEADER
-================================ */
-
-.header {
-    width: min(1180px, calc(100% - 32px));
-    margin: auto;
-
-    padding: 22px 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.logoBox{
+ width:38px;
+ height:38px;
+ display:grid;
+ place-items:center;
+ border-radius:12px;
+ background:linear-gradient(135deg,var(--primary),var(--purple));
 }
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-
-    font-size: 22px;
-    font-weight: 900;
-    letter-spacing: -.7px;
+.status{
+ color:#62e69a;
+ font-size:11px;
 }
-
-.logo-mark {
-    width: 39px;
-    height: 39px;
-
-    display: grid;
-    place-items: center;
-
-    border-radius: 13px;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--primary),
-            var(--purple)
-        );
-
-    box-shadow:
-        0 8px 30px rgba(101,117,255,.35);
-
-    font-weight: 900;
+.chat{
+ width:min(850px,calc(100% - 24px));
+ margin:auto;
+ padding:110px 0 150px;
 }
-
-.logo span {
-    color: #aeb7ff;
+.welcome{text-align:center;padding-top:10vh}
+.welcomeLogo{
+ width:80px;
+ height:80px;
+ margin:auto auto 20px;
+ display:grid;
+ place-items:center;
+ border-radius:25px;
+ font-size:35px;
+ font-weight:900;
+ background:linear-gradient(135deg,var(--primary),var(--purple));
+ box-shadow:0 20px 60px rgba(101,119,255,.3);
 }
-
-.header-actions {
-    display: flex;
-    gap: 8px;
+h1{
+ font-size:clamp(38px,7vw,60px);
+ letter-spacing:-3px;
+ margin:0;
 }
-
-.icon-btn {
-    width: 40px;
-    height: 40px;
-
-    border: 1px solid var(--border);
-    border-radius: 12px;
-
-    color: var(--text);
-    background: rgba(255,255,255,.04);
-
-    cursor: pointer;
-
-    transition: .2s;
+.welcome p{color:var(--muted)}
+.cards{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+ max-width:620px;
+ margin:35px auto;
 }
-
-.icon-btn:hover {
-    background: rgba(255,255,255,.08);
-    transform: translateY(-1px);
+.card{
+ padding:16px;
+ text-align:right;
+ color:#aeb7c9;
+ background:rgba(255,255,255,.035);
+ border:1px solid var(--border);
+ border-radius:15px;
+ cursor:pointer;
 }
-
-/* ================================
-   HERO
-================================ */
-
-.hero {
-    width: min(900px, calc(100% - 32px));
-
-    margin:
-        70px
-        auto
-        35px;
-
-    text-align: center;
+.card:hover{
+ background:rgba(101,119,255,.08);
+ border-color:rgba(101,119,255,.5);
 }
-
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-
-    padding: 7px 12px;
-
-    border: 1px solid rgba(101,117,255,.2);
-    border-radius: 999px;
-
-    background: rgba(101,117,255,.08);
-
-    color: #aeb7ff;
-    font-size: 12px;
+.message{
+ display:flex;
+ gap:12px;
+ margin:30px 0;
 }
-
-.badge-dot {
-    width: 7px;
-    height: 7px;
-
-    border-radius: 50%;
-
-    background: var(--success);
-
-    box-shadow:
-        0 0 12px var(--success);
+.avatar{
+ width:36px;
+ height:36px;
+ flex:0 0 36px;
+ display:grid;
+ place-items:center;
+ border-radius:11px;
+ font-size:11px;
+ font-weight:bold;
 }
-
-.hero h1 {
-    margin:
-        22px
-        0
-        12px;
-
-    font-size:
-        clamp(42px, 8vw, 76px);
-
-    line-height: .95;
-    letter-spacing: -4px;
+.user .avatar{background:#293349}
+.ai .avatar{
+ background:linear-gradient(135deg,var(--primary),var(--purple));
 }
-
-.gradient {
-    background:
-        linear-gradient(
-            100deg,
-            #fff,
-            #9da8ff 45%,
-            #b875ff
-        );
-
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+.content{flex:1;min-width:0}
+.name{
+ color:#8d98ad;
+ font-size:11px;
+ margin-bottom:7px;
 }
-
-.hero p {
-    margin: 0 auto;
-
-    max-width: 600px;
-
-    color: var(--muted);
-
-    line-height: 1.8;
+.bubble{
+ line-height:1.9;
+ font-size:15px;
+ overflow-wrap:anywhere;
 }
-
-/* ================================
-   SEARCH
-================================ */
-
-.search-shell {
-    width: min(900px, calc(100% - 32px));
-    margin: auto;
+.user .bubble{
+ display:inline-block;
+ padding:13px 16px;
+ max-width:90%;
+ border-radius:17px;
+ background:rgba(255,255,255,.055);
+ border:1px solid var(--border);
 }
-
-.search-box {
-    position: relative;
-
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    padding: 8px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.1);
-
-    border-radius: 22px;
-
-    background:
-        rgba(15,20,31,.78);
-
-    backdrop-filter:
-        blur(20px);
-
-    box-shadow:
-        var(--shadow);
-
-    transition: .25s;
+.bubble img{
+ display:block;
+ max-width:100%;
+ max-height:450px;
+ border-radius:14px;
+ margin-bottom:10px;
 }
-
-.search-box:focus-within {
-    border-color:
-        rgba(101,117,255,.55);
-
-    box-shadow:
-        0 0 0 4px rgba(101,117,255,.08),
-        0 25px 80px rgba(0,0,0,.45);
+pre{
+ direction:ltr;
+ text-align:left;
+ overflow:auto;
+ padding:16px;
+ border-radius:13px;
+ background:#05070c;
+ border:1px solid var(--border);
 }
-
-.search-icon {
-    width: 45px;
-    flex: 0 0 45px;
-
-    display: grid;
-    place-items: center;
-
-    color: #8995ff;
-    font-size: 20px;
+code{font-family:Consolas,monospace}
+.composerWrap{
+ position:fixed;
+ bottom:15px;
+ left:50%;
+ transform:translateX(-50%);
+ width:min(850px,calc(100% - 20px));
+ z-index:20;
 }
-
-#query {
-    min-width: 0;
-    flex: 1;
-
-    border: 0;
-    outline: 0;
-
-    background: transparent;
-
-    color: var(--text);
-
-    padding: 14px 5px;
-
-    font-size: 16px;
+.preview{
+ display:none;
+ gap:8px;
+ padding:8px;
+ margin-bottom:8px;
+ width:max-content;
+ max-width:100%;
+ border-radius:14px;
+ background:#121927;
+ border:1px solid var(--border);
 }
-
-#query::placeholder {
-    color: #667087;
+.previewItem{position:relative}
+.previewItem img{
+ width:70px;
+ height:70px;
+ object-fit:cover;
+ border-radius:10px;
 }
-
-.engine {
-    height: 45px;
-
-    border:
-        1px solid
-        var(--border);
-
-    border-radius: 13px;
-
-    padding:
-        0
-        11px;
-
-    color: var(--text);
-
-    background:
-        #151c2b;
-
-    outline: 0;
-
-    cursor: pointer;
+.remove{
+ position:absolute;
+ top:-6px;
+ left:-6px;
+ width:20px;
+ height:20px;
+ border:0;
+ border-radius:50%;
+ background:#ff5870;
+ color:white;
+ cursor:pointer;
 }
-
-.search-btn {
-    height: 45px;
-
-    padding:
-        0
-        18px;
-
-    border: 0;
-    border-radius: 14px;
-
-    color: white;
-
-    font-weight: 800;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--primary),
-            var(--purple)
-        );
-
-    cursor: pointer;
-
-    box-shadow:
-        0 8px 25px
-        rgba(83,92,255,.25);
-
-    transition: .2s;
+.composer{
+ display:flex;
+ align-items:flex-end;
+ gap:7px;
+ padding:8px;
+ border-radius:20px;
+ background:rgba(15,20,31,.94);
+ border:1px solid rgba(255,255,255,.12);
+ box-shadow:0 20px 70px rgba(0,0,0,.5);
+ backdrop-filter:blur(25px);
 }
-
-.search-btn:hover {
-    filter: brightness(1.1);
-    transform: translateY(-1px);
+textarea{
+ flex:1;
+ min-width:0;
+ min-height:46px;
+ max-height:170px;
+ resize:none;
+ outline:0;
+ border:0;
+ background:transparent;
+ color:white;
+ padding:13px;
 }
-
-.search-btn:active {
-    transform: scale(.97);
+button{font:inherit}
+.tool,.send,.stop{
+ width:45px;
+ height:45px;
+ flex:0 0 45px;
+ border:0;
+ border-radius:13px;
+ cursor:pointer;
 }
-
-/* ================================
-   QUICK ENGINES
-================================ */
-
-.engines {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    gap: 8px;
-
-    margin-top: 16px;
+.tool{background:#20283a;color:white}
+.send{
+ background:linear-gradient(135deg,var(--primary),var(--purple));
+ color:white;
+ font-size:20px;
 }
-
-.engine-chip {
-    border:
-        1px solid
-        var(--border);
-
-    border-radius: 999px;
-
-    padding:
-        7px
-        12px;
-
-    color: #9ba5b9;
-
-    background:
-        rgba(255,255,255,.025);
-
-    cursor: pointer;
-
-    font-size: 12px;
-
-    transition: .2s;
+.stop{
+ display:none;
+ background:#dc5268;
+ color:white;
 }
-
-.engine-chip:hover {
-    color: white;
-    border-color: rgba(101,117,255,.35);
-    background: rgba(101,117,255,.08);
-}
-
-/* ================================
-   RESULTS
-================================ */
-
-.results {
-    width: min(900px, calc(100% - 32px));
-
-    margin:
-        45px
-        auto
-        80px;
-}
-
-.results-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 15px;
-}
-
-.results-title {
-    font-size: 14px;
-    font-weight: 800;
-}
-
-.results-status {
-    color: var(--muted);
-    font-size: 12px;
-}
-
-.result {
-    padding: 20px;
-
-    margin-bottom: 10px;
-
-    border:
-        1px solid
-        var(--border);
-
-    border-radius: 18px;
-
-    background:
-        rgba(16,22,34,.65);
-
-    transition: .2s;
-}
-
-.result:hover {
-    border-color:
-        rgba(101,117,255,.25);
-
-    transform:
-        translateY(-2px);
-}
-
-.result-source {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    color: #7783ff;
-
-    font-size: 11px;
-    font-weight: 700;
-
-    margin-bottom: 8px;
-}
-
-.result h3 {
-    margin:
-        0
-        0
-        8px;
-
-    font-size: 17px;
-}
-
-.result h3 a {
-    color: white;
-    text-decoration: none;
-}
-
-.result h3 a:hover {
-    color: #aeb7ff;
-}
-
-.result p {
-    margin: 0;
-
-    color: #929caf;
-
-    font-size: 13px;
-
-    line-height: 1.8;
-}
-
-.result-url {
-    display: block;
-
-    margin-top: 10px;
-
-    color: #4ddbb4;
-
-    font-size: 11px;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.empty {
-    padding: 50px 20px;
-
-    text-align: center;
-
-    color: var(--muted);
-}
-
-.empty-icon {
-    font-size: 35px;
-    margin-bottom: 10px;
-}
-
-/* ================================
-   FOOTER
-================================ */
-
-footer {
-    width: min(900px, calc(100% - 32px));
-
-    margin: auto;
-
-    padding:
-        20px
-        0
-        35px;
-
-    color: #596378;
-
-    text-align: center;
-
-    font-size: 11px;
-}
-
-footer strong {
-    color: #818cff;
-}
-
-/* ================================
-   TOAST
-================================ */
-
-.toast {
-    position: fixed;
-
-    left: 50%;
-    bottom: 25px;
-
-    transform:
-        translate(-50%, 100px);
-
-    padding:
-        12px
-        18px;
-
-    border:
-        1px solid
-        var(--border);
-
-    border-radius: 14px;
-
-    color: white;
-
-    background:
-        rgba(17,24,39,.94);
-
-    backdrop-filter:
-        blur(15px);
-
-    box-shadow:
-        0 15px 50px rgba(0,0,0,.35);
-
-    opacity: 0;
-
-    transition: .3s;
-
-    z-index: 100;
-}
-
-.toast.show {
-    opacity: 1;
-
-    transform:
-        translate(-50%, 0);
-}
-
-/* ================================
-   MOBILE
-================================ */
-
-@media (max-width: 650px) {
-
-    .header {
-        padding-top: 15px;
-    }
-
-    .hero {
-        margin-top: 45px;
-    }
-
-    .hero h1 {
-        letter-spacing: -2px;
-    }
-
-    .search-box {
-        flex-wrap: wrap;
-        padding: 8px;
-    }
-
-    .search-icon {
-        width: 38px;
-        flex-basis: 38px;
-    }
-
-    #query {
-        flex-basis: calc(100% - 55px);
-    }
-
-    .engine {
-        flex: 1;
-    }
-
-    .search-btn {
-        flex: 1;
-    }
-
-    .results {
-        margin-top: 30px;
-    }
+@media(max-width:650px){
+ .cards{grid-template-columns:1fr}
 }
 </style>
 </head>
 
 <body>
 
-<header class="header">
-
-    <div class="logo">
-        <div class="logo-mark">Z</div>
-        <div>Zide<span>.</span></div>
-    </div>
-
-    <div class="header-actions">
-        <button
-            class="icon-btn"
-            id="clearBtn"
-            title="مسح">
-            ×
-        </button>
-    </div>
-
+<header>
+ <div class="logo">
+  <div class="logoBox">Z</div>
+  Zide
+ </div>
+ <div class="status">● متصل</div>
 </header>
 
+<main class="chat" id="chat">
 
-<main>
+<div class="welcome" id="welcome">
+ <div class="welcomeLogo">Z</div>
+ <h1>كيف أساعدك؟</h1>
+ <p>محادثة ذكية + تحليل الصور + برمجة</p>
 
-<section class="hero">
-
-    <div class="badge">
-        <span class="badge-dot"></span>
-        بحث مجاني ومتعدد المصادر
-    </div>
-
-    <h1>
-        ابحث بذكاء مع
-        <span class="gradient">Zide</span>
-    </h1>
-
-    <p>
-        محرك بحث بسيط وسريع يجمع لك الوصول إلى
-        Google وBing وDuckDuckGo وWikipedia
-        من واجهة واحدة.
-    </p>
-
-</section>
-
-
-<section class="search-shell">
-
-    <form class="search-box" id="searchForm">
-
-        <div class="search-icon">⌕</div>
-
-        <input
-            id="query"
-            type="search"
-            autocomplete="off"
-            placeholder="ماذا تريد أن تبحث؟"
-            aria-label="بحث"
-        >
-
-        <select
-            id="engine"
-            class="engine"
-            aria-label="محرك البحث">
-
-            <option value="google">
-                Google
-            </option>
-
-            <option value="bing">
-                Bing
-            </option>
-
-            <option value="duck">
-                DuckDuckGo
-            </option>
-
-            <option value="wiki">
-                Wikipedia
-            </option>
-
-        </select>
-
-        <button
-            class="search-btn"
-            type="submit">
-            بحث
-        </button>
-
-    </form>
-
-
-    <div class="engines">
-
-        <button
-            class="engine-chip"
-            data-engine="google">
-            Google
-        </button>
-
-        <button
-            class="engine-chip"
-            data-engine="bing">
-            Bing
-        </button>
-
-        <button
-            class="engine-chip"
-            data-engine="duck">
-            DuckDuckGo
-        </button>
-
-        <button
-            class="engine-chip"
-            data-engine="wiki">
-            Wikipedia
-        </button>
-
-    </div>
-
-</section>
-
-
-<section class="results" id="results">
-
-    <div class="results-header">
-
-        <div class="results-title">
-            نتائج Zide
-        </div>
-
-        <div
-            class="results-status"
-            id="status">
-            جاهز للبحث
-        </div>
-
-    </div>
-
-    <div class="empty">
-
-        <div class="empty-icon">
-            ✦
-        </div>
-
-        <div>
-            اكتب كلمة أو سؤالاً للبدء
-        </div>
-
-    </div>
-
-</section>
+ <div class="cards">
+  <button class="card" data-text="اشرح لي هذا الموضوع بطريقة بسيطة وعميقة">
+   🧠 اشرح لي موضوعًا
+  </button>
+  <button class="card" data-text="ساعدني في كتابة كود احترافي">
+   💻 ساعدني بالبرمجة
+  </button>
+  <button class="card" data-text="حلل الصورة التي سأرسلها لك بالتفصيل">
+   👁 حلل صورة
+  </button>
+  <button class="card" data-text="ساعدني في حل المشكلة خطوة بخطوة">
+   🚀 حل مشكلة
+  </button>
+ </div>
+</div>
 
 </main>
 
+<div class="composerWrap">
 
-<footer>
-    <strong>Zide</strong>
-    — واجهة بحث مجانية بدون API Key
-</footer>
+<div class="preview" id="preview"></div>
 
+<form class="composer" id="composer">
 
-<div
-    class="toast"
-    id="toast">
+<input id="images" type="file" accept="image/*" multiple hidden>
+
+<button type="button" class="tool" id="attach">📎</button>
+
+<textarea id="input" rows="1"
+placeholder="اكتب رسالتك إلى Zide..."></textarea>
+
+<button type="button" class="stop" id="stop">■</button>
+
+<button type="submit" class="send" id="send">↑</button>
+
+</form>
 </div>
-
 
 <script>
 
 /* =========================================
-   ZIDE SEARCH ENGINE
+   ضع مفتاحك هنا
 ========================================= */
 
-const form = document.getElementById("searchForm");
-const queryInput = document.getElementById("query");
-const engineSelect = document.getElementById("engine");
-const results = document.getElementById("results");
-const statusText = document.getElementById("status");
-const toast = document.getElementById("toast");
-const clearBtn = document.getElementById("clearBtn");
+const API_KEY =
+"AQ.Ab8RN6L1-3lkO_vKPgLJauRUKisG0xyaAxPM75AHFsSJrg97Sw";
+
+/*
+   اختر النموذج المتاح في حسابك.
+   غيّره إذا كان مزود الخدمة لديك يستخدم اسمًا آخر.
+*/
+
+const MODEL =
+"gpt-4.1-mini";
 
 
 /* =========================================
-   SEARCH URLS
+   العناصر
 ========================================= */
 
-const engines = {
+const chat=document.getElementById("chat");
+const welcome=document.getElementById("welcome");
+const input=document.getElementById("input");
+const composer=document.getElementById("composer");
+const imagesInput=document.getElementById("images");
+const attach=document.getElementById("attach");
+const preview=document.getElementById("preview");
+const send=document.getElementById("send");
+const stop=document.getElementById("stop");
 
-    google: query =>
-        "https://www.google.com/search?q="
-        + encodeURIComponent(query),
+let images=[];
+let controller=null;
+let history=[];
 
-    bing: query =>
-        "https://www.bing.com/search?q="
-        + encodeURIComponent(query),
 
-    duck: query =>
-        "https://duckduckgo.com/?q="
-        + encodeURIComponent(query),
+/* =========================================
+   تعليمات Zide
+========================================= */
 
-    wiki: query =>
-        "https://www.wikipedia.org/w/index.php?search="
-        + encodeURIComponent(query)
+const SYSTEM = `
+أنت Zide، مساعد ذكاء اصطناعي متقدم.
 
+تحدث مع المستخدم بشكل طبيعي جدًا.
+
+- افهم سياق المحادثة.
+- رد بنفس لغة المستخدم.
+- إذا استخدم العربية العامية، استخدم العربية الطبيعية المناسبة.
+- كن دقيقًا ومباشرًا.
+- لا تخترع المعلومات.
+- إذا لم تكن متأكدًا، قل ذلك بوضوح.
+- حلل الصور التي يرسلها المستخدم بعناية.
+- يمكنك قراءة النص الموجود في الصور.
+- يمكنك تحليل الأكواد والواجهات والمخططات.
+- عند البرمجة استخدم code blocks.
+- قدم حلولًا عملية.
+- لا تكرر السؤال أو المقدمات بلا سبب.
+- اسمك Zide.
+`;
+
+
+/* =========================================
+   textarea
+========================================= */
+
+input.addEventListener("input",()=>{
+ input.style.height="auto";
+ input.style.height=
+ Math.min(input.scrollHeight,170)+"px";
+});
+
+
+/* =========================================
+   الصور
+========================================= */
+
+attach.onclick=()=>{
+ imagesInput.click();
 };
 
+imagesInput.onchange=()=>{
+ addImages(Array.from(imagesInput.files));
+ imagesInput.value="";
+};
+
+document.addEventListener("paste",e=>{
+
+ const files=
+ Array.from(e.clipboardData?.items||[])
+ .filter(x=>x.type.startsWith("image/"))
+ .map(x=>x.getAsFile())
+ .filter(Boolean);
+
+ if(files.length)
+ addImages(files);
+
+});
+
+composer.addEventListener("dragover",e=>{
+ e.preventDefault();
+});
+
+composer.addEventListener("drop",e=>{
+
+ e.preventDefault();
+
+ addImages(
+  Array.from(e.dataTransfer.files)
+  .filter(x=>x.type.startsWith("image/"))
+ );
+
+});
+
+
+function addImages(files){
+
+ for(const file of files){
+
+  if(images.length>=4) break;
+
+  if(!file.type.startsWith("image/"))
+   continue;
+
+  if(file.size>15*1024*1024){
+   alert("حجم الصورة يجب أن يكون أقل من 15MB.");
+   continue;
+  }
+
+  images.push(file);
+ }
+
+ renderPreview();
+}
+
+
+function renderPreview(){
+
+ preview.innerHTML="";
+
+ if(!images.length){
+  preview.style.display="none";
+  return;
+ }
+
+ preview.style.display="flex";
+
+ images.forEach((file,index)=>{
+
+  const item=document.createElement("div");
+  item.className="previewItem";
+
+  const img=document.createElement("img");
+  img.src=URL.createObjectURL(file);
+
+  const remove=document.createElement("button");
+  remove.className="remove";
+  remove.textContent="×";
+
+  remove.onclick=()=>{
+   images.splice(index,1);
+   renderPreview();
+  };
+
+  item.append(img,remove);
+  preview.appendChild(item);
+
+ });
+
+}
+
 
 /* =========================================
-   SEARCH
+   الاقتراحات
 ========================================= */
 
-form.addEventListener("submit", async event => {
+document.querySelectorAll(".card").forEach(card=>{
 
-    event.preventDefault();
-
-    const query =
-        queryInput.value.trim();
-
-    const engine =
-        engineSelect.value;
-
-    if (!query) {
-
-        showToast(
-            "اكتب شيئاً للبحث أولاً"
-        );
-
-        queryInput.focus();
-
-        return;
-    }
-
-
-    if (engine === "wiki") {
-
-        await wikipediaSearch(query);
-
-        return;
-    }
-
-
-    /*
-       المحركات الخارجية:
-       لا تحتاج API Key.
-       يتم فتح البحث مباشرة.
-    */
-
-    window.open(
-        engines[engine](query),
-        "_blank",
-        "noopener,noreferrer"
-    );
+ card.onclick=()=>{
+  input.value=card.dataset.text;
+  input.dispatchEvent(new Event("input"));
+  input.focus();
+ };
 
 });
 
 
 /* =========================================
-   WIKIPEDIA SEARCH
+   إرسال
 ========================================= */
 
-async function wikipediaSearch(query) {
+composer.onsubmit=async e=>{
 
-    setStatus("جاري البحث...");
+ e.preventDefault();
 
-    results.innerHTML = `
+ const text=input.value.trim();
 
-        <div class="results-header">
+ if(!text && !images.length)
+  return;
 
-            <div class="results-title">
-                نتائج Wikipedia
-            </div>
+ welcome.style.display="none";
 
-            <div class="results-status">
-                البحث...
-            </div>
+ const sentImages=[...images];
 
-        </div>
+ addUser(text,sentImages);
 
-        <div class="empty">
-            جاري جلب النتائج
-        </div>
+ images=[];
+ renderPreview();
 
-    `;
+ input.value="";
+ input.style.height="auto";
 
+ await askZide(text,sentImages);
 
-    try {
-
-        const url =
-            "https://en.wikipedia.org/w/api.php"
-            + "?action=query"
-            + "&generator=search"
-            + "&gsrsearch="
-            + encodeURIComponent(query)
-            + "&gsrlimit=8"
-            + "&prop=extracts|info"
-            + "&exintro=1"
-            + "&explaintext=1"
-            + "&inprop=url"
-            + "&format=json"
-            + "&origin=*";
+};
 
 
-        const response =
-            await fetch(url);
+/* =========================================
+   رسالة المستخدم
+========================================= */
+
+function addUser(text,files){
+
+ const msg=document.createElement("div");
+ msg.className="message user";
+
+ const avatar=document.createElement("div");
+ avatar.className="avatar";
+ avatar.textContent="أنت";
+
+ const content=document.createElement("div");
+ content.className="content";
+
+ const name=document.createElement("div");
+ name.className="name";
+ name.textContent="أنت";
+
+ const bubble=document.createElement("div");
+ bubble.className="bubble";
+
+ files.forEach(file=>{
+  const img=document.createElement("img");
+  img.src=URL.createObjectURL(file);
+  bubble.appendChild(img);
+ });
+
+ if(text){
+  const div=document.createElement("div");
+  div.innerHTML=format(text);
+  bubble.appendChild(div);
+ }
+
+ content.append(name,bubble);
+ msg.append(avatar,content);
+ chat.appendChild(msg);
+
+ scrollBottom();
+}
 
 
-        if (!response.ok) {
-            throw new Error(
-                "Wikipedia request failed"
-            );
-        }
+/* =========================================
+   رسالة Zide
+========================================= */
+
+function createAI(){
+
+ const msg=document.createElement("div");
+ msg.className="message ai";
+
+ const avatar=document.createElement("div");
+ avatar.className="avatar";
+ avatar.textContent="Z";
+
+ const content=document.createElement("div");
+ content.className="content";
+
+ const name=document.createElement("div");
+ name.className="name";
+ name.textContent="Zide";
+
+ const bubble=document.createElement("div");
+ bubble.className="bubble";
+
+ content.append(name,bubble);
+ msg.append(avatar,content);
+ chat.appendChild(msg);
+
+ return bubble;
+}
 
 
-        const data =
-            await response.json();
+/* =========================================
+   طلب OpenAI
+========================================= */
 
+async function askZide(text,files){
 
-        const pages =
-            Object.values(
-                data.query?.pages || {}
-            );
+ controller=new AbortController();
 
+ send.style.display="none";
+ stop.style.display="block";
 
-        renderWikipedia(
-            pages,
-            query
-        );
+ const bubble=createAI();
 
+ const userContent=[];
 
-    } catch (error) {
+ if(text){
+  userContent.push({
+   type:"input_text",
+   text:text
+  });
+ }
 
-        console.error(error);
+ for(const file of files){
 
-        results.innerHTML = `
+  const base64=
+   await fileToBase64(file);
 
-            <div class="empty">
+  userContent.push({
+   type:"input_image",
+   image_url:base64,
+   detail:"high"
+  });
 
-                <div class="empty-icon">
-                    ⚠
-                </div>
+ }
 
-                <div>
-                    تعذر تحميل النتائج حالياً.
-                </div>
+ history.push({
+  role:"user",
+  content:userContent
+ });
 
-            </div>
+ try{
 
-        `;
+  const response=await fetch(
+   "https://api.openai.com/v1/responses",
+   {
+    method:"POST",
+    signal:controller.signal,
+    headers:{
+     "Content-Type":"application/json",
+     "Authorization":
+      "Bearer "+API_KEY
+    },
+    body:JSON.stringify({
+     model:MODEL,
+     instructions:SYSTEM,
+     input:history,
+     store:false
+    })
+   }
+  );
 
-        setStatus("حدث خطأ");
+  const data=await response.json();
 
+  if(!response.ok){
+   throw new Error(
+    data?.error?.message ||
+    "حدث خطأ في الاتصال."
+   );
+  }
+
+  const answer=
+   data.output_text ||
+   "لم تصل إجابة.";
+
+  bubble.innerHTML=format(answer);
+
+  history.push({
+   role:"assistant",
+   content:[
+    {
+     type:"output_text",
+     text:answer
     }
+   ]
+  });
+
+  scrollBottom();
+
+ }catch(error){
+
+  if(error.name!=="AbortError"){
+
+   bubble.innerHTML=
+   `<span style="color:#ff7185">
+   ${escapeHtml(error.message)}
+   </span>`;
+
+  }
+
+ }finally{
+
+  controller=null;
+  send.style.display="block";
+  stop.style.display="none";
+
+ }
 
 }
 
 
 /* =========================================
-   RENDER RESULTS
+   تحويل الصورة إلى Data URL
 ========================================= */
 
-function renderWikipedia(
-    pages,
-    query
-) {
+function fileToBase64(file){
 
-    results.innerHTML = `
+ return new Promise((resolve,reject)=>{
 
-        <div class="results-header">
+  const reader=new FileReader();
 
-            <div class="results-title">
-                نتائج لـ "${escapeHTML(query)}"
-            </div>
+  reader.onload=()=>{
+   resolve(reader.result);
+  };
 
-            <div class="results-status">
-                Wikipedia
-            </div>
+  reader.onerror=reject;
 
-        </div>
+  reader.readAsDataURL(file);
 
-    `;
-
-
-    if (!pages.length) {
-
-        results.innerHTML += `
-
-            <div class="empty">
-
-                <div class="empty-icon">
-                    ◌
-                </div>
-
-                <div>
-                    لم نجد نتائج في Wikipedia.
-                </div>
-
-            </div>
-
-        `;
-
-        setStatus("لا توجد نتائج");
-
-        return;
-    }
-
-
-    pages.forEach(page => {
-
-        const article =
-            document.createElement("article");
-
-        article.className = "result";
-
-
-        const title =
-            page.title || "بدون عنوان";
-
-        const extract =
-            page.extract ||
-            "لا يوجد وصف متاح لهذا المقال.";
-
-        const url =
-            page.fullurl ||
-            `https://en.wikipedia.org/wiki/${
-                encodeURIComponent(
-                    title.replaceAll(" ", "_")
-                )
-            }`;
-
-
-        article.innerHTML = `
-
-            <div class="result-source">
-                WIKIPEDIA
-            </div>
-
-            <h3>
-                <a
-                    href="${escapeAttribute(url)}"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    ${escapeHTML(title)}
-                </a>
-            </h3>
-
-            <p>
-                ${escapeHTML(
-                    extract.substring(0, 450)
-                )}
-            </p>
-
-            <span class="result-url">
-                ${escapeHTML(url)}
-            </span>
-
-        `;
-
-
-        results.appendChild(article);
-
-    });
-
-
-    setStatus(
-        `${pages.length} نتائج`
-    );
+ });
 
 }
 
 
 /* =========================================
-   QUICK ENGINE BUTTONS
+   إيقاف
 ========================================= */
 
-document
-    .querySelectorAll(".engine-chip")
-    .forEach(button => {
+stop.onclick=()=>{
 
-        button.addEventListener(
-            "click",
-            () => {
+ if(controller){
+  controller.abort();
+  controller=null;
+ }
 
-                const engine =
-                    button.dataset.engine;
-
-                engineSelect.value =
-                    engine;
-
-                queryInput.focus();
-
-                if (queryInput.value.trim()) {
-
-                    form.requestSubmit();
-
-                }
-
-            }
-        );
-
-    });
+};
 
 
 /* =========================================
-   CLEAR
+   Markdown بسيط
 ========================================= */
 
-clearBtn.addEventListener(
-    "click",
-    () => {
+function format(text){
 
-        queryInput.value = "";
+ let x=escapeHtml(text);
 
-        results.innerHTML = `
+ x=x.replace(
+  /```([\s\S]*?)```/g,
+  "<pre><code>$1</code></pre>"
+ );
 
-            <div class="results-header">
+ x=x.replace(
+  /\*\*(.*?)\*\*/g,
+  "<strong>$1</strong>"
+ );
 
-                <div class="results-title">
-                    نتائج Zide
-                </div>
+ x=x.replace(
+  /`([^`]+)`/g,
+  "<code>$1</code>"
+ );
 
-                <div class="results-status">
-                    جاهز للبحث
-                </div>
+ x=x.replace(/\n/g,"<br>");
 
-            </div>
-
-            <div class="empty">
-
-                <div class="empty-icon">
-                    ✦
-                </div>
-
-                <div>
-                    اكتب كلمة أو سؤالاً للبدء
-                </div>
-
-            </div>
-
-        `;
-
-        setStatus("جاهز للبحث");
-
-        queryInput.focus();
-
-    }
-);
+ return x;
+}
 
 
-/* =========================================
-   KEYBOARD SHORTCUT
-========================================= */
+function escapeHtml(text){
 
-document.addEventListener(
-    "keydown",
-    event => {
-
-        if (
-            event.key === "/" &&
-            document.activeElement !== queryInput
-        ) {
-
-            event.preventDefault();
-
-            queryInput.focus();
-
-        }
-
-    }
-);
-
-
-/* =========================================
-   HELPERS
-========================================= */
-
-function setStatus(text) {
-
-    statusText.textContent =
-        text;
+ return String(text)
+ .replaceAll("&","&amp;")
+ .replaceAll("<","&lt;")
+ .replaceAll(">","&gt;")
+ .replaceAll('"',"&quot;")
+ .replaceAll("'","&#039;");
 
 }
 
 
-function showToast(message) {
+function scrollBottom(){
 
-    toast.textContent =
-        message;
-
-    toast.classList.add("show");
-
-
-    setTimeout(() => {
-
-        toast.classList.remove("show");
-
-    }, 2200);
-
-}
-
-
-function escapeHTML(value) {
-
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
-}
-
-
-function escapeAttribute(value) {
-
-    return escapeHTML(value);
+ window.scrollTo({
+  top:document.body.scrollHeight,
+  behavior:"smooth"
+ });
 
 }
 
