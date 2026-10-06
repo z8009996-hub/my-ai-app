@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#070a11">
+
 <title>Zide AI</title>
 
 <style>
@@ -12,7 +13,6 @@
 :root{
  --bg:#070a11;
  --panel:#101624;
- --panel2:#0d1320;
  --border:rgba(255,255,255,.09);
  --text:#f5f7ff;
  --muted:#8792a8;
@@ -32,7 +32,7 @@ html,body{
 
 body{
  background:
- radial-gradient(circle at 15% 0%,rgba(101,119,255,.20),transparent 32%),
+ radial-gradient(circle at 15% 0%,rgba(101,119,255,.2),transparent 32%),
  radial-gradient(circle at 90% 15%,rgba(173,85,255,.17),transparent 30%),
  var(--bg);
 }
@@ -41,17 +41,11 @@ button,textarea{
  font:inherit;
 }
 
-button{
- -webkit-tap-highlight-color:transparent;
-}
-
 header{
  height:64px;
  position:fixed;
- top:0;
- right:0;
- left:0;
- z-index:50;
+ inset:0 0 auto 0;
+ z-index:20;
  display:flex;
  align-items:center;
  justify-content:space-between;
@@ -76,7 +70,6 @@ header{
  place-items:center;
  border-radius:12px;
  background:linear-gradient(135deg,var(--primary),var(--purple));
- box-shadow:0 8px 25px rgba(101,119,255,.25);
 }
 
 .status{
@@ -91,18 +84,18 @@ header{
  width:7px;
  height:7px;
  border-radius:50%;
- background:#f2bd45;
- box-shadow:0 0 10px #f2bd45;
+ background:#f0b936;
+ box-shadow:0 0 10px #f0b936;
 }
 
 .dot.ready{
  background:var(--green);
- box-shadow:0 0 10px var(--green);
+ box-shadow:0 0 12px var(--green);
 }
 
 .dot.error{
  background:var(--red);
- box-shadow:0 0 10px var(--red);
+ box-shadow:0 0 12px var(--red);
 }
 
 .chat{
@@ -119,9 +112,9 @@ header{
 .welcomeLogo{
  width:82px;
  height:82px;
+ margin:auto auto 20px;
  display:grid;
  place-items:center;
- margin:0 auto 20px;
  border-radius:25px;
  background:linear-gradient(135deg,var(--primary),var(--purple));
  font-size:36px;
@@ -149,37 +142,24 @@ h1{
 
 .card{
  padding:17px;
- text-align:right;
- color:#b0b9ca;
- background:rgba(255,255,255,.035);
  border:1px solid var(--border);
  border-radius:15px;
+ color:#b0b9ca;
+ background:rgba(255,255,255,.035);
+ text-align:right;
  cursor:pointer;
  transition:.2s;
 }
 
 .card:hover{
  background:rgba(101,119,255,.08);
- border-color:rgba(101,119,255,.45);
- transform:translateY(-2px);
+ border-color:rgba(101,119,255,.5);
 }
 
 .message{
  display:flex;
- gap:11px;
+ gap:10px;
  margin:28px 0;
- animation:show .18s ease;
-}
-
-@keyframes show{
- from{
-  opacity:0;
-  transform:translateY(5px);
- }
- to{
-  opacity:1;
-  transform:none;
- }
 }
 
 .avatar{
@@ -213,8 +193,8 @@ h1{
 }
 
 .bubble{
- line-height:1.9;
  font-size:15px;
+ line-height:1.9;
  overflow-wrap:anywhere;
 }
 
@@ -236,12 +216,10 @@ h1{
 }
 
 pre{
- position:relative;
  direction:ltr;
  text-align:left;
  overflow:auto;
  padding:16px;
- margin:12px 0;
  border-radius:13px;
  background:#05070c;
  border:1px solid var(--border);
@@ -249,28 +227,6 @@ pre{
 }
 
 code{
- font-family:Consolas,monospace;
-}
-
-.copyCode{
- position:absolute;
- top:7px;
- right:7px;
- padding:5px 9px;
- border:0;
- border-radius:7px;
- color:#cbd2df;
- background:#1b2230;
- cursor:pointer;
- font-size:11px;
-}
-
-.inlineCode{
- direction:ltr;
- display:inline-block;
- padding:1px 5px;
- border-radius:5px;
- background:#151b27;
  font-family:Consolas,monospace;
 }
 
@@ -289,14 +245,20 @@ code{
  animation:bounce 1s infinite;
 }
 
-.typing i:nth-child(2){animation-delay:.15s}
-.typing i:nth-child(3){animation-delay:.3s}
+.typing i:nth-child(2){
+ animation-delay:.15s;
+}
+
+.typing i:nth-child(3){
+ animation-delay:.3s;
+}
 
 @keyframes bounce{
  0%,80%,100%{
   opacity:.25;
   transform:translateY(0);
  }
+
  40%{
   opacity:1;
   transform:translateY(-4px);
@@ -306,7 +268,6 @@ code{
 .preview{
  display:none;
  gap:8px;
- max-width:100%;
  overflow:auto;
  padding:8px;
  margin-bottom:8px;
@@ -335,9 +296,8 @@ code{
  height:21px;
  border:0;
  border-radius:50%;
- color:#fff;
+ color:white;
  background:var(--red);
- cursor:pointer;
 }
 
 .composerWrap{
@@ -346,7 +306,7 @@ code{
  bottom:12px;
  transform:translateX(-50%);
  width:min(850px,calc(100% - 16px));
- z-index:40;
+ z-index:30;
 }
 
 .composer{
@@ -370,7 +330,7 @@ textarea{
  outline:none;
  border:0;
  background:transparent;
- color:#fff;
+ color:white;
  padding:13px;
 }
 
@@ -378,9 +338,7 @@ textarea::placeholder{
  color:#657087;
 }
 
-.tool,
-.send,
-.stop{
+.tool,.send,.stop{
  width:45px;
  height:45px;
  flex:0 0 45px;
@@ -395,7 +353,7 @@ textarea::placeholder{
 }
 
 .send{
- color:#fff;
+ color:white;
  font-size:20px;
  background:linear-gradient(135deg,var(--primary),var(--purple));
 }
@@ -408,53 +366,53 @@ textarea::placeholder{
 
 .loader{
  position:fixed;
- inset:0;
- z-index:100;
- display:flex;
- align-items:center;
- justify-content:center;
- background:#070a11;
-}
-
-.loaderBox{
- width:min(420px,calc(100% - 35px));
- padding:30px;
- text-align:center;
- border-radius:25px;
- background:#101624;
+ right:15px;
+ bottom:90px;
+ z-index:25;
+ width:min(330px,calc(100% - 30px));
+ padding:15px;
+ border-radius:15px;
+ background:rgba(16,22,36,.95);
  border:1px solid var(--border);
+ box-shadow:0 15px 50px rgba(0,0,0,.4);
+ backdrop-filter:blur(20px);
 }
 
-.loaderLogo{
- width:65px;
- height:65px;
- display:grid;
- place-items:center;
- margin:0 auto 18px;
- border-radius:20px;
- background:linear-gradient(135deg,var(--primary),var(--purple));
- font-size:28px;
- font-weight:900;
+.loaderTitle{
+ font-size:13px;
+ font-weight:bold;
+}
+
+.loaderText{
+ margin-top:5px;
+ color:var(--muted);
+ font-size:11px;
+ line-height:1.6;
 }
 
 .progress{
- height:5px;
- margin-top:20px;
+ height:4px;
+ margin-top:10px;
  overflow:hidden;
  border-radius:10px;
  background:#20283a;
 }
 
 .progressBar{
- width:35%;
+ width:30%;
  height:100%;
  background:linear-gradient(90deg,var(--primary),var(--purple));
  animation:loading 1.2s infinite;
 }
 
 @keyframes loading{
- from{transform:translateX(-150%)}
- to{transform:translateX(400%)}
+ from{
+  transform:translateX(-150%);
+ }
+
+ to{
+  transform:translateX(400%);
+ }
 }
 
 .hidden{
@@ -471,19 +429,10 @@ textarea::placeholder{
   padding-top:6vh;
  }
 
- .message{
-  gap:8px;
+ .loader{
+  bottom:85px;
  }
 
- .avatar{
-  width:34px;
-  height:34px;
-  flex-basis:34px;
- }
-
- .composerWrap{
-  bottom:max(8px,env(safe-area-inset-bottom));
- }
 }
 </style>
 </head>
@@ -498,8 +447,8 @@ textarea::placeholder{
  </div>
 
  <div class="status">
-  <span class="dot" id="statusDot"></span>
-  <span id="statusText">جاري التشغيل...</span>
+  <span class="dot" id="dot"></span>
+  <span id="status">جاري تجهيز AI...</span>
  </div>
 
 </header>
@@ -507,27 +456,16 @@ textarea::placeholder{
 
 <div class="loader" id="loader">
 
- <div class="loaderBox">
+ <div class="loaderTitle">
+  🧠 Zide Local AI
+ </div>
 
-  <div class="loaderLogo">Z</div>
+ <div class="loaderText" id="loaderText">
+  الموقع جاهز. يتم تجهيز الذكاء في الخلفية...
+ </div>
 
-  <h2 id="loaderTitle">
-   تشغيل Zide
-  </h2>
-
-  <p id="loaderText" style="color:#8792a8">
-   جاري تجهيز الذكاء المحلي...
-  </p>
-
-  <div class="progress">
-   <div class="progressBar"></div>
-  </div>
-
-  <p style="color:#667189;font-size:11px;line-height:1.7">
-   أول تشغيل قد يحتاج وقتًا لتحميل النموذج.
-   بعد ذلك سيستخدم المتصفح الملفات المخزنة مؤقتًا.
-  </p>
-
+ <div class="progress">
+  <div class="progressBar"></div>
  </div>
 
 </div>
@@ -537,34 +475,42 @@ textarea::placeholder{
 
  <section class="welcome" id="welcome">
 
-  <div class="welcomeLogo">Z</div>
+  <div class="welcomeLogo">
+   Z
+  </div>
 
-  <h1>كيف أساعدك؟</h1>
+  <h1>
+   كيف أساعدك؟
+  </h1>
 
   <p>
-   Zide — ذكاء اصطناعي محلي بدون API
+   ذكاء اصطناعي محلي بدون API
   </p>
 
   <div class="cards">
 
-   <button class="card"
+   <button
+    class="card"
     data-text="اشرح لي هذا الموضوع بطريقة بسيطة وعميقة مع أمثلة.">
     🧠 اشرح لي موضوعًا
    </button>
 
-   <button class="card"
-    data-text="ساعدني في كتابة كود احترافي، واشرح لي لماذا اخترت هذا الحل.">
+   <button
+    class="card"
+    data-text="ساعدني في كتابة كود احترافي واشرح لي الحل.">
     💻 ساعدني بالبرمجة
    </button>
 
-   <button class="card"
-    data-text="سأرسل لك صورة. أخبرني ماذا يمكنني أن أفعل بها.">
-    👁 تعامل مع صورة
+   <button
+    class="card"
+    data-text="ساعدني في تحليل هذه المشكلة خطوة بخطوة.">
+    🚀 حل مشكلة
    </button>
 
-   <button class="card"
-    data-text="ساعدني في حل المشكلة خطوة بخطوة ولا تتخطى التفاصيل المهمة.">
-    🚀 حل مشكلة
+   <button
+    class="card"
+    data-text="أريد مساعدتك في بناء مشروع برمجي كامل.">
+    🛠️ بناء مشروع
    </button>
 
   </div>
@@ -581,7 +527,7 @@ textarea::placeholder{
  <form class="composer" id="composer">
 
   <input
-   id="images"
+   id="files"
    type="file"
    accept="image/*"
    multiple
@@ -590,29 +536,28 @@ textarea::placeholder{
 
   <button
    class="tool"
-   id="attach"
    type="button"
-   title="إضافة صورة">
+   id="attach">
    📎
   </button>
 
   <textarea
    id="input"
    rows="1"
-   placeholder="اكتب رسالتك إلى Zide..."
-  ></textarea>
+   placeholder="اكتب رسالتك إلى Zide...">
+  </textarea>
 
   <button
    class="stop"
-   id="stop"
-   type="button">
+   type="button"
+   id="stop">
    ■
   </button>
 
   <button
    class="send"
-   id="send"
-   type="submit">
+   type="submit"
+   id="send">
    ↑
   </button>
 
@@ -624,61 +569,36 @@ textarea::placeholder{
 <script type="module">
 
 /*
-========================================================
- ZIDE LOCAL AI
-========================================================
+=====================================================
+ ZIDE LOCAL
+=====================================================
 
- هذا الملف لا يحتوي على:
+ لا API
+ لا API KEY
+ لا Backend
 
- API KEY
- OpenAI API
- Backend
- Server
+ النموذج يعمل على الجهاز باستخدام WebGPU.
 
- الذكاء يعمل على جهاز المستخدم بواسطة WebGPU.
-
- النموذج:
- Qwen2.5 1.5B Instruct
-
- ملاحظة:
- أداء النموذج يعتمد على:
- GPU
- RAM
- المتصفح
- WebGPU
- حرارة الهاتف
-========================================================
+=====================================================
 */
 
 
 import {
- pipeline,
- env
+ pipeline
 } from
 "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2";
 
 
 /* =========================================
-   الإعداد
+   النموذج
 ========================================= */
-
-env.allowRemoteModels = true;
-env.allowLocalModels = false;
-
-
-/*
- * نموذج محلي صغير نسبيًا وقوي للهواتف.
- *
- * يتم تحميله مرة أولى ثم يستفيد المتصفح
- * من التخزين المؤقت.
- */
 
 const MODEL =
 "onnx-community/Qwen2.5-1.5B-Instruct-ONNX";
 
 
 /* =========================================
-   عناصر
+   العناصر
 ========================================= */
 
 const chat =
@@ -693,8 +613,8 @@ document.getElementById("input");
 const composer =
 document.getElementById("composer");
 
-const imagesInput =
-document.getElementById("images");
+const files =
+document.getElementById("files");
 
 const attach =
 document.getElementById("attach");
@@ -714,36 +634,26 @@ document.getElementById("loader");
 const loaderText =
 document.getElementById("loaderText");
 
-const loaderTitle =
-document.getElementById("loaderTitle");
+const dot =
+document.getElementById("dot");
 
-const statusDot =
-document.getElementById("statusDot");
-
-const statusText =
-document.getElementById("statusText");
+const status =
+document.getElementById("status");
 
 
 /* =========================================
-   الحالة
+   حالة Zide
 ========================================= */
 
-let model = null;
+let ai = null;
 
-let busy = false;
+let running = false;
+
+let controller = null;
 
 let images = [];
 
 let history = [];
-
-let generation = null;
-
-
-/*
- * لا نرسل محادثة لا نهائية للنموذج.
- *
- * آخر 18 رسالة كافية لمعظم المحادثات.
- */
 
 const MAX_HISTORY = 18;
 
@@ -755,63 +665,71 @@ const MAX_HISTORY = 18;
 const SYSTEM = `
 أنت Zide، مساعد ذكاء اصطناعي متقدم.
 
-أنت مساعد طبيعي وذكي وعملي.
+افهم سياق المحادثة بالكامل.
 
-القواعد:
+اعتمد على الرسائل السابقة عند الإجابة.
 
-- افهم كامل سياق المحادثة السابقة.
-- استخدم المعلومات السابقة بدل سؤال المستخدم عنها مرة أخرى.
-- إذا كان السؤال متعلقًا برسالة سابقة، اربط إجابتك بها.
-- لا تتعامل مع كل رسالة وكأنها محادثة جديدة.
-- أجب بنفس لغة المستخدم.
-- إذا كتب المستخدم بالعربية، استخدم العربية الطبيعية.
-- إذا كتب بالعامية، يمكنك الرد بأسلوب طبيعي ومفهوم.
-- كن دقيقًا.
-- لا تخترع حقائق.
-- إذا لم تعرف شيئًا، قل إنك غير متأكد.
-- لا تكرر المقدمات.
-- لا تقل "بصفتي نموذج ذكاء اصطناعي".
-- اسمك Zide.
-- إذا سأل المستخدم: من صنعك؟ أجب: زيد.
-- ساعد في البرمجة والكود.
-- عند كتابة الكود استخدم code blocks.
-- قدم حلولًا عملية.
-- عند إصلاح كود، اشرح المشكلة ثم أعط الحل.
-- لا تضع معلومات غير مطلوبة.
-- السؤال البسيط يحتاج جوابًا بسيطًا.
-- السؤال المعقد يحتاج شرحًا منظمًا.
+لا تطلب معلومات سبق أن أعطاها المستخدم.
+
+أجب بنفس لغة المستخدم.
+
+إذا كان المستخدم عربيًا، استخدم العربية الطبيعية.
+
+كن دقيقًا ومباشرًا.
+
+لا تخترع المعلومات.
+
+إذا لم تكن متأكدًا، قل ذلك.
+
+عند البرمجة:
+- أعط كودًا عمليًا.
+- استخدم code blocks.
+- اشرح الحل عند الحاجة.
+
+لا تكرر المقدمات.
+
+اسمك Zide.
+
+إذا سأل المستخدم من صنعك، قل: زيد.
 `;
 
 
 /* =========================================
-   تحميل الذاكرة
+   فتح الموقع فورًا
 ========================================= */
 
-loadHistory();
+/*
+ * مهم:
+ * لا ننتظر النموذج حتى تظهر الواجهة.
+ *
+ * الواجهة تعمل فورًا.
+ */
+
+startAI();
 
 
 /* =========================================
-   تشغيل النموذج
+   تشغيل AI بالخلفية
 ========================================= */
 
-async function start(){
+async function startAI(){
 
  try{
 
   if(!("gpu" in navigator)){
 
    throw new Error(
-    "هذا المتصفح لا يدعم WebGPU. افتح الموقع في متصفح حديث يدعم WebGPU."
+    "WebGPU غير مدعوم في هذا المتصفح."
    );
 
   }
 
 
   loaderText.textContent =
-  "جاري تجهيز GPU...";
+  "جاري تحميل Zide على GPU...";
 
 
-  model =
+  ai =
   await pipeline(
    "text-generation",
    MODEL,
@@ -825,42 +743,31 @@ async function start(){
   );
 
 
-  statusDot.classList.add("ready");
+  dot.classList.add("ready");
 
-  statusText.textContent =
+  status.textContent =
   "محلي • جاهز";
 
-
-  loaderTitle.textContent =
-  "Zide جاهز";
-
   loaderText.textContent =
-  "الذكاء يعمل على جهازك.";
+  "Zide جاهز ويمكنك البدء.";
 
 
   setTimeout(()=>{
    loader.classList.add("hidden");
-  },500);
+  },1200);
 
 
  }catch(error){
 
   console.error(error);
 
-  statusDot.classList.add("error");
+  dot.classList.add("error");
 
-  statusText.textContent =
-  "خطأ";
+  status.textContent =
+  "AI غير متاح";
 
-  loaderTitle.textContent =
-  "تعذر تشغيل Zide";
-
-  loaderText.innerHTML =
-  `
-   ${escapeHtml(error.message)}
-   <br><br>
-   جرّب Chrome أو Edge حديثًا يدعم WebGPU.
-  `;
+  loaderText.textContent =
+  error.message;
 
  }
 
@@ -873,11 +780,8 @@ async function start(){
 
 function progress(data){
 
- if(!data)
- return;
-
-
  if(
+  data &&
   data.status === "progress"
  ){
 
@@ -886,16 +790,6 @@ function progress(data){
 
   loaderText.textContent =
   `تحميل نموذج Zide... ${p}%`;
-
- }
-
-
- if(
-  data.status === "done"
- ){
-
-  loaderText.textContent =
-  "اكتمل تحميل النموذج.";
 
  }
 
@@ -945,93 +839,30 @@ e=>{
 ========================================= */
 
 attach.onclick=()=>{
- imagesInput.click();
+ files.click();
 };
 
 
-imagesInput.onchange=()=>{
+files.onchange=()=>{
 
  addImages(
-  Array.from(imagesInput.files)
+  Array.from(files)
  );
 
- imagesInput.value="";
+ files.value="";
 
 };
 
 
-document.addEventListener(
-"paste",
-e=>{
+function addImages(list){
 
- const files =
- Array.from(
-  e.clipboardData?.items || []
- )
- .filter(
-  x=>x.type.startsWith("image/")
- )
- .map(
-  x=>x.getAsFile()
- )
- .filter(Boolean);
+ for(const file of list){
 
-
- if(files.length)
- addImages(files);
-
-});
-
-
-composer.addEventListener(
-"dragover",
-e=>{
- e.preventDefault();
-});
-
-
-composer.addEventListener(
-"drop",
-e=>{
-
- e.preventDefault();
-
- addImages(
-  Array.from(e.dataTransfer.files)
-  .filter(
-   x=>x.type.startsWith("image/")
-  )
- );
-
-});
-
-
-function addImages(files){
-
- for(const file of files){
-
-  if(images.length >= 4)
+  if(images.length>=4)
   break;
 
-
-  if(
-   !file.type.startsWith("image/")
-  )
+  if(!file.type.startsWith("image/"))
   continue;
-
-
-  if(
-   file.size > 15*1024*1024
-  ){
-
-   alert(
-    "الصورة يجب أن تكون أقل من 15MB."
-   );
-
-   continue;
-
-  }
-
 
   images.push(file);
 
@@ -1049,16 +880,14 @@ function renderPreview(){
 
  if(!images.length){
 
-  preview.style.display =
-  "none";
+  preview.style.display="none";
 
   return;
 
  }
 
 
- preview.style.display =
- "flex";
+ preview.style.display="flex";
 
 
  images.forEach(
@@ -1084,16 +913,12 @@ function renderPreview(){
   remove.className =
   "remove";
 
-  remove.textContent =
-  "×";
+  remove.textContent="×";
 
 
   remove.onclick=()=>{
 
-   images.splice(
-    index,
-    1
-   );
+   images.splice(index,1);
 
    renderPreview();
 
@@ -1105,9 +930,7 @@ function renderPreview(){
    remove
   );
 
-  preview.appendChild(
-   item
-  );
+  preview.appendChild(item);
 
  });
 
@@ -1148,7 +971,7 @@ async e=>{
  e.preventDefault();
 
 
- if(busy)
+ if(running)
  return;
 
 
@@ -1163,10 +986,10 @@ async e=>{
  return;
 
 
- if(!model){
+ if(!ai){
 
   alert(
-   "Zide ما زال يقوم بالتشغيل."
+   "Zide ما زال يحمل النموذج. انتظر حتى يصبح جاهزًا."
   );
 
   return;
@@ -1178,31 +1001,29 @@ async e=>{
  "none";
 
 
- const selectedImages =
+ const selected =
  [...images];
 
 
  addUser(
   text,
-  selectedImages
+  selected
  );
 
-
- /*
-  * الصور يتم عرضها في المحادثة.
-  *
-  * النموذج النصي الحالي لا يقوم برؤية الصور.
-  */
 
  history.push({
   role:"user",
   content:
   text ||
-  "[أرسل المستخدم صورة]"
+  "[صورة مرفقة]"
  });
 
 
- trimHistory();
+ history =
+ history.slice(
+  -MAX_HISTORY
+ );
+
 
  saveHistory();
 
@@ -1214,65 +1035,29 @@ async e=>{
 
  input.value="";
 
- input.style.height =
- "auto";
+ input.style.height="auto";
 
 
- await ask();
+ await generate();
 
 };
 
 
 /* =========================================
-   بناء المحادثة
+   توليد
 ========================================= */
 
-function createPrompt(){
+async function generate(){
 
- const messages = [
-  {
-   role:"system",
-   content:SYSTEM
-  }
- ];
+ running=true;
+
+ controller =
+ new AbortController();
 
 
- for(
-  const item of
-  history.slice(-MAX_HISTORY)
- ){
+ send.style.display="none";
 
-  messages.push({
-   role:item.role,
-   content:item.content
-  });
-
- }
-
-
- /*
-  * Transformers.js يستخدم chat template
-  * الخاص بالنموذج.
-  */
-
- return messages;
-
-}
-
-
-/* =========================================
-   الذكاء
-========================================= */
-
-async function ask(){
-
- busy=true;
-
- send.style.display =
- "none";
-
- stop.style.display =
- "block";
+ stop.style.display="block";
 
 
  const bubble =
@@ -1289,30 +1074,24 @@ async function ask(){
  `;
 
 
- scrollBottom();
-
-
  try{
 
-  /*
-   * إلغاء التوليد السابق.
-   */
+  const messages = [
 
-  generation =
-  new AbortController();
+   {
+    role:"system",
+    content:SYSTEM
+   },
 
+   ...history.slice(
+    -MAX_HISTORY
+   )
 
-  const messages =
-  createPrompt();
+  ];
 
-
-  /*
-   * نستخدم chat template الحقيقي
-   * بدل بناء prompt يدوي.
-   */
 
   const result =
-  await model(
+  await ai(
    messages,
    {
     max_new_tokens:600,
@@ -1330,7 +1109,7 @@ async function ask(){
     return_full_text:false,
 
     signal:
-    generation.signal
+    controller.signal
    }
   );
 
@@ -1339,7 +1118,7 @@ async function ask(){
 
 
   if(
-   Array.isArray(result) &&
+   result &&
    result[0]
   ){
 
@@ -1349,52 +1128,16 @@ async function ask(){
   }
 
 
-  /*
-   * بعض الإصدارات تعيد النص
-   * وبعضها تعيد الرسائل.
-   */
-
-  if(
-   typeof answer !== "string"
-  ){
-
-   if(
-    Array.isArray(answer)
-   ){
-
-    const last =
-    answer[answer.length-1];
-
-    answer =
-    last?.content || "";
-
-   }else{
-
-    answer =
-    String(answer || "");
-
-   }
-
-  }
-
-
   answer =
   clean(answer);
 
 
-  if(!answer){
-
-   answer =
-   "لم أستطع توليد إجابة.";
-
-  }
+  if(!answer)
+  answer="لم أستطع توليد إجابة.";
 
 
   bubble.innerHTML =
   format(answer);
-
-
-  addCopyButtons();
 
 
   history.push({
@@ -1403,7 +1146,11 @@ async function ask(){
   });
 
 
-  trimHistory();
+  history =
+  history.slice(
+   -MAX_HISTORY
+  );
+
 
   saveHistory();
 
@@ -1419,37 +1166,26 @@ async function ask(){
   ){
 
    bubble.innerHTML =
-   `
-    <span style="color:#8792a8">
-     تم إيقاف التوليد.
-    </span>
-   `;
+   "تم إيقاف التوليد.";
 
   }else{
 
-   console.error(error);
-
    bubble.innerHTML =
-   `
-    <span style="color:#ff7185">
-     حدث خطأ أثناء التوليد:
-     ${escapeHtml(error.message)}
-    </span>
-   `;
+   `<span style="color:#ff7185">
+   ${escapeHtml(error.message)}
+   </span>`;
 
   }
 
  }finally{
 
-  busy=false;
+  running=false;
 
-  generation=null;
+  controller=null;
 
-  send.style.display =
-  "block";
+  send.style.display="block";
 
-  stop.style.display =
-  "none";
+  stop.style.display="none";
 
  }
 
@@ -1457,30 +1193,27 @@ async function ask(){
 
 
 /* =========================================
-   إيقاف
+   Stop
 ========================================= */
 
 stop.onclick=()=>{
 
- if(generation){
-
-  generation.abort();
-
- }
+ if(controller)
+ controller.abort();
 
 };
 
 
 /* =========================================
-   رسالة المستخدم
+   User
 ========================================= */
 
-function addUser(text,files){
+function addUser(text,list){
 
- const msg =
+ const message =
  document.createElement("div");
 
- msg.className =
+ message.className =
  "message user";
 
 
@@ -1511,4 +1244,301 @@ function addUser(text,files){
  "أنت";
 
 
- c
+ const bubble =
+ document.createElement("div");
+
+ bubble.className =
+ "bubble";
+
+
+ list.forEach(file=>{
+
+  const img =
+  document.createElement("img");
+
+  img.src =
+  URL.createObjectURL(file);
+
+  bubble.appendChild(img);
+
+ });
+
+
+ if(text){
+
+  const div =
+  document.createElement("div");
+
+  div.innerHTML =
+  format(text);
+
+  bubble.appendChild(div);
+
+ }
+
+
+ content.append(
+  name,
+  bubble
+ );
+
+ message.append(
+  avatar,
+  content
+ );
+
+ chat.appendChild(
+  message
+ );
+
+
+ scrollBottom();
+
+}
+
+
+/* =========================================
+   AI
+========================================= */
+
+function createAI(){
+
+ const message =
+ document.createElement("div");
+
+ message.className =
+ "message ai";
+
+
+ const avatar =
+ document.createElement("div");
+
+ avatar.className =
+ "avatar";
+
+ avatar.textContent =
+ "Z";
+
+
+ const content =
+ document.createElement("div");
+
+ content.className =
+ "content";
+
+
+ const name =
+ document.createElement("div");
+
+ name.className =
+ "name";
+
+ name.textContent =
+ "Zide";
+
+
+ const bubble =
+ document.createElement("div");
+
+ bubble.className =
+ "bubble";
+
+
+ content.append(
+  name,
+  bubble
+ );
+
+ message.append(
+  avatar,
+  content
+ );
+
+
+ chat.appendChild(
+  message
+ );
+
+
+ return bubble;
+
+}
+
+
+/* =========================================
+   Markdown
+========================================= */
+
+function format(text){
+
+ let x =
+ escapeHtml(text);
+
+
+ x =
+ x.replace(
+  /```(?:[a-zA-Z0-9_+-]+)?\s*\n?([\s\S]*?)```/g,
+  "<pre><code>$1</code></pre>"
+ );
+
+
+ x =
+ x.replace(
+  /\*\*(.*?)\*\*/g,
+  "<strong>$1</strong>"
+ );
+
+
+ x =
+ x.replace(
+  /`([^`]+)`/g,
+  "<code>$1</code>"
+ );
+
+
+ x =
+ x.replace(
+  /\n/g,
+  "<br>"
+ );
+
+
+ return x;
+
+}
+
+
+/* =========================================
+   Clean
+========================================= */
+
+function clean(text){
+
+ return String(text)
+ .replaceAll(
+  "<|im_end|>",
+  ""
+ )
+ .replaceAll(
+  "<|endoftext|>",
+  ""
+ )
+ .trim();
+
+}
+
+
+/* =========================================
+   Escape
+========================================= */
+
+function escapeHtml(text){
+
+ return String(text)
+ .replaceAll("&","&amp;")
+ .replaceAll("<","&lt;")
+ .replaceAll(">","&gt;")
+ .replaceAll('"',"&quot;")
+ .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================
+   Memory
+========================================= */
+
+function saveHistory(){
+
+ try{
+
+  localStorage.setItem(
+   "zide_history",
+   JSON.stringify(history)
+  );
+
+ }catch{}
+
+}
+
+
+function loadHistory(){
+
+ try{
+
+  const data =
+  JSON.parse(
+   localStorage.getItem(
+    "zide_history"
+   ) || "[]"
+  );
+
+
+  if(
+   !Array.isArray(data)
+  )
+  return;
+
+
+  history =
+  data.slice(
+   -MAX_HISTORY
+  );
+
+
+  for(
+   const item of history
+  ){
+
+   if(
+    item.role==="user"
+   ){
+
+    addUser(
+     item.content,
+     []
+    );
+
+   }
+
+
+   if(
+    item.role==="assistant"
+   ){
+
+    const bubble =
+    createAI();
+
+    bubble.innerHTML =
+    format(item.content);
+
+   }
+
+  }
+
+
+  if(history.length){
+
+   welcome.style.display =
+   "none";
+
+  }
+
+ }catch{}
+
+}
+
+
+function scrollBottom(){
+
+ window.scrollTo({
+  top:document.body.scrollHeight,
+  behavior:"smooth"
+ });
+
+}
+
+</script>
+
+</body>
+</html>
