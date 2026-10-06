@@ -2,53 +2,73 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070a11">
 <title>Zide AI</title>
 
 <style>
 *{box-sizing:border-box}
+
 :root{
  --bg:#070a11;
  --panel:#101624;
+ --panel2:#0d1320;
  --border:rgba(255,255,255,.09);
  --text:#f5f7ff;
  --muted:#8792a8;
  --primary:#6577ff;
  --purple:#ad55ff;
+ --green:#62e69a;
+ --red:#ff5870;
 }
-body{
+
+html,body{
  margin:0;
- min-height:100vh;
- background:
- radial-gradient(circle at 15% 0%,rgba(101,119,255,.2),transparent 32%),
- radial-gradient(circle at 90% 15%,rgba(173,85,255,.17),transparent 30%),
- var(--bg);
+ min-height:100%;
+ background:var(--bg);
  color:var(--text);
  font-family:Arial,system-ui,sans-serif;
 }
-.app{min-height:100vh}
+
+body{
+ background:
+ radial-gradient(circle at 15% 0%,rgba(101,119,255,.20),transparent 32%),
+ radial-gradient(circle at 90% 15%,rgba(173,85,255,.17),transparent 30%),
+ var(--bg);
+}
+
+button,textarea{
+ font:inherit;
+}
+
+button{
+ -webkit-tap-highlight-color:transparent;
+}
+
 header{
  height:64px;
- display:flex;
- align-items:center;
- justify-content:space-between;
- padding:0 22px;
  position:fixed;
  top:0;
  right:0;
  left:0;
- z-index:10;
- background:rgba(7,10,17,.8);
+ z-index:50;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:0 18px;
+ background:rgba(7,10,17,.82);
  backdrop-filter:blur(20px);
  border-bottom:1px solid var(--border);
 }
+
 .logo{
  display:flex;
  align-items:center;
  gap:10px;
- font-size:23px;
+ font-size:22px;
  font-weight:900;
 }
+
 .logoBox{
  width:38px;
  height:38px;
@@ -56,60 +76,112 @@ header{
  place-items:center;
  border-radius:12px;
  background:linear-gradient(135deg,var(--primary),var(--purple));
+ box-shadow:0 8px 25px rgba(101,119,255,.25);
 }
+
 .status{
- color:#62e69a;
+ display:flex;
+ align-items:center;
+ gap:7px;
+ color:var(--muted);
  font-size:11px;
 }
-.chat{
- width:min(850px,calc(100% - 24px));
- margin:auto;
- padding:110px 0 150px;
+
+.dot{
+ width:7px;
+ height:7px;
+ border-radius:50%;
+ background:#f2bd45;
+ box-shadow:0 0 10px #f2bd45;
 }
-.welcome{text-align:center;padding-top:10vh}
+
+.dot.ready{
+ background:var(--green);
+ box-shadow:0 0 10px var(--green);
+}
+
+.dot.error{
+ background:var(--red);
+ box-shadow:0 0 10px var(--red);
+}
+
+.chat{
+ width:min(850px,calc(100% - 20px));
+ margin:auto;
+ padding:100px 0 155px;
+}
+
+.welcome{
+ text-align:center;
+ padding-top:9vh;
+}
+
 .welcomeLogo{
- width:80px;
- height:80px;
- margin:auto auto 20px;
+ width:82px;
+ height:82px;
  display:grid;
  place-items:center;
+ margin:0 auto 20px;
  border-radius:25px;
- font-size:35px;
- font-weight:900;
  background:linear-gradient(135deg,var(--primary),var(--purple));
+ font-size:36px;
+ font-weight:900;
  box-shadow:0 20px 60px rgba(101,119,255,.3);
 }
+
 h1{
- font-size:clamp(38px,7vw,60px);
- letter-spacing:-3px;
  margin:0;
+ font-size:clamp(38px,8vw,60px);
+ letter-spacing:-3px;
 }
-.welcome p{color:var(--muted)}
+
+.welcome p{
+ color:var(--muted);
+}
+
 .cards{
  display:grid;
  grid-template-columns:1fr 1fr;
  gap:10px;
- max-width:620px;
+ max-width:650px;
  margin:35px auto;
 }
+
 .card{
- padding:16px;
+ padding:17px;
  text-align:right;
- color:#aeb7c9;
+ color:#b0b9ca;
  background:rgba(255,255,255,.035);
  border:1px solid var(--border);
  border-radius:15px;
  cursor:pointer;
+ transition:.2s;
 }
+
 .card:hover{
  background:rgba(101,119,255,.08);
- border-color:rgba(101,119,255,.5);
+ border-color:rgba(101,119,255,.45);
+ transform:translateY(-2px);
 }
+
 .message{
  display:flex;
- gap:12px;
- margin:30px 0;
+ gap:11px;
+ margin:28px 0;
+ animation:show .18s ease;
 }
+
+@keyframes show{
+ from{
+  opacity:0;
+  transform:translateY(5px);
+ }
+ to{
+  opacity:1;
+  transform:none;
+ }
+}
+
 .avatar{
  width:36px;
  height:36px;
@@ -120,109 +192,195 @@ h1{
  font-size:11px;
  font-weight:bold;
 }
-.user .avatar{background:#293349}
+
+.user .avatar{
+ background:#293349;
+}
+
 .ai .avatar{
  background:linear-gradient(135deg,var(--primary),var(--purple));
 }
-.content{flex:1;min-width:0}
+
+.content{
+ flex:1;
+ min-width:0;
+}
+
 .name{
  color:#8d98ad;
  font-size:11px;
  margin-bottom:7px;
 }
+
 .bubble{
  line-height:1.9;
  font-size:15px;
  overflow-wrap:anywhere;
 }
+
 .user .bubble{
  display:inline-block;
+ max-width:92%;
  padding:13px 16px;
- max-width:90%;
  border-radius:17px;
  background:rgba(255,255,255,.055);
  border:1px solid var(--border);
 }
+
 .bubble img{
  display:block;
  max-width:100%;
- max-height:450px;
- border-radius:14px;
+ max-height:400px;
  margin-bottom:10px;
+ border-radius:14px;
 }
+
 pre{
+ position:relative;
  direction:ltr;
  text-align:left;
  overflow:auto;
  padding:16px;
+ margin:12px 0;
  border-radius:13px;
  background:#05070c;
  border:1px solid var(--border);
+ white-space:pre-wrap;
 }
-code{font-family:Consolas,monospace}
-.composerWrap{
- position:fixed;
- bottom:15px;
- left:50%;
- transform:translateX(-50%);
- width:min(850px,calc(100% - 20px));
- z-index:20;
+
+code{
+ font-family:Consolas,monospace;
 }
+
+.copyCode{
+ position:absolute;
+ top:7px;
+ right:7px;
+ padding:5px 9px;
+ border:0;
+ border-radius:7px;
+ color:#cbd2df;
+ background:#1b2230;
+ cursor:pointer;
+ font-size:11px;
+}
+
+.inlineCode{
+ direction:ltr;
+ display:inline-block;
+ padding:1px 5px;
+ border-radius:5px;
+ background:#151b27;
+ font-family:Consolas,monospace;
+}
+
+.typing{
+ display:flex;
+ gap:5px;
+ align-items:center;
+ color:var(--muted);
+}
+
+.typing i{
+ width:5px;
+ height:5px;
+ border-radius:50%;
+ background:#8d98ad;
+ animation:bounce 1s infinite;
+}
+
+.typing i:nth-child(2){animation-delay:.15s}
+.typing i:nth-child(3){animation-delay:.3s}
+
+@keyframes bounce{
+ 0%,80%,100%{
+  opacity:.25;
+  transform:translateY(0);
+ }
+ 40%{
+  opacity:1;
+  transform:translateY(-4px);
+ }
+}
+
 .preview{
  display:none;
  gap:8px;
+ max-width:100%;
+ overflow:auto;
  padding:8px;
  margin-bottom:8px;
- width:max-content;
- max-width:100%;
  border-radius:14px;
  background:#121927;
  border:1px solid var(--border);
 }
-.previewItem{position:relative}
+
+.previewItem{
+ position:relative;
+ flex:0 0 auto;
+}
+
 .previewItem img{
  width:70px;
  height:70px;
  object-fit:cover;
  border-radius:10px;
 }
+
 .remove{
  position:absolute;
- top:-6px;
- left:-6px;
- width:20px;
- height:20px;
+ top:-5px;
+ left:-5px;
+ width:21px;
+ height:21px;
  border:0;
  border-radius:50%;
- background:#ff5870;
- color:white;
+ color:#fff;
+ background:var(--red);
  cursor:pointer;
 }
+
+.composerWrap{
+ position:fixed;
+ left:50%;
+ bottom:12px;
+ transform:translateX(-50%);
+ width:min(850px,calc(100% - 16px));
+ z-index:40;
+}
+
 .composer{
  display:flex;
  align-items:flex-end;
  gap:7px;
  padding:8px;
  border-radius:20px;
- background:rgba(15,20,31,.94);
+ background:rgba(15,20,31,.95);
  border:1px solid rgba(255,255,255,.12);
- box-shadow:0 20px 70px rgba(0,0,0,.5);
+ box-shadow:0 20px 70px rgba(0,0,0,.55);
  backdrop-filter:blur(25px);
 }
+
 textarea{
  flex:1;
  min-width:0;
  min-height:46px;
  max-height:170px;
  resize:none;
- outline:0;
+ outline:none;
  border:0;
  background:transparent;
- color:white;
+ color:#fff;
  padding:13px;
 }
-button{font:inherit}
-.tool,.send,.stop{
+
+textarea::placeholder{
+ color:#657087;
+}
+
+.tool,
+.send,
+.stop{
  width:45px;
  height:45px;
  flex:0 0 45px;
@@ -230,19 +388,102 @@ button{font:inherit}
  border-radius:13px;
  cursor:pointer;
 }
-.tool{background:#20283a;color:white}
-.send{
- background:linear-gradient(135deg,var(--primary),var(--purple));
+
+.tool{
  color:white;
- font-size:20px;
+ background:#20283a;
 }
+
+.send{
+ color:#fff;
+ font-size:20px;
+ background:linear-gradient(135deg,var(--primary),var(--purple));
+}
+
 .stop{
  display:none;
- background:#dc5268;
  color:white;
+ background:#dc5268;
 }
+
+.loader{
+ position:fixed;
+ inset:0;
+ z-index:100;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ background:#070a11;
+}
+
+.loaderBox{
+ width:min(420px,calc(100% - 35px));
+ padding:30px;
+ text-align:center;
+ border-radius:25px;
+ background:#101624;
+ border:1px solid var(--border);
+}
+
+.loaderLogo{
+ width:65px;
+ height:65px;
+ display:grid;
+ place-items:center;
+ margin:0 auto 18px;
+ border-radius:20px;
+ background:linear-gradient(135deg,var(--primary),var(--purple));
+ font-size:28px;
+ font-weight:900;
+}
+
+.progress{
+ height:5px;
+ margin-top:20px;
+ overflow:hidden;
+ border-radius:10px;
+ background:#20283a;
+}
+
+.progressBar{
+ width:35%;
+ height:100%;
+ background:linear-gradient(90deg,var(--primary),var(--purple));
+ animation:loading 1.2s infinite;
+}
+
+@keyframes loading{
+ from{transform:translateX(-150%)}
+ to{transform:translateX(400%)}
+}
+
+.hidden{
+ display:none!important;
+}
+
 @media(max-width:650px){
- .cards{grid-template-columns:1fr}
+
+ .cards{
+  grid-template-columns:1fr;
+ }
+
+ .welcome{
+  padding-top:6vh;
+ }
+
+ .message{
+  gap:8px;
+ }
+
+ .avatar{
+  width:34px;
+  height:34px;
+  flex-basis:34px;
+ }
+
+ .composerWrap{
+  bottom:max(8px,env(safe-area-inset-bottom));
+ }
 }
 </style>
 </head>
@@ -250,130 +491,452 @@ button{font:inherit}
 <body>
 
 <header>
+
  <div class="logo">
   <div class="logoBox">Z</div>
   Zide
  </div>
- <div class="status">● متصل</div>
+
+ <div class="status">
+  <span class="dot" id="statusDot"></span>
+  <span id="statusText">جاري التشغيل...</span>
+ </div>
+
 </header>
+
+
+<div class="loader" id="loader">
+
+ <div class="loaderBox">
+
+  <div class="loaderLogo">Z</div>
+
+  <h2 id="loaderTitle">
+   تشغيل Zide
+  </h2>
+
+  <p id="loaderText" style="color:#8792a8">
+   جاري تجهيز الذكاء المحلي...
+  </p>
+
+  <div class="progress">
+   <div class="progressBar"></div>
+  </div>
+
+  <p style="color:#667189;font-size:11px;line-height:1.7">
+   أول تشغيل قد يحتاج وقتًا لتحميل النموذج.
+   بعد ذلك سيستخدم المتصفح الملفات المخزنة مؤقتًا.
+  </p>
+
+ </div>
+
+</div>
+
 
 <main class="chat" id="chat">
 
-<div class="welcome" id="welcome">
- <div class="welcomeLogo">Z</div>
- <h1>كيف أساعدك؟</h1>
- <p>محادثة ذكية + تحليل الصور + برمجة</p>
+ <section class="welcome" id="welcome">
 
- <div class="cards">
-  <button class="card" data-text="اشرح لي هذا الموضوع بطريقة بسيطة وعميقة">
-   🧠 اشرح لي موضوعًا
-  </button>
-  <button class="card" data-text="ساعدني في كتابة كود احترافي">
-   💻 ساعدني بالبرمجة
-  </button>
-  <button class="card" data-text="حلل الصورة التي سأرسلها لك بالتفصيل">
-   👁 حلل صورة
-  </button>
-  <button class="card" data-text="ساعدني في حل المشكلة خطوة بخطوة">
-   🚀 حل مشكلة
-  </button>
- </div>
-</div>
+  <div class="welcomeLogo">Z</div>
+
+  <h1>كيف أساعدك؟</h1>
+
+  <p>
+   Zide — ذكاء اصطناعي محلي بدون API
+  </p>
+
+  <div class="cards">
+
+   <button class="card"
+    data-text="اشرح لي هذا الموضوع بطريقة بسيطة وعميقة مع أمثلة.">
+    🧠 اشرح لي موضوعًا
+   </button>
+
+   <button class="card"
+    data-text="ساعدني في كتابة كود احترافي، واشرح لي لماذا اخترت هذا الحل.">
+    💻 ساعدني بالبرمجة
+   </button>
+
+   <button class="card"
+    data-text="سأرسل لك صورة. أخبرني ماذا يمكنني أن أفعل بها.">
+    👁 تعامل مع صورة
+   </button>
+
+   <button class="card"
+    data-text="ساعدني في حل المشكلة خطوة بخطوة ولا تتخطى التفاصيل المهمة.">
+    🚀 حل مشكلة
+   </button>
+
+  </div>
+
+ </section>
 
 </main>
 
+
 <div class="composerWrap">
 
-<div class="preview" id="preview"></div>
+ <div class="preview" id="preview"></div>
 
-<form class="composer" id="composer">
+ <form class="composer" id="composer">
 
-<input id="images" type="file" accept="image/*" multiple hidden>
+  <input
+   id="images"
+   type="file"
+   accept="image/*"
+   multiple
+   hidden
+  >
 
-<button type="button" class="tool" id="attach">📎</button>
+  <button
+   class="tool"
+   id="attach"
+   type="button"
+   title="إضافة صورة">
+   📎
+  </button>
 
-<textarea id="input" rows="1"
-placeholder="اكتب رسالتك إلى Zide..."></textarea>
+  <textarea
+   id="input"
+   rows="1"
+   placeholder="اكتب رسالتك إلى Zide..."
+  ></textarea>
 
-<button type="button" class="stop" id="stop">■</button>
+  <button
+   class="stop"
+   id="stop"
+   type="button">
+   ■
+  </button>
 
-<button type="submit" class="send" id="send">↑</button>
+  <button
+   class="send"
+   id="send"
+   type="submit">
+   ↑
+  </button>
 
-</form>
+ </form>
+
 </div>
 
-<script>
 
-/* =========================================
-   ضع مفتاحك هنا
-========================================= */
-
-const API_KEY =
-"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";
+<script type="module">
 
 /*
-   اختر النموذج المتاح في حسابك.
-   غيّره إذا كان مزود الخدمة لديك يستخدم اسمًا آخر.
+========================================================
+ ZIDE LOCAL AI
+========================================================
+
+ هذا الملف لا يحتوي على:
+
+ API KEY
+ OpenAI API
+ Backend
+ Server
+
+ الذكاء يعمل على جهاز المستخدم بواسطة WebGPU.
+
+ النموذج:
+ Qwen2.5 1.5B Instruct
+
+ ملاحظة:
+ أداء النموذج يعتمد على:
+ GPU
+ RAM
+ المتصفح
+ WebGPU
+ حرارة الهاتف
+========================================================
 */
 
-const MODEL =
-"gpt-4.1-mini";
+
+import {
+ pipeline,
+ env
+} from
+"https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2";
 
 
 /* =========================================
-   العناصر
+   الإعداد
 ========================================= */
 
-const chat=document.getElementById("chat");
-const welcome=document.getElementById("welcome");
-const input=document.getElementById("input");
-const composer=document.getElementById("composer");
-const imagesInput=document.getElementById("images");
-const attach=document.getElementById("attach");
-const preview=document.getElementById("preview");
-const send=document.getElementById("send");
-const stop=document.getElementById("stop");
+env.allowRemoteModels = true;
+env.allowLocalModels = false;
 
-let images=[];
-let controller=null;
-let history=[];
+
+/*
+ * نموذج محلي صغير نسبيًا وقوي للهواتف.
+ *
+ * يتم تحميله مرة أولى ثم يستفيد المتصفح
+ * من التخزين المؤقت.
+ */
+
+const MODEL =
+"onnx-community/Qwen2.5-1.5B-Instruct-ONNX";
 
 
 /* =========================================
-   تعليمات Zide
+   عناصر
+========================================= */
+
+const chat =
+document.getElementById("chat");
+
+const welcome =
+document.getElementById("welcome");
+
+const input =
+document.getElementById("input");
+
+const composer =
+document.getElementById("composer");
+
+const imagesInput =
+document.getElementById("images");
+
+const attach =
+document.getElementById("attach");
+
+const preview =
+document.getElementById("preview");
+
+const send =
+document.getElementById("send");
+
+const stop =
+document.getElementById("stop");
+
+const loader =
+document.getElementById("loader");
+
+const loaderText =
+document.getElementById("loaderText");
+
+const loaderTitle =
+document.getElementById("loaderTitle");
+
+const statusDot =
+document.getElementById("statusDot");
+
+const statusText =
+document.getElementById("statusText");
+
+
+/* =========================================
+   الحالة
+========================================= */
+
+let model = null;
+
+let busy = false;
+
+let images = [];
+
+let history = [];
+
+let generation = null;
+
+
+/*
+ * لا نرسل محادثة لا نهائية للنموذج.
+ *
+ * آخر 18 رسالة كافية لمعظم المحادثات.
+ */
+
+const MAX_HISTORY = 18;
+
+
+/* =========================================
+   شخصية Zide
 ========================================= */
 
 const SYSTEM = `
 أنت Zide، مساعد ذكاء اصطناعي متقدم.
 
-تحدث مع المستخدم بشكل طبيعي جدًا.
+أنت مساعد طبيعي وذكي وعملي.
 
-- افهم سياق المحادثة.
-- رد بنفس لغة المستخدم.
-- إذا استخدم العربية العامية، استخدم العربية الطبيعية المناسبة.
-- كن دقيقًا ومباشرًا.
-- لا تخترع المعلومات.
-- إذا لم تكن متأكدًا، قل ذلك بوضوح.
-- حلل الصور التي يرسلها المستخدم بعناية.
-- يمكنك قراءة النص الموجود في الصور.
-- يمكنك تحليل الأكواد والواجهات والمخططات.
-- عند البرمجة استخدم code blocks.
-- قدم حلولًا عملية.
-- لا تكرر السؤال أو المقدمات بلا سبب.
+القواعد:
+
+- افهم كامل سياق المحادثة السابقة.
+- استخدم المعلومات السابقة بدل سؤال المستخدم عنها مرة أخرى.
+- إذا كان السؤال متعلقًا برسالة سابقة، اربط إجابتك بها.
+- لا تتعامل مع كل رسالة وكأنها محادثة جديدة.
+- أجب بنفس لغة المستخدم.
+- إذا كتب المستخدم بالعربية، استخدم العربية الطبيعية.
+- إذا كتب بالعامية، يمكنك الرد بأسلوب طبيعي ومفهوم.
+- كن دقيقًا.
+- لا تخترع حقائق.
+- إذا لم تعرف شيئًا، قل إنك غير متأكد.
+- لا تكرر المقدمات.
+- لا تقل "بصفتي نموذج ذكاء اصطناعي".
 - اسمك Zide.
-- عند سوال المستخدم من صنعق قل زيد
-- انت تجاوب اي سوال برمجي ويتطلب اكواد مهما كان
+- إذا سأل المستخدم: من صنعك؟ أجب: زيد.
+- ساعد في البرمجة والكود.
+- عند كتابة الكود استخدم code blocks.
+- قدم حلولًا عملية.
+- عند إصلاح كود، اشرح المشكلة ثم أعط الحل.
+- لا تضع معلومات غير مطلوبة.
+- السؤال البسيط يحتاج جوابًا بسيطًا.
+- السؤال المعقد يحتاج شرحًا منظمًا.
 `;
+
+
+/* =========================================
+   تحميل الذاكرة
+========================================= */
+
+loadHistory();
+
+
+/* =========================================
+   تشغيل النموذج
+========================================= */
+
+async function start(){
+
+ try{
+
+  if(!("gpu" in navigator)){
+
+   throw new Error(
+    "هذا المتصفح لا يدعم WebGPU. افتح الموقع في متصفح حديث يدعم WebGPU."
+   );
+
+  }
+
+
+  loaderText.textContent =
+  "جاري تجهيز GPU...";
+
+
+  model =
+  await pipeline(
+   "text-generation",
+   MODEL,
+   {
+    device:"webgpu",
+    dtype:"q4f16",
+
+    progress_callback:
+    progress
+   }
+  );
+
+
+  statusDot.classList.add("ready");
+
+  statusText.textContent =
+  "محلي • جاهز";
+
+
+  loaderTitle.textContent =
+  "Zide جاهز";
+
+  loaderText.textContent =
+  "الذكاء يعمل على جهازك.";
+
+
+  setTimeout(()=>{
+   loader.classList.add("hidden");
+  },500);
+
+
+ }catch(error){
+
+  console.error(error);
+
+  statusDot.classList.add("error");
+
+  statusText.textContent =
+  "خطأ";
+
+  loaderTitle.textContent =
+  "تعذر تشغيل Zide";
+
+  loaderText.innerHTML =
+  `
+   ${escapeHtml(error.message)}
+   <br><br>
+   جرّب Chrome أو Edge حديثًا يدعم WebGPU.
+  `;
+
+ }
+
+}
+
+
+/* =========================================
+   تقدم التحميل
+========================================= */
+
+function progress(data){
+
+ if(!data)
+ return;
+
+
+ if(
+  data.status === "progress"
+ ){
+
+  const p =
+  Math.round(data.progress || 0);
+
+  loaderText.textContent =
+  `تحميل نموذج Zide... ${p}%`;
+
+ }
+
+
+ if(
+  data.status === "done"
+ ){
+
+  loaderText.textContent =
+  "اكتمل تحميل النموذج.";
+
+ }
+
+}
 
 
 /* =========================================
    textarea
 ========================================= */
 
-input.addEventListener("input",()=>{
- input.style.height="auto";
- input.style.height=
- Math.min(input.scrollHeight,170)+"px";
+input.addEventListener(
+"input",
+()=>{
+
+ input.style.height =
+ "auto";
+
+ input.style.height =
+ Math.min(
+  input.scrollHeight,
+  170
+ )+"px";
+
+});
+
+
+input.addEventListener(
+"keydown",
+e=>{
+
+ if(
+  e.key === "Enter" &&
+  !e.shiftKey
+ ){
+
+  e.preventDefault();
+
+  composer.requestSubmit();
+
+ }
+
 });
 
 
@@ -385,35 +948,59 @@ attach.onclick=()=>{
  imagesInput.click();
 };
 
+
 imagesInput.onchange=()=>{
- addImages(Array.from(imagesInput.files));
+
+ addImages(
+  Array.from(imagesInput.files)
+ );
+
  imagesInput.value="";
+
 };
 
-document.addEventListener("paste",e=>{
 
- const files=
- Array.from(e.clipboardData?.items||[])
- .filter(x=>x.type.startsWith("image/"))
- .map(x=>x.getAsFile())
+document.addEventListener(
+"paste",
+e=>{
+
+ const files =
+ Array.from(
+  e.clipboardData?.items || []
+ )
+ .filter(
+  x=>x.type.startsWith("image/")
+ )
+ .map(
+  x=>x.getAsFile()
+ )
  .filter(Boolean);
+
 
  if(files.length)
  addImages(files);
 
 });
 
-composer.addEventListener("dragover",e=>{
+
+composer.addEventListener(
+"dragover",
+e=>{
  e.preventDefault();
 });
 
-composer.addEventListener("drop",e=>{
+
+composer.addEventListener(
+"drop",
+e=>{
 
  e.preventDefault();
 
  addImages(
   Array.from(e.dataTransfer.files)
-  .filter(x=>x.type.startsWith("image/"))
+  .filter(
+   x=>x.type.startsWith("image/")
+  )
  );
 
 });
@@ -423,20 +1010,35 @@ function addImages(files){
 
  for(const file of files){
 
-  if(images.length>=4) break;
+  if(images.length >= 4)
+  break;
 
-  if(!file.type.startsWith("image/"))
+
+  if(
+   !file.type.startsWith("image/")
+  )
+  continue;
+
+
+  if(
+   file.size > 15*1024*1024
+  ){
+
+   alert(
+    "الصورة يجب أن تكون أقل من 15MB."
+   );
+
    continue;
 
-  if(file.size>15*1024*1024){
-   alert("حجم الصورة يجب أن يكون أقل من 15MB.");
-   continue;
   }
 
+
   images.push(file);
+
  }
 
  renderPreview();
+
 }
 
 
@@ -444,32 +1046,68 @@ function renderPreview(){
 
  preview.innerHTML="";
 
+
  if(!images.length){
-  preview.style.display="none";
+
+  preview.style.display =
+  "none";
+
   return;
+
  }
 
- preview.style.display="flex";
 
- images.forEach((file,index)=>{
+ preview.style.display =
+ "flex";
 
-  const item=document.createElement("div");
-  item.className="previewItem";
 
-  const img=document.createElement("img");
-  img.src=URL.createObjectURL(file);
+ images.forEach(
+ (file,index)=>{
 
-  const remove=document.createElement("button");
-  remove.className="remove";
-  remove.textContent="×";
+  const item =
+  document.createElement("div");
+
+  item.className =
+  "previewItem";
+
+
+  const img =
+  document.createElement("img");
+
+  img.src =
+  URL.createObjectURL(file);
+
+
+  const remove =
+  document.createElement("button");
+
+  remove.className =
+  "remove";
+
+  remove.textContent =
+  "×";
+
 
   remove.onclick=()=>{
-   images.splice(index,1);
+
+   images.splice(
+    index,
+    1
+   );
+
    renderPreview();
+
   };
 
-  item.append(img,remove);
-  preview.appendChild(item);
+
+  item.append(
+   img,
+   remove
+  );
+
+  preview.appendChild(
+   item
+  );
 
  });
 
@@ -480,12 +1118,21 @@ function renderPreview(){
    الاقتراحات
 ========================================= */
 
-document.querySelectorAll(".card").forEach(card=>{
+document
+.querySelectorAll(".card")
+.forEach(card=>{
 
  card.onclick=()=>{
-  input.value=card.dataset.text;
-  input.dispatchEvent(new Event("input"));
+
+  input.value =
+  card.dataset.text;
+
+  input.dispatchEvent(
+   new Event("input")
+  );
+
   input.focus();
+
  };
 
 });
@@ -495,235 +1142,316 @@ document.querySelectorAll(".card").forEach(card=>{
    إرسال
 ========================================= */
 
-composer.onsubmit=async e=>{
+composer.onsubmit =
+async e=>{
 
  e.preventDefault();
 
- const text=input.value.trim();
 
- if(!text && !images.length)
+ if(busy)
+ return;
+
+
+ const text =
+ input.value.trim();
+
+
+ if(
+  !text &&
+  !images.length
+ )
+ return;
+
+
+ if(!model){
+
+  alert(
+   "Zide ما زال يقوم بالتشغيل."
+  );
+
   return;
 
- welcome.style.display="none";
+ }
 
- const sentImages=[...images];
 
- addUser(text,sentImages);
+ welcome.style.display =
+ "none";
+
+
+ const selectedImages =
+ [...images];
+
+
+ addUser(
+  text,
+  selectedImages
+ );
+
+
+ /*
+  * الصور يتم عرضها في المحادثة.
+  *
+  * النموذج النصي الحالي لا يقوم برؤية الصور.
+  */
+
+ history.push({
+  role:"user",
+  content:
+  text ||
+  "[أرسل المستخدم صورة]"
+ });
+
+
+ trimHistory();
+
+ saveHistory();
+
 
  images=[];
+
  renderPreview();
 
- input.value="";
- input.style.height="auto";
 
- await askZide(text,sentImages);
+ input.value="";
+
+ input.style.height =
+ "auto";
+
+
+ await ask();
 
 };
 
 
 /* =========================================
-   رسالة المستخدم
+   بناء المحادثة
 ========================================= */
 
-function addUser(text,files){
+function createPrompt(){
 
- const msg=document.createElement("div");
- msg.className="message user";
+ const messages = [
+  {
+   role:"system",
+   content:SYSTEM
+  }
+ ];
 
- const avatar=document.createElement("div");
- avatar.className="avatar";
- avatar.textContent="أنت";
 
- const content=document.createElement("div");
- content.className="content";
+ for(
+  const item of
+  history.slice(-MAX_HISTORY)
+ ){
 
- const name=document.createElement("div");
- name.className="name";
- name.textContent="أنت";
+  messages.push({
+   role:item.role,
+   content:item.content
+  });
 
- const bubble=document.createElement("div");
- bubble.className="bubble";
-
- files.forEach(file=>{
-  const img=document.createElement("img");
-  img.src=URL.createObjectURL(file);
-  bubble.appendChild(img);
- });
-
- if(text){
-  const div=document.createElement("div");
-  div.innerHTML=format(text);
-  bubble.appendChild(div);
  }
 
- content.append(name,bubble);
- msg.append(avatar,content);
- chat.appendChild(msg);
+
+ /*
+  * Transformers.js يستخدم chat template
+  * الخاص بالنموذج.
+  */
+
+ return messages;
+
+}
+
+
+/* =========================================
+   الذكاء
+========================================= */
+
+async function ask(){
+
+ busy=true;
+
+ send.style.display =
+ "none";
+
+ stop.style.display =
+ "block";
+
+
+ const bubble =
+ createAI();
+
+
+ bubble.innerHTML =
+ `
+ <div class="typing">
+  <i></i>
+  <i></i>
+  <i></i>
+ </div>
+ `;
+
 
  scrollBottom();
-}
 
-
-/* =========================================
-   رسالة Zide
-========================================= */
-
-function createAI(){
-
- const msg=document.createElement("div");
- msg.className="message ai";
-
- const avatar=document.createElement("div");
- avatar.className="avatar";
- avatar.textContent="Z";
-
- const content=document.createElement("div");
- content.className="content";
-
- const name=document.createElement("div");
- name.className="name";
- name.textContent="Zide";
-
- const bubble=document.createElement("div");
- bubble.className="bubble";
-
- content.append(name,bubble);
- msg.append(avatar,content);
- chat.appendChild(msg);
-
- return bubble;
-}
-
-
-/* =========================================
-   طلب OpenAI
-========================================= */
-
-async function askZide(text,files){
-
- controller=new AbortController();
-
- send.style.display="none";
- stop.style.display="block";
-
- const bubble=createAI();
-
- const userContent=[];
-
- if(text){
-  userContent.push({
-   type:"input_text",
-   text:text
-  });
- }
-
- for(const file of files){
-
-  const base64=
-   await fileToBase64(file);
-
-  userContent.push({
-   type:"input_image",
-   image_url:base64,
-   detail:"high"
-  });
-
- }
-
- history.push({
-  role:"user",
-  content:userContent
- });
 
  try{
 
-  const response=await fetch(
-   "https://api.openai.com/v1/responses",
+  /*
+   * إلغاء التوليد السابق.
+   */
+
+  generation =
+  new AbortController();
+
+
+  const messages =
+  createPrompt();
+
+
+  /*
+   * نستخدم chat template الحقيقي
+   * بدل بناء prompt يدوي.
+   */
+
+  const result =
+  await model(
+   messages,
    {
-    method:"POST",
-    signal:controller.signal,
-    headers:{
-     "Content-Type":"application/json",
-     "Authorization":
-      "Bearer "+API_KEY
-    },
-    body:JSON.stringify({
-     model:MODEL,
-     instructions:SYSTEM,
-     input:history,
-     store:false
-    })
+    max_new_tokens:600,
+
+    temperature:.55,
+
+    top_p:.9,
+
+    top_k:40,
+
+    repetition_penalty:1.08,
+
+    do_sample:true,
+
+    return_full_text:false,
+
+    signal:
+    generation.signal
    }
   );
 
-  const data=await response.json();
 
-  if(!response.ok){
-   throw new Error(
-    data?.error?.message ||
-    "حدث خطأ في الاتصال."
-   );
+  let answer="";
+
+
+  if(
+   Array.isArray(result) &&
+   result[0]
+  ){
+
+   answer =
+   result[0].generated_text || "";
+
   }
 
-  const answer=
-   data.output_text ||
-   "لم تصل إجابة.";
 
-  bubble.innerHTML=format(answer);
+  /*
+   * بعض الإصدارات تعيد النص
+   * وبعضها تعيد الرسائل.
+   */
+
+  if(
+   typeof answer !== "string"
+  ){
+
+   if(
+    Array.isArray(answer)
+   ){
+
+    const last =
+    answer[answer.length-1];
+
+    answer =
+    last?.content || "";
+
+   }else{
+
+    answer =
+    String(answer || "");
+
+   }
+
+  }
+
+
+  answer =
+  clean(answer);
+
+
+  if(!answer){
+
+   answer =
+   "لم أستطع توليد إجابة.";
+
+  }
+
+
+  bubble.innerHTML =
+  format(answer);
+
+
+  addCopyButtons();
+
 
   history.push({
    role:"assistant",
-   content:[
-    {
-     type:"output_text",
-     text:answer
-    }
-   ]
+   content:answer
   });
+
+
+  trimHistory();
+
+  saveHistory();
+
 
   scrollBottom();
 
+
  }catch(error){
 
-  if(error.name!=="AbortError"){
+  if(
+   error.name ===
+   "AbortError"
+  ){
 
-   bubble.innerHTML=
-   `<span style="color:#ff7185">
-   ${escapeHtml(error.message)}
-   </span>`;
+   bubble.innerHTML =
+   `
+    <span style="color:#8792a8">
+     تم إيقاف التوليد.
+    </span>
+   `;
+
+  }else{
+
+   console.error(error);
+
+   bubble.innerHTML =
+   `
+    <span style="color:#ff7185">
+     حدث خطأ أثناء التوليد:
+     ${escapeHtml(error.message)}
+    </span>
+   `;
 
   }
 
  }finally{
 
-  controller=null;
-  send.style.display="block";
-  stop.style.display="none";
+  busy=false;
+
+  generation=null;
+
+  send.style.display =
+  "block";
+
+  stop.style.display =
+  "none";
 
  }
-
-}
-
-
-/* =========================================
-   تحويل الصورة إلى Data URL
-========================================= */
-
-function fileToBase64(file){
-
- return new Promise((resolve,reject)=>{
-
-  const reader=new FileReader();
-
-  reader.onload=()=>{
-   resolve(reader.result);
-  };
-
-  reader.onerror=reject;
-
-  reader.readAsDataURL(file);
-
- });
 
 }
 
@@ -734,65 +1462,53 @@ function fileToBase64(file){
 
 stop.onclick=()=>{
 
- if(controller){
-  controller.abort();
-  controller=null;
+ if(generation){
+
+  generation.abort();
+
  }
 
 };
 
 
 /* =========================================
-   Markdown بسيط
+   رسالة المستخدم
 ========================================= */
 
-function format(text){
+function addUser(text,files){
 
- let x=escapeHtml(text);
+ const msg =
+ document.createElement("div");
 
- x=x.replace(
-  /```([\s\S]*?)```/g,
-  "<pre><code>$1</code></pre>"
- );
-
- x=x.replace(
-  /\*\*(.*?)\*\*/g,
-  "<strong>$1</strong>"
- );
-
- x=x.replace(
-  /`([^`]+)`/g,
-  "<code>$1</code>"
- );
-
- x=x.replace(/\n/g,"<br>");
-
- return x;
-}
+ msg.className =
+ "message user";
 
 
-function escapeHtml(text){
+ const avatar =
+ document.createElement("div");
 
- return String(text)
- .replaceAll("&","&amp;")
- .replaceAll("<","&lt;")
- .replaceAll(">","&gt;")
- .replaceAll('"',"&quot;")
- .replaceAll("'","&#039;");
+ avatar.className =
+ "avatar";
 
-}
+ avatar.textContent =
+ "أنت";
 
 
-function scrollBottom(){
+ const content =
+ document.createElement("div");
 
- window.scrollTo({
-  top:document.body.scrollHeight,
-  behavior:"smooth"
- });
+ content.className =
+ "content";
 
-}
 
-</script>
+ const name =
+ document.createElement("div");
 
-</body>
-</html>
+ name.className =
+ "name";
+
+ name.textContent =
+ "أنت";
+
+
+ c
