@@ -2,9 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#070a11">
-
 <title>Zide AI</title>
 
 <style>
@@ -22,35 +21,29 @@
  --red:#ff5870;
 }
 
-html,body{
+body{
  margin:0;
- min-height:100%;
- background:var(--bg);
+ min-height:100vh;
  color:var(--text);
  font-family:Arial,system-ui,sans-serif;
-}
-
-body{
  background:
  radial-gradient(circle at 15% 0%,rgba(101,119,255,.2),transparent 32%),
  radial-gradient(circle at 90% 15%,rgba(173,85,255,.17),transparent 30%),
  var(--bg);
 }
 
-button,textarea{
- font:inherit;
-}
-
 header{
- height:64px;
  position:fixed;
- inset:0 0 auto 0;
+ top:0;
+ right:0;
+ left:0;
+ height:64px;
  z-index:20;
  display:flex;
  align-items:center;
  justify-content:space-between;
- padding:0 18px;
- background:rgba(7,10,17,.82);
+ padding:0 20px;
+ background:rgba(7,10,17,.85);
  backdrop-filter:blur(20px);
  border-bottom:1px solid var(--border);
 }
@@ -59,7 +52,7 @@ header{
  display:flex;
  align-items:center;
  gap:10px;
- font-size:22px;
+ font-size:23px;
  font-weight:900;
 }
 
@@ -73,52 +66,31 @@ header{
 }
 
 .status{
- display:flex;
- align-items:center;
- gap:7px;
- color:var(--muted);
+ color:var(--green);
  font-size:11px;
-}
-
-.dot{
- width:7px;
- height:7px;
- border-radius:50%;
- background:#f0b936;
- box-shadow:0 0 10px #f0b936;
-}
-
-.dot.ready{
- background:var(--green);
- box-shadow:0 0 12px var(--green);
-}
-
-.dot.error{
- background:var(--red);
- box-shadow:0 0 12px var(--red);
 }
 
 .chat{
  width:min(850px,calc(100% - 20px));
  margin:auto;
- padding:100px 0 155px;
+ padding:105px 0 145px;
 }
 
 .welcome{
  text-align:center;
- padding-top:9vh;
+ padding-top:8vh;
 }
 
 .welcomeLogo{
- width:82px;
- height:82px;
+ width:80px;
+ height:80px;
  margin:auto auto 20px;
  display:grid;
  place-items:center;
  border-radius:25px;
- background:linear-gradient(135deg,var(--primary),var(--purple));
- font-size:36px;
+ font-size:35px;
  font-weight:900;
+ background:linear-gradient(135deg,var(--primary),var(--purple));
  box-shadow:0 20px 60px rgba(101,119,255,.3);
 }
 
@@ -141,14 +113,13 @@ h1{
 }
 
 .card{
- padding:17px;
+ padding:16px;
  border:1px solid var(--border);
  border-radius:15px;
- color:#b0b9ca;
+ color:#aeb7c9;
  background:rgba(255,255,255,.035);
  text-align:right;
  cursor:pointer;
- transition:.2s;
 }
 
 .card:hover{
@@ -158,7 +129,7 @@ h1{
 
 .message{
  display:flex;
- gap:10px;
+ gap:11px;
  margin:28px 0;
 }
 
@@ -193,8 +164,8 @@ h1{
 }
 
 .bubble{
- font-size:15px;
  line-height:1.9;
+ font-size:15px;
  overflow-wrap:anywhere;
 }
 
@@ -207,19 +178,11 @@ h1{
  border:1px solid var(--border);
 }
 
-.bubble img{
- display:block;
- max-width:100%;
- max-height:400px;
- margin-bottom:10px;
- border-radius:14px;
-}
-
 pre{
  direction:ltr;
  text-align:left;
  overflow:auto;
- padding:16px;
+ padding:15px;
  border-radius:13px;
  background:#05070c;
  border:1px solid var(--border);
@@ -231,79 +194,13 @@ code{
 }
 
 .typing{
- display:flex;
- gap:5px;
- align-items:center;
  color:var(--muted);
-}
-
-.typing i{
- width:5px;
- height:5px;
- border-radius:50%;
- background:#8d98ad;
- animation:bounce 1s infinite;
-}
-
-.typing i:nth-child(2){
- animation-delay:.15s;
-}
-
-.typing i:nth-child(3){
- animation-delay:.3s;
-}
-
-@keyframes bounce{
- 0%,80%,100%{
-  opacity:.25;
-  transform:translateY(0);
- }
-
- 40%{
-  opacity:1;
-  transform:translateY(-4px);
- }
-}
-
-.preview{
- display:none;
- gap:8px;
- overflow:auto;
- padding:8px;
- margin-bottom:8px;
- border-radius:14px;
- background:#121927;
- border:1px solid var(--border);
-}
-
-.previewItem{
- position:relative;
- flex:0 0 auto;
-}
-
-.previewItem img{
- width:70px;
- height:70px;
- object-fit:cover;
- border-radius:10px;
-}
-
-.remove{
- position:absolute;
- top:-5px;
- left:-5px;
- width:21px;
- height:21px;
- border:0;
- border-radius:50%;
- color:white;
- background:var(--red);
 }
 
 .composerWrap{
  position:fixed;
- left:50%;
  bottom:12px;
+ left:50%;
  transform:translateX(-50%);
  width:min(850px,calc(100% - 16px));
  z-index:30;
@@ -317,7 +214,7 @@ code{
  border-radius:20px;
  background:rgba(15,20,31,.95);
  border:1px solid rgba(255,255,255,.12);
- box-shadow:0 20px 70px rgba(0,0,0,.55);
+ box-shadow:0 20px 70px rgba(0,0,0,.5);
  backdrop-filter:blur(25px);
 }
 
@@ -327,18 +224,14 @@ textarea{
  min-height:46px;
  max-height:170px;
  resize:none;
- outline:none;
+ outline:0;
  border:0;
  background:transparent;
  color:white;
  padding:13px;
 }
 
-textarea::placeholder{
- color:#657087;
-}
-
-.tool,.send,.stop{
+.tool,.send{
  width:45px;
  height:45px;
  flex:0 0 45px;
@@ -348,91 +241,18 @@ textarea::placeholder{
 }
 
 .tool{
- color:white;
  background:#20283a;
+ color:white;
 }
 
 .send{
+ background:linear-gradient(135deg,var(--primary),var(--purple));
  color:white;
  font-size:20px;
- background:linear-gradient(135deg,var(--primary),var(--purple));
-}
-
-.stop{
- display:none;
- color:white;
- background:#dc5268;
-}
-
-.loader{
- position:fixed;
- right:15px;
- bottom:90px;
- z-index:25;
- width:min(330px,calc(100% - 30px));
- padding:15px;
- border-radius:15px;
- background:rgba(16,22,36,.95);
- border:1px solid var(--border);
- box-shadow:0 15px 50px rgba(0,0,0,.4);
- backdrop-filter:blur(20px);
-}
-
-.loaderTitle{
- font-size:13px;
- font-weight:bold;
-}
-
-.loaderText{
- margin-top:5px;
- color:var(--muted);
- font-size:11px;
- line-height:1.6;
-}
-
-.progress{
- height:4px;
- margin-top:10px;
- overflow:hidden;
- border-radius:10px;
- background:#20283a;
-}
-
-.progressBar{
- width:30%;
- height:100%;
- background:linear-gradient(90deg,var(--primary),var(--purple));
- animation:loading 1.2s infinite;
-}
-
-@keyframes loading{
- from{
-  transform:translateX(-150%);
- }
-
- to{
-  transform:translateX(400%);
- }
-}
-
-.hidden{
- display:none!important;
 }
 
 @media(max-width:650px){
-
- .cards{
-  grid-template-columns:1fr;
- }
-
- .welcome{
-  padding-top:6vh;
- }
-
- .loader{
-  bottom:85px;
- }
-
+ .cards{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -440,166 +260,94 @@ textarea::placeholder{
 <body>
 
 <header>
-
  <div class="logo">
   <div class="logoBox">Z</div>
   Zide
  </div>
 
  <div class="status">
-  <span class="dot" id="dot"></span>
-  <span id="status">جاري تجهيز AI...</span>
+  ● محلي • جاهز
  </div>
-
 </header>
-
-
-<div class="loader" id="loader">
-
- <div class="loaderTitle">
-  🧠 Zide Local AI
- </div>
-
- <div class="loaderText" id="loaderText">
-  الموقع جاهز. يتم تجهيز الذكاء في الخلفية...
- </div>
-
- <div class="progress">
-  <div class="progressBar"></div>
- </div>
-
-</div>
 
 
 <main class="chat" id="chat">
 
- <section class="welcome" id="welcome">
+<section class="welcome" id="welcome">
 
-  <div class="welcomeLogo">
-   Z
-  </div>
+ <div class="welcomeLogo">Z</div>
 
-  <h1>
-   كيف أساعدك؟
-  </h1>
+ <h1>كيف أساعدك؟</h1>
 
-  <p>
-   ذكاء اصطناعي محلي بدون API
-  </p>
+ <p>
+  Zide المحلي — سريع وبدون API
+ </p>
 
-  <div class="cards">
+ <div class="cards">
 
-   <button
-    class="card"
-    data-text="اشرح لي هذا الموضوع بطريقة بسيطة وعميقة مع أمثلة.">
-    🧠 اشرح لي موضوعًا
-   </button>
+  <button class="card"
+   data-text="اشرح لي هذا الموضوع بطريقة بسيطة وعميقة">
+   🧠 اشرح لي موضوعًا
+  </button>
 
-   <button
-    class="card"
-    data-text="ساعدني في كتابة كود احترافي واشرح لي الحل.">
-    💻 ساعدني بالبرمجة
-   </button>
+  <button class="card"
+   data-text="ساعدني في كتابة كود احترافي">
+   💻 ساعدني بالبرمجة
+  </button>
 
-   <button
-    class="card"
-    data-text="ساعدني في تحليل هذه المشكلة خطوة بخطوة.">
-    🚀 حل مشكلة
-   </button>
+  <button class="card"
+   data-text="احسب لي هذه العملية">
+   🧮 احسب لي
+  </button>
 
-   <button
-    class="card"
-    data-text="أريد مساعدتك في بناء مشروع برمجي كامل.">
-    🛠️ بناء مشروع
-   </button>
+  <button class="card"
+   data-text="ساعدني في حل مشكلة خطوة بخطوة">
+   🚀 حل مشكلة
+  </button>
 
-  </div>
+ </div>
 
- </section>
+</section>
 
 </main>
 
 
 <div class="composerWrap">
 
- <div class="preview" id="preview"></div>
+<form class="composer" id="composer">
 
- <form class="composer" id="composer">
+ <button
+  type="button"
+  class="tool"
+  id="clear">
+  🗑
+ </button>
 
-  <input
-   id="files"
-   type="file"
-   accept="image/*"
-   multiple
-   hidden
-  >
+ <textarea
+  id="input"
+  rows="1"
+  placeholder="اكتب رسالتك إلى Zide...">
+ </textarea>
 
-  <button
-   class="tool"
-   type="button"
-   id="attach">
-   📎
-  </button>
+ <button
+  type="submit"
+  class="send">
+  ↑
+ </button>
 
-  <textarea
-   id="input"
-   rows="1"
-   placeholder="اكتب رسالتك إلى Zide...">
-  </textarea>
-
-  <button
-   class="stop"
-   type="button"
-   id="stop">
-   ■
-  </button>
-
-  <button
-   class="send"
-   type="submit"
-   id="send">
-   ↑
-  </button>
-
- </form>
+</form>
 
 </div>
 
 
-<script type="module">
+<script>
 
-/*
-=====================================================
- ZIDE LOCAL
-=====================================================
-
- لا API
- لا API KEY
- لا Backend
-
- النموذج يعمل على الجهاز باستخدام WebGPU.
-
-=====================================================
-*/
-
-
-import {
- pipeline
-} from
-"https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2";
-
-
-/* =========================================
-   النموذج
-========================================= */
-
-const MODEL =
-"onnx-community/Qwen2.5-1.5B-Instruct-ONNX";
-
-
-/* =========================================
-   العناصر
-========================================= */
+/* =====================================================
+   ZIDE LOCAL LITE
+   0 API
+   0 MODEL DOWNLOAD
+   0 WAITING
+===================================================== */
 
 const chat =
 document.getElementById("chat");
@@ -613,199 +361,65 @@ document.getElementById("input");
 const composer =
 document.getElementById("composer");
 
-const files =
-document.getElementById("files");
-
-const attach =
-document.getElementById("attach");
-
-const preview =
-document.getElementById("preview");
-
-const send =
-document.getElementById("send");
-
-const stop =
-document.getElementById("stop");
-
-const loader =
-document.getElementById("loader");
-
-const loaderText =
-document.getElementById("loaderText");
-
-const dot =
-document.getElementById("dot");
-
-const status =
-document.getElementById("status");
+const clear =
+document.getElementById("clear");
 
 
-/* =========================================
-   حالة Zide
-========================================= */
-
-let ai = null;
-
-let running = false;
-
-let controller = null;
-
-let images = [];
-
-let history = [];
-
-const MAX_HISTORY = 18;
+let history =
+JSON.parse(
+ localStorage.getItem("zide_history") || "[]"
+);
 
 
-/* =========================================
-   شخصية Zide
-========================================= */
+/* =====================================================
+   استعادة المحادثة
+===================================================== */
 
-const SYSTEM = `
-أنت Zide، مساعد ذكاء اصطناعي متقدم.
+function restore(){
 
-افهم سياق المحادثة بالكامل.
+ if(!history.length)
+  return;
 
-اعتمد على الرسائل السابقة عند الإجابة.
+ welcome.style.display="none";
 
-لا تطلب معلومات سبق أن أعطاها المستخدم.
+ for(const msg of history){
 
-أجب بنفس لغة المستخدم.
+  if(msg.role==="user")
+   addUser(msg.text,false);
 
-إذا كان المستخدم عربيًا، استخدم العربية الطبيعية.
-
-كن دقيقًا ومباشرًا.
-
-لا تخترع المعلومات.
-
-إذا لم تكن متأكدًا، قل ذلك.
-
-عند البرمجة:
-- أعط كودًا عمليًا.
-- استخدم code blocks.
-- اشرح الحل عند الحاجة.
-
-لا تكرر المقدمات.
-
-اسمك Zide.
-
-إذا سأل المستخدم من صنعك، قل: زيد.
-`;
-
-
-/* =========================================
-   فتح الموقع فورًا
-========================================= */
-
-/*
- * مهم:
- * لا ننتظر النموذج حتى تظهر الواجهة.
- *
- * الواجهة تعمل فورًا.
- */
-
-startAI();
-
-
-/* =========================================
-   تشغيل AI بالخلفية
-========================================= */
-
-async function startAI(){
-
- try{
-
-  if(!("gpu" in navigator)){
-
-   throw new Error(
-    "WebGPU غير مدعوم في هذا المتصفح."
-   );
-
-  }
-
-
-  loaderText.textContent =
-  "جاري تحميل Zide على GPU...";
-
-
-  ai =
-  await pipeline(
-   "text-generation",
-   MODEL,
-   {
-    device:"webgpu",
-    dtype:"q4f16",
-
-    progress_callback:
-    progress
-   }
-  );
-
-
-  dot.classList.add("ready");
-
-  status.textContent =
-  "محلي • جاهز";
-
-  loaderText.textContent =
-  "Zide جاهز ويمكنك البدء.";
-
-
-  setTimeout(()=>{
-   loader.classList.add("hidden");
-  },1200);
-
-
- }catch(error){
-
-  console.error(error);
-
-  dot.classList.add("error");
-
-  status.textContent =
-  "AI غير متاح";
-
-  loaderText.textContent =
-  error.message;
+  if(msg.role==="assistant")
+   addAI(msg.text,false);
 
  }
+
+ scrollBottom();
 
 }
 
 
-/* =========================================
-   تقدم التحميل
-========================================= */
+/* =====================================================
+   حفظ
+===================================================== */
 
-function progress(data){
+function save(){
 
- if(
-  data &&
-  data.status === "progress"
- ){
-
-  const p =
-  Math.round(data.progress || 0);
-
-  loaderText.textContent =
-  `تحميل نموذج Zide... ${p}%`;
-
- }
+ localStorage.setItem(
+  "zide_history",
+  JSON.stringify(
+   history.slice(-30)
+  )
+ );
 
 }
 
 
-/* =========================================
+/* =====================================================
    textarea
-========================================= */
+===================================================== */
 
-input.addEventListener(
-"input",
-()=>{
+input.addEventListener("input",()=>{
 
- input.style.height =
- "auto";
+ input.style.height="auto";
 
  input.style.height =
  Math.min(
@@ -816,14 +430,9 @@ input.addEventListener(
 });
 
 
-input.addEventListener(
-"keydown",
-e=>{
+input.addEventListener("keydown",e=>{
 
- if(
-  e.key === "Enter" &&
-  !e.shiftKey
- ){
+ if(e.key==="Enter" && !e.shiftKey){
 
   e.preventDefault();
 
@@ -834,481 +443,526 @@ e=>{
 });
 
 
-/* =========================================
-   الصور
-========================================= */
-
-attach.onclick=()=>{
- files.click();
-};
-
-
-files.onchange=()=>{
-
- addImages(
-  Array.from(files)
- );
-
- files.value="";
-
-};
-
-
-function addImages(list){
-
- for(const file of list){
-
-  if(images.length>=4)
-  break;
-
-  if(!file.type.startsWith("image/"))
-  continue;
-
-  images.push(file);
-
- }
-
- renderPreview();
-
-}
-
-
-function renderPreview(){
-
- preview.innerHTML="";
-
-
- if(!images.length){
-
-  preview.style.display="none";
-
-  return;
-
- }
-
-
- preview.style.display="flex";
-
-
- images.forEach(
- (file,index)=>{
-
-  const item =
-  document.createElement("div");
-
-  item.className =
-  "previewItem";
-
-
-  const img =
-  document.createElement("img");
-
-  img.src =
-  URL.createObjectURL(file);
-
-
-  const remove =
-  document.createElement("button");
-
-  remove.className =
-  "remove";
-
-  remove.textContent="×";
-
-
-  remove.onclick=()=>{
-
-   images.splice(index,1);
-
-   renderPreview();
-
-  };
-
-
-  item.append(
-   img,
-   remove
-  );
-
-  preview.appendChild(item);
-
- });
-
-}
-
-
-/* =========================================
-   الاقتراحات
-========================================= */
-
-document
-.querySelectorAll(".card")
-.forEach(card=>{
-
- card.onclick=()=>{
-
-  input.value =
-  card.dataset.text;
-
-  input.dispatchEvent(
-   new Event("input")
-  );
-
-  input.focus();
-
- };
-
-});
-
-
-/* =========================================
+/* =====================================================
    إرسال
-========================================= */
+===================================================== */
 
-composer.onsubmit =
-async e=>{
+composer.onsubmit = e => {
 
  e.preventDefault();
-
-
- if(running)
- return;
-
 
  const text =
  input.value.trim();
 
-
- if(
-  !text &&
-  !images.length
- )
- return;
-
-
- if(!ai){
-
-  alert(
-   "Zide ما زال يحمل النموذج. انتظر حتى يصبح جاهزًا."
-  );
-
+ if(!text)
   return;
 
- }
+ welcome.style.display="none";
 
-
- welcome.style.display =
- "none";
-
-
- const selected =
- [...images];
-
-
- addUser(
-  text,
-  selected
- );
-
+ addUser(text,true);
 
  history.push({
   role:"user",
-  content:
-  text ||
-  "[صورة مرفقة]"
+  text:text
  });
 
-
- history =
- history.slice(
-  -MAX_HISTORY
- );
-
-
- saveHistory();
-
-
- images=[];
-
- renderPreview();
-
+ save();
 
  input.value="";
-
  input.style.height="auto";
 
+ const answer =
+ think(text);
 
- await generate();
+ setTimeout(()=>{
 
-};
-
-
-/* =========================================
-   توليد
-========================================= */
-
-async function generate(){
-
- running=true;
-
- controller =
- new AbortController();
-
-
- send.style.display="none";
-
- stop.style.display="block";
-
-
- const bubble =
- createAI();
-
-
- bubble.innerHTML =
- `
- <div class="typing">
-  <i></i>
-  <i></i>
-  <i></i>
- </div>
- `;
-
-
- try{
-
-  const messages = [
-
-   {
-    role:"system",
-    content:SYSTEM
-   },
-
-   ...history.slice(
-    -MAX_HISTORY
-   )
-
-  ];
-
-
-  const result =
-  await ai(
-   messages,
-   {
-    max_new_tokens:600,
-
-    temperature:.55,
-
-    top_p:.9,
-
-    top_k:40,
-
-    repetition_penalty:1.08,
-
-    do_sample:true,
-
-    return_full_text:false,
-
-    signal:
-    controller.signal
-   }
-  );
-
-
-  let answer="";
-
-
-  if(
-   result &&
-   result[0]
-  ){
-
-   answer =
-   result[0].generated_text || "";
-
-  }
-
-
-  answer =
-  clean(answer);
-
-
-  if(!answer)
-  answer="لم أستطع توليد إجابة.";
-
-
-  bubble.innerHTML =
-  format(answer);
-
+  addAI(answer,true);
 
   history.push({
    role:"assistant",
-   content:answer
+   text:answer
   });
 
+  save();
 
-  history =
-  history.slice(
-   -MAX_HISTORY
-  );
-
-
-  saveHistory();
-
-
-  scrollBottom();
-
-
- }catch(error){
-
-  if(
-   error.name ===
-   "AbortError"
-  ){
-
-   bubble.innerHTML =
-   "تم إيقاف التوليد.";
-
-  }else{
-
-   bubble.innerHTML =
-   `<span style="color:#ff7185">
-   ${escapeHtml(error.message)}
-   </span>`;
-
-  }
-
- }finally{
-
-  running=false;
-
-  controller=null;
-
-  send.style.display="block";
-
-  stop.style.display="none";
-
- }
-
-}
-
-
-/* =========================================
-   Stop
-========================================= */
-
-stop.onclick=()=>{
-
- if(controller)
- controller.abort();
+ },180);
 
 };
 
 
-/* =========================================
-   User
-========================================= */
+/* =====================================================
+   عقل Zide
+===================================================== */
 
-function addUser(text,list){
+function think(text){
 
- const message =
- document.createElement("div");
-
- message.className =
- "message user";
+ const q =
+ text.toLowerCase().trim();
 
 
- const avatar =
- document.createElement("div");
+ /* ---------------------------------------------
+    هوية Zide
+ --------------------------------------------- */
 
- avatar.className =
- "avatar";
-
- avatar.textContent =
- "أنت";
-
-
- const content =
- document.createElement("div");
-
- content.className =
- "content";
-
-
- const name =
- document.createElement("div");
-
- name.className =
- "name";
-
- name.textContent =
- "أنت";
+ if(
+  contains(q,[
+   "من صنعك",
+   "مين صنعك",
+   "من صممك",
+   "مين عملك",
+   "who made you"
+  ])
+ ){
+  return "أنا Zide، مساعد محلي خفيف يعمل مباشرة داخل المتصفح بدون API.";
+ }
 
 
- const bubble =
- document.createElement("div");
-
- bubble.className =
- "bubble";
-
-
- list.forEach(file=>{
-
-  const img =
-  document.createElement("img");
-
-  img.src =
-  URL.createObjectURL(file);
-
-  bubble.appendChild(img);
-
- });
+ if(
+  contains(q,[
+   "اسمك",
+   "شو اسمك",
+   "ما اسمك"
+  ])
+ ){
+  return "اسمي Zide.";
+ }
 
 
- if(text){
+ /* ---------------------------------------------
+    تحية
+ --------------------------------------------- */
 
-  const div =
-  document.createElement("div");
+ if(
+  contains(q,[
+   "مرحبا",
+   "مرحبًا",
+   "اهلا",
+   "أهلا",
+   "السلام عليكم",
+   "hello",
+   "hi"
+  ])
+ ){
+  return "أهلًا! 👋 أنا Zide. احكي لي شو بدك وأنا بحاول أساعدك مباشرة.";
+ }
 
-  div.innerHTML =
-  format(text);
 
-  bubble.appendChild(div);
+ /* ---------------------------------------------
+    حساب
+ --------------------------------------------- */
+
+ if(
+  looksLikeMath(q)
+ ){
+
+  const result =
+  calculate(q);
+
+  if(result !== null){
+
+   return (
+    "🧮 النتيجة:\n\n" +
+    result
+   );
+
+  }
 
  }
 
 
- content.append(
-  name,
-  bubble
- );
+ /* ---------------------------------------------
+    برمجة
+ --------------------------------------------- */
 
- message.append(
-  avatar,
-  content
- );
+ if(
+  contains(q,[
+   "كود",
+   "برمج",
+   "javascript",
+   "html",
+   "css",
+   "python",
+   "php",
+   "react",
+   "api",
+   "code"
+  ])
+ ){
 
- chat.appendChild(
-  message
- );
+  return programmingAnswer(text);
+
+ }
 
 
- scrollBottom();
+ /* ---------------------------------------------
+    سؤال كيف
+ --------------------------------------------- */
+
+ if(
+  q.startsWith("كيف") ||
+  q.startsWith("كيف ")
+ ){
+
+  return explainHow(text);
+
+ }
+
+
+ /* ---------------------------------------------
+    لماذا
+ --------------------------------------------- */
+
+ if(
+  q.startsWith("لماذا") ||
+  q.startsWith("ليش") ||
+  q.startsWith("ليش ")
+ ){
+
+  return (
+   "خليني أوضحها بطريقة بسيطة:\n\n" +
+   explainWhy(text)
+  );
+
+ }
+
+
+ /* ---------------------------------------------
+    سياق سابق
+ --------------------------------------------- */
+
+ if(history.length){
+
+  const previous =
+  history
+  .filter(x=>x.role==="user")
+  .slice(-3)
+  .map(x=>x.text)
+  .join(" ");
+
+  if(
+   contains(q,[
+    "نعم",
+    "اه",
+    "أيوه",
+    "كمل",
+    "تابع",
+    "طيب",
+    "وبعدين",
+    "وهذا"
+   ])
+  ){
+
+   return contextAnswer(
+    text,
+    previous
+   );
+
+  }
+
+ }
+
+
+ /* ---------------------------------------------
+    أسئلة عامة
+ --------------------------------------------- */
+
+ if(
+  q.includes("ما هو") ||
+  q.includes("شو هو") ||
+  q.includes("ما هي") ||
+  q.includes("شو يعني")
+ ){
+
+  return generalExplain(text);
+
+ }
+
+
+ /* ---------------------------------------------
+    افتراضي
+ --------------------------------------------- */
+
+ return smartGeneral(text);
 
 }
 
 
-/* =========================================
-   AI
-========================================= */
+/* =====================================================
+   مساعد contains
+===================================================== */
 
-function createAI(){
+function contains(text,list){
 
- const message =
+ return list.some(
+  word=>text.includes(word)
+ );
+
+}
+
+
+/* =====================================================
+   رياضيات
+===================================================== */
+
+function looksLikeMath(text){
+
+ return /^[\d\s+\-*/().%^=]+$/.test(
+  text.replace(
+   /كم|احسب|يساوي|نتيجة/g,
+   ""
+  ).trim()
+ );
+
+}
+
+
+function calculate(text){
+
+ try{
+
+  let expression =
+  text
+  .replace(/كم|احسب|يساوي|نتيجة/g,"")
+  .replace(/[^0-9+\-*/().%^]/g,"")
+  .trim();
+
+  if(!expression)
+   return null;
+
+  expression =
+  expression.replaceAll("^","**");
+
+  if(!/^[0-9+\-*/().%\s*]+$/.test(expression))
+   return null;
+
+  const result =
+  Function(
+   '"use strict";return ('+
+   expression+
+   ')'
+  )();
+
+  if(
+   typeof result==="number" &&
+   Number.isFinite(result)
+  ){
+
+   return result;
+
+  }
+
+ }catch{}
+
+ return null;
+
+}
+
+
+/* =====================================================
+   برمجة
+===================================================== */
+
+function programmingAnswer(text){
+
+ const q =
+ text.toLowerCase();
+
+
+ if(q.includes("html")){
+
+  return `
+أكيد. هذا مثال HTML بسيط:
+
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ar"&gt;
+&lt;body&gt;
+
+&lt;h1&gt;مرحبا من Zide&lt;/h1&gt;
+
+&lt;button onclick="hello()"&gt;
+اضغط هنا
+&lt;/button&gt;
+
+&lt;script&gt;
+function hello(){
+  alert("أهلا!");
+}
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+إذا أعطيتني فكرتك، أقدر أحولها إلى صفحة كاملة.
+`.trim();
+
+ }
+
+
+ if(q.includes("javascript")){
+
+  return `
+مثال JavaScript:
+
+<pre><code>function greet(name){
+  return "أهلا " + name;
+}
+
+console.log(greet("Zide"));</code></pre>
+
+إذا أرسلت الكود الذي عندك، أستطيع شرحه أو تصحيح الأخطاء الواضحة فيه.
+`.trim();
+
+ }
+
+
+ return `
+أقدر أساعدك بالبرمجة.
+
+أرسل لي:
+1. اللغة المستخدمة.
+2. ماذا تريد أن يبني الكود.
+3. المشكلة أو الخطأ الموجود.
+
+وسأرتب لك الحل خطوة بخطوة مع الكود.
+`.trim();
+
+}
+
+
+/* =====================================================
+   كيف
+===================================================== */
+
+function explainHow(text){
+
+ return `
+لفهم الموضوع بشكل صحيح، نقسمه إلى خطوات:
+
+1. نحدد المطلوب بالضبط.
+2. نحدد البيانات أو الأدوات المطلوبة.
+3. ننفذ الخطوة الأولى.
+4. نختبر النتيجة.
+5. نعالج الأخطاء إن ظهرت.
+6. نكمل إلى النتيجة النهائية.
+
+إذا كان سؤالك عن شيء محدد، اكتب التفاصيل وسأعطيك الخطوات المناسبة له.
+`.trim();
+
+}
+
+
+/* =====================================================
+   لماذا
+===================================================== */
+
+function explainWhy(text){
+
+ return `
+غالبًا السبب يعتمد على التفاصيل الموجودة في المشكلة.
+
+حتى أعطيك جوابًا أدق، أرسل لي:
+- ماذا كنت تتوقع أن يحدث؟
+- ماذا حدث فعليًا؟
+- وأي رسالة خطأ ظهرت.
+
+وبناءً عليها نحدد السبب والحل.
+`.trim();
+
+}
+
+
+/* =====================================================
+   شرح عام
+===================================================== */
+
+function generalExplain(text){
+
+ return `
+الفكرة ببساطة هي أن هذا المصطلح أو الموضوع يحتاج إلى فهم ثلاثة أشياء:
+
+• ما هو؟
+• كيف يعمل؟
+• متى نستخدمه؟
+
+إذا كتبت لي المصطلح نفسه بشكل أوضح، سأشرحه لك بطريقة مبسطة مع مثال.
+`.trim();
+
+}
+
+
+/* =====================================================
+   سياق
+===================================================== */
+
+function contextAnswer(text,previous){
+
+ return `
+تمام، فهمت أنك تريد نكمل من الكلام السابق.
+
+آخر سياق عندي كان:
+"${previous.slice(-500)}"
+
+إذا قصدك نكمل بنفس الموضوع، اكتب "كمل" أو حدد الجزء الذي تريد التوسع فيه.
+`.trim();
+
+}
+
+
+/* =====================================================
+   جواب عام ذكي نسبيًا
+===================================================== */
+
+function smartGeneral(text){
+
+ const words =
+ text
+ .split(/\s+/)
+ .filter(Boolean);
+
+ if(words.length<=3){
+
+  return `
+فهمت سؤالك بشكل مبدئي.
+
+لكن السؤال قصير جدًا، لذلك أعطني تفصيلًا صغيرًا حتى أعطيك جوابًا أفضل.
+
+مثال:
+"اشرح لي ..."
+أو
+"كيف أعمل ..."
+أو
+"عندي مشكلة في ..."
+`.trim();
+
+ }
+
+ return `
+فهمت طلبك.
+
+أقدر أساعدك فيه، لكن حتى أعطيك نتيجة دقيقة بدل ما أخمن، سأحتاج معرفة التفاصيل المهمة المرتبطة بالموضوع.
+
+اكتب لي:
+• ما النتيجة التي تريدها؟
+• ما الذي جربته؟
+• وما المشكلة التي ظهرت؟
+
+وبعدها نرتب الحل خطوة بخطوة.
+`.trim();
+
+}
+
+
+/* =====================================================
+   عرض المستخدم
+===================================================== */
+
+function addUser(text,scroll=true){
+
+ const msg =
  document.createElement("div");
 
- message.className =
- "message ai";
-
+ msg.className =
+ "message user";
 
  const avatar =
  document.createElement("div");
@@ -1316,9 +970,7 @@ function createAI(){
  avatar.className =
  "avatar";
 
- avatar.textContent =
- "Z";
-
+ avatar.textContent="أنت";
 
  const content =
  document.createElement("div");
@@ -1326,16 +978,13 @@ function createAI(){
  content.className =
  "content";
 
-
  const name =
  document.createElement("div");
 
  name.className =
  "name";
 
- name.textContent =
- "Zide";
-
+ name.textContent="أنت";
 
  const bubble =
  document.createElement("div");
@@ -1343,44 +992,102 @@ function createAI(){
  bubble.className =
  "bubble";
 
+ bubble.innerHTML =
+ format(text);
 
  content.append(
   name,
   bubble
  );
 
- message.append(
+ msg.append(
   avatar,
   content
  );
 
+ chat.appendChild(msg);
 
- chat.appendChild(
-  message
- );
-
-
- return bubble;
+ if(scroll)
+  scrollBottom();
 
 }
 
 
-/* =========================================
-   Markdown
-========================================= */
+/* =====================================================
+   عرض Zide
+===================================================== */
+
+function addAI(text,scroll=true){
+
+ const msg =
+ document.createElement("div");
+
+ msg.className =
+ "message ai";
+
+ const avatar =
+ document.createElement("div");
+
+ avatar.className =
+ "avatar";
+
+ avatar.textContent="Z";
+
+ const content =
+ document.createElement("div");
+
+ content.className =
+ "content";
+
+ const name =
+ document.createElement("div");
+
+ name.className =
+ "name";
+
+ name.textContent="Zide";
+
+ const bubble =
+ document.createElement("div");
+
+ bubble.className =
+ "bubble";
+
+ bubble.innerHTML =
+ format(text);
+
+ content.append(
+  name,
+  bubble
+ );
+
+ msg.append(
+  avatar,
+  content
+ );
+
+ chat.appendChild(msg);
+
+ if(scroll)
+  scrollBottom();
+
+}
+
+
+/* =====================================================
+   Markdown بسيط
+===================================================== */
 
 function format(text){
 
  let x =
  escapeHtml(text);
 
-
  x =
  x.replace(
-  /```(?:[a-zA-Z0-9_+-]+)?\s*\n?([\s\S]*?)```/g,
+  /```([\s\S]*?)```/g,
   "<pre><code>$1</code></pre>"
  );
-
 
  x =
  x.replace(
@@ -1388,13 +1095,11 @@ function format(text){
   "<strong>$1</strong>"
  );
 
-
  x =
  x.replace(
   /`([^`]+)`/g,
   "<code>$1</code>"
  );
-
 
  x =
  x.replace(
@@ -1402,35 +1107,14 @@ function format(text){
   "<br>"
  );
 
-
  return x;
 
 }
 
 
-/* =========================================
-   Clean
-========================================= */
-
-function clean(text){
-
- return String(text)
- .replaceAll(
-  "<|im_end|>",
-  ""
- )
- .replaceAll(
-  "<|endoftext|>",
-  ""
- )
- .trim();
-
-}
-
-
-/* =========================================
-   Escape
-========================================= */
+/* =====================================================
+   حماية HTML
+===================================================== */
 
 function escapeHtml(text){
 
@@ -1444,90 +1128,31 @@ function escapeHtml(text){
 }
 
 
-/* =========================================
-   Memory
-========================================= */
+/* =====================================================
+   مسح المحادثة
+===================================================== */
 
-function saveHistory(){
+clear.onclick=()=>{
 
- try{
+ if(
+  !confirm("مسح المحادثة؟")
+ )
+ return;
 
-  localStorage.setItem(
-   "zide_history",
-   JSON.stringify(history)
-  );
+ history=[];
 
- }catch{}
+ localStorage.removeItem(
+  "zide_history"
+ );
 
-}
+ location.reload();
 
-
-function loadHistory(){
-
- try{
-
-  const data =
-  JSON.parse(
-   localStorage.getItem(
-    "zide_history"
-   ) || "[]"
-  );
+};
 
 
-  if(
-   !Array.isArray(data)
-  )
-  return;
-
-
-  history =
-  data.slice(
-   -MAX_HISTORY
-  );
-
-
-  for(
-   const item of history
-  ){
-
-   if(
-    item.role==="user"
-   ){
-
-    addUser(
-     item.content,
-     []
-    );
-
-   }
-
-
-   if(
-    item.role==="assistant"
-   ){
-
-    const bubble =
-    createAI();
-
-    bubble.innerHTML =
-    format(item.content);
-
-   }
-
-  }
-
-
-  if(history.length){
-
-   welcome.style.display =
-   "none";
-
-  }
-
- }catch{}
-
-}
-
+/* =====================================================
+   Scroll
+===================================================== */
 
 function scrollBottom(){
 
@@ -1537,6 +1162,13 @@ function scrollBottom(){
  });
 
 }
+
+
+/* =====================================================
+   تشغيل
+===================================================== */
+
+restore();
 
 </script>
 
