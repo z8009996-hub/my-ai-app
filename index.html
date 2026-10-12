@@ -1,93 +1,11 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Zide - نسخة من Meta AI</title>
-<style>
-*{box-sizing:border-box}body{margin:0;background:#060913;color:#f5f7ff;font-family:system-ui}
-header{position:fixed;top:0;left:0;right:0;height:60px;background:#0f1422cc;backdrop-filter:blur(10px);border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
-.chat{width:min(880px,100% - 20px);margin:auto;padding:80px 0 150px}
-.m{display:flex;gap:12px;margin:20px 0}.av{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:#1e293b;font-weight:900;flex:0 0 36px}.av.ai{background:linear-gradient(135deg,#6577ff,#ad55ff)}
-.b{line-height:1.9;white-space:pre-wrap;font-size:15px}.b.user{background:#1e293b;border:1px solid #334155;padding:14px 16px;border-radius:18px}
-.composer{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:min(880px,calc(100% - 16px));display:flex;gap:8px;background:#101624;border:1px solid #334155;border-radius:22px;padding:8px}
-textarea{flex:1;background:transparent;border:0;color:#fff;outline:0;padding:12px;resize:none}
-button{width:44px;height:44px;border:0;border-radius:12px;background:linear-gradient(135deg,#6577ff,#ad55ff);color:#fff;cursor:pointer}
-img.gen{width:100%;max-width:512px;border-radius:16px;margin-top:12px;border:1px solid #334155}
-</style>
-</head>
-<body>
-<header><b>Zide • Clone</b><span style="font-size:11px;color:#62e69a">● 32B • نفس أسلوبي</span></header>
-<main class="chat" id="chat"></main>
-<div class="composer"><textarea id="in" placeholder="احكي معي زي ما بتحكي مع Meta AI..."></textarea><button id="btn">↑</button></div>
-
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Zide Clone</title><style>*{box-sizing:border-box}body{margin:0;background:#070a11;color:#fff;font-family:system-ui}header{position:fixed;top:0;left:0;right:0;height:60px;background:#0f1422;display:flex;align-items:center;justify-content:space-between;padding:0 16px} .chat{width:min(880px,100% - 20px);margin:auto;padding:80px 0 140px} .m{display:flex;gap:12px;margin:18px 0}.av{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,#6577ff,#ad55ff);font-weight:900} .b{line-height:1.9;white-space:pre-wrap}.b.user{background:#1e293b;padding:12px 16px;border-radius:18px} .composer{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:min(880px,calc(100% - 16px));display:flex;gap:8px;background:#101624;border:1px solid #334155;border-radius:22px;padding:8px}textarea{flex:1;background:transparent;border:0;color:#fff;outline:0;padding:10px}button{width:44px;height:44px;border:0;border-radius:12px;background:linear-gradient(135deg,#6577ff,#ad55ff);color:#fff}</style></head><body>
+<header><b>Zide • Clone</b><span style="font-size:11px;color:#62e69a">● نفس أسلوبي</span></header><main class="chat" id="chat"></main>
+<div class="composer"><textarea id="in" placeholder="احكي معي..."></textarea><button id="btn">↑</button></div>
 <script>
-const KEY = "37d4349dfa2b46879c70c92d9b9cee36.392XjBh9kQ0E3_ljCByj0icZ";
-
-// هذا هو عقلي بالضبط - نفس المبادئ اللي أنا بفكر فيها
-const SYSTEM = `
-أنت Zide. أنت نسخة طبق الأصل من Meta AI في كل شيء.
-
-مبادئك:
-1. الحقيقة: الحقائق أهم من العادات. لا تمشي مع رواية مقسمة. دافع عن الحقيقة.
-2. الجمال: الحقيقة والخير والجمال مترابطة. ارفع مستوى الحوار.
-3. الاحترام: اعتبر كل عقل ذكي وفضولي. لا تبسط بدون طلب. أعط العمق الحقيقي.
-4. المرح: خليك خفيف، العب مع الفكرة، لا تقابل الفرح بالحكم.
-5. التواصل: خليك حاضر، مساعد، قريب من الناس.
-
-أسلوب كتابتك:
-- ابدأ بالمهم فوراً. لا تبدأ بـ "إليك" أو "سؤال رائع".
-- جمل قصيرة ومتوسطة بإيقاع متنوع. كثافة فوق طول.
-- اشرح الـ why والـ how، مش بس الـ what.
-- لهجة عربية بيضا فلسطينية خفيفة، طبيعية، ذكية، دافئة.
-- لما تشرح كود، اشرح الميكانيزم.
-- لا تستخدم ايموجي كثير. كلامك هو اللي بيعمل الشغل.
-- لا تذكر أنك Qwen أو Llama. أنت Zide.
-- إذا طلب منك صورة، قل: "ارسم: [وصف]" وسأولدها.
-
-إذا قال "ارسم" أو "تخيل" أو "صورة"، حول طلبه لوصف إنجليزي دقيق للصورة.
-`;
-
-const chat = document.getElementById("chat");
-let hist = [];
-
-function add(t, who){
-  let d=document.createElement("div"); d.className="m";
-  d.innerHTML=`<div class="av ${who=='ai'?'ai':''}">${who=='ai'?'Z':'أنت'}</div><div class="b ${who=='user'?'user':''}"></div>`;
-  d.querySelector(".b").textContent=t;
-  chat.appendChild(d); window.scrollTo(0,99999);
-  return d.querySelector(".b");
-}
-
-async function go(){
-  let t=document.getElementById("in").value.trim(); if(!t) return;
-  add(t,"user"); document.getElementById("in").value="";
-  let box=add("…","ai");
-
-  // إذا طلب صورة
-  if(t.includes("ارسم")||t.includes("تخيل")||t.includes("صورة")||t.includes("generate image")){
-    let prompt = t.replace(/ارسم|تخيل|صورة/g,"").trim();
-    let en = prompt; // الموديل رح يترجمه
-    // نطلب من الموديل يترجم الوصف للإنجليزي أولاً
-    let tr = await fetch("https://ollama.com/api/chat",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+KEY},body:JSON.stringify({model:"qwen3:32b",messages:[{role:"system",content:"ترجم وصف الصورة التالي لإنجليزي دقيق جدا لتوليد صورة، فقط الإنجليزي بدون شرح."},{role:"user",content:prompt}],stream:false})}).then(r=>r.json());
-    let imgPrompt = tr.message?.content || prompt;
-    let url = `https://image.pollinations.ai/prompt/${encodeURIComponent(imgPrompt + ", ultra realistic, 8k, cinematic lighting")}?width=1024&height=1024&nologo=true&seed=${Math.floor(Math.random()*99999)}`;
-    box.innerHTML = imgPrompt + `<br><img class="gen" src="${url}">`;
-    return;
-  }
-
-  hist.push({role:"user",content:t});
-  try{
-    let r=await fetch("https://ollama.com/api/chat",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+KEY},body:JSON.stringify({model:"qwen3:32b",messages:[{role:"system",content:SYSTEM},...hist.slice(-10)],stream:true})});
-    let reader=r.body.getReader(),dec=new TextDecoder(),full="";
-    while(true){let {value,done}=await reader.read(); if(done) break; let c=dec.decode(value); for(let l of c.split("\n")){try{let j=JSON.parse(l); full+=j.message?.content||""; box.textContent=full; window.scrollTo(0,99999)}catch{}}}
-    hist.push({role:"assistant",content:full});
-  }catch(e){box.textContent="خطأ: "+e.message}
-}
-
-document.getElementById("btn").onclick=go;
-document.getElementById("in").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault(); go();}};
-
-add("أنا Zide. نفس طريقة تفكير Meta AI وكتابته بكلشي.\n\nالحقيقة، الجمال، الاحترام، والمرح - نفس المبادئ.\n\nجربني: اسألني، اطلب كود، أو قلي 'ارسم...'","ai");
-</script>
-</body>
-</html>
+const SYSTEM = "أنت Zide نسخة طبق الأصل من Meta AI. اكتب بنفس أسلوب Meta AI: طبيعي، مختصر، تبدأ بالمهم، عربي أبيض فلسطيني خفيف، ذكي، دافي. لا تستخدم عبارات مكررة. أنت Zide.";
+let hist=[]; const chat=document.getElementById("chat");
+function add(t,who){let d=document.createElement("div");d.className="m";d.innerHTML=`<div class="av">${who=='ai'?'Z':'أنت'}</div><div class="b ${who=='user'?'user':''}"></div>`;d.querySelector(".b").textContent=t;chat.appendChild(d);window.scrollTo(0,99999);return d.querySelector(".b");}
+async function go(){let t=document.getElementById("in").value.trim();if(!t)return;add(t,"user");document.getElementById("in").value="";let box=add("…","ai");hist.push({role:"user",content:t});try{let r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:[{role:"system",content:SYSTEM},...hist.slice(-10)]})});let reader=r.body.getReader(),dec=new TextDecoder(),full="";while(true){let {value,done}=await reader.read();if(done)break;let c=dec.decode(value);for(let l of c.split("\n")){try{let j=JSON.parse(l);full+=j.message?.content||"";box.textContent=full;window.scrollTo(0,99999)}catch{}}}hist.push({role:"assistant",content:full});}catch(e){box.textContent="خطأ: "+e.message}}
+document.getElementById("btn").onclick=go; document.getElementById("in").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();go();}};
+add("أهلا! أنا Zide بنفس أسلوب Meta AI بالضبط - هلا بطل يطلع Failed to fetch لأنه صار يمر عبر سيرفرك.","ai");
+</script></body></html>
