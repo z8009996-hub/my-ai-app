@@ -1,150 +1,59 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Zide Ultra - ذكاء حقيقي محلي</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zide Lite - 200MB</title>
 <style>
-*{box-sizing:border-box}
-:root{--bg:#070a11;--border:rgba(255,255,255,.09);--text:#f5f7ff;--muted:#8792a8;--primary:#6577ff;--purple:#ad55ff;--green:#62e69a}
-body{margin:0;min-height:100vh;color:var(--text);font-family:system-ui,Arial;background:radial-gradient(circle at 15% 0%,rgba(101,119,255,.25),transparent 32%),radial-gradient(circle at 90% 15%,rgba(173,85,255,.2),transparent 30%),var(--bg)}
-header{position:fixed;top:0;right:0;left:0;height:64px;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(7,10,17,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:22px}.logoBox{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--purple))}
-.status{color:var(--green);font-size:11px}
-.chat{width:min(850px,calc(100% - 20px));margin:auto;padding:100px 0 140px}
-.welcome{text-align:center;padding-top:6vh}.welcomeLogo{width:80px;height:80px;margin:0 auto 20px;display:grid;place-items:center;border-radius:25px;font-size:34px;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--purple))}
-h1{margin:0;font-size:50px;letter-spacing:-2px}.welcome p{color:var(--muted)}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:650px;margin:30px auto}
-.card{padding:16px;border:1px solid var(--border);border-radius:15px;color:#aeb7c9;background:rgba(255,255,255,.04);text-align:right;cursor:pointer}.card:hover{background:rgba(101,119,255,.1);border-color:rgba(101,119,255,.5)}
-.message{display:flex;gap:11px;margin:26px 0}.avatar{width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;border-radius:11px;font-size:11px;font-weight:bold}
-.user.avatar{background:#293349}.ai.avatar{background:linear-gradient(135deg,var(--primary),var(--purple))}
-.content{flex:1;min-width:0}.name{color:#8d98ad;font-size:11px;margin-bottom:6px}.bubble{line-height:1.9;font-size:15px;overflow-wrap:anywhere}
-.user.bubble{display:inline-block;max-width:92%;padding:13px 16px;border-radius:17px;background:rgba(255,255,255,.06);border:1px solid var(--border)}
-pre{direction:ltr;text-align:left;overflow:auto;padding:15px;border-radius:13px;background:#05070c;border:1px solid var(--border);white-space:pre-wrap}code{font-family:Consolas,monospace}
-.composerWrap{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:min(850px,calc(100% - 16px));z-index:30}
-.composer{display:flex;align-items:flex-end;gap:7px;padding:8px;border-radius:20px;background:rgba(15,20,31,.96);border:1px solid rgba(255,255,255,.12);box-shadow:0 20px 70px rgba(0,0,0,.5);backdrop-filter:blur(25px)}
-textarea{flex:1;min-width:0;min-height:46px;max-height:170px;resize:none;outline:0;border:0;background:transparent;color:white;padding:13px}
-.tool,.send{width:45px;height:45px;flex:0 0 45px;border:0;border-radius:13px;cursor:pointer}.tool{background:#20283a;color:white}.send{background:linear-gradient(135deg,var(--primary),var(--purple));color:white;font-size:20px}
+*{box-sizing:border-box}:root{--bg:#070a11;--border:rgba(255,255,255,.09);--text:#fff;--muted:#8792a8;--p:#6577ff;--pu:#ad55ff}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui}
+header{position:fixed;top:0;left:0;right:0;height:60px;display:flex;justify-content:space-between;align-items:center;padding:0 16px;background:rgba(7,10,17,.9);border-bottom:1px solid var(--border);z-index:10}
+.chat{width:min(850px,calc(100% - 16px));margin:auto;padding:80px 0 130px}
+.message{display:flex;gap:10px;margin:20px 0}.avatar{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#293349;font-weight:bold}.ai.avatar{background:linear-gradient(135deg,var(--p),var(--pu))}
+.bubble{line-height:1.8;white-space:pre-wrap}
+.composerWrap{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);width:min(850px,calc(100% - 14px))}
+.composer{display:flex;gap:6px;padding:7px;border-radius:18px;background:#101624;border:1px solid var(--border)}
+textarea{flex:1;background:transparent;border:0;color:#fff;outline:0;resize:none;padding:12px}
+.send{width:44px;height:44px;border:0;border-radius:12px;background:linear-gradient(135deg,var(--p),var(--pu));color:#fff}
 </style>
 </head>
 <body>
-<header><div class="logo"><div class="logoBox">Z</div>Zide Ultra</div><div class="status">● ذكاء حقيقي • بدون API</div></header>
-<main class="chat" id="chat">
-<section class="welcome" id="welcome">
-<div class="welcomeLogo">Z</div>
-<h1>أنا أذكى الآن</h1>
-<p>عقل Ultra يفهم المعنى، يتذكر، ويحلل - كله محلي</p>
-<div class="cards">
-<button class="card" data-text="ابني لي ذكاء اصطناعي يتعرف على الصور">🧠 ابني ذكاء يتعرف على الصور</button>
-<button class="card" data-text="اكتب لي كود لعبة ذكاء اصطناعي">🎮 كود لعبة ذكية</button>
-<button class="card" data-text="كيف أخلي الذكاء الاصطناعي تبعي أذكى؟">🚀 كيف أطوره؟</button>
-<button class="card" data-text="احسب 15*8+240/2">🧮 احسب بسرعة</button>
-</div>
-</section>
-</main>
-<div class="composerWrap"><form class="composer" id="composer"><button type="button" class="tool" id="clear">🗑</button><textarea id="input" rows="1" placeholder="احكي مع العقل الذكي..."></textarea><button type="submit" class="send">↑</button></form></div>
+<header><div style="font-weight:900">Zide Ultra • 200MB</div><div id="status" style="font-size:11px;color:#62e69a">● أونلاين • خفيف للتلفون</div></header>
+<main class="chat" id="chat"></main>
+<div class="composerWrap"><form id="form" class="composer"><textarea id="input" placeholder="بحمل العقل 200MB..."></textarea><button class="send" id="btn" disabled>↑</button></form></div>
 
-<script>
-const chat=document.getElementById("chat"), welcome=document.getElementById("welcome"), input=document.getElementById("input"), composer=document.getElementById("composer"), clearBtn=document.getElementById("clear");
-let history=JSON.parse(localStorage.getItem("zide_history")||"[]");
-document.querySelectorAll(".card").forEach(b=>b.onclick=()=>{input.value=b.dataset.text; composer.requestSubmit();});
-function restore(){if(!history.length) return; welcome.style.display="none"; for(const m of history){m.role==="user"?addUser(m.text,false):addAI(m.text,false)} scrollBottom();}
-function save(){localStorage.setItem("zide_history",JSON.stringify(history.slice(-60)));}
-input.addEventListener("input",()=>{input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,170)+"px";});
-input.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault(); composer.requestSubmit();}});
+<script type="module">
+import { CreateMLCEngine } from "https://esm.run/@mlc-ai/web-llm@0.2.79";
+const chat=document.getElementById("chat"), input=document.getElementById("input"), btn=document.getElementById("btn"), statusEl=document.getElementById("status");
+let engine;
 
-composer.onsubmit=e=>{
- e.preventDefault(); const text=input.value.trim(); if(!text) return;
- welcome.style.display="none"; addUser(text,true); history.push({role:"user",text}); save();
- input.value=""; input.style.height="auto";
- const tid=addTyping();
- setTimeout(()=>{removeTyping(tid); const ans=ultraThink(text); addAI(ans,true); history.push({role:"assistant",text:ans}); save();},350);
+// هذا النموذج حجمه 200 ميجا فقط - ممتاز للتلفون
+const MODEL = "SmolLM2-360M-Instruct-q4f32_1-MLC"; // حوالي 200MB
+
+async function load(){
+ engine = await CreateMLCEngine(MODEL, {
+  initProgressCallback:(p)=>{
+   input.placeholder = p.text + " " + Math.round(p.progress*100)+"%";
+   if(p.progress>=1){
+    input.placeholder="احكي مع Zide...";
+    btn.disabled=false;
+    statusEl.textContent="● جاهز • 200MB • أونلاين";
+   }
+  }
+ });
+}
+load();
+
+document.getElementById("form").onsubmit=async e=>{
+ e.preventDefault();
+ let t=input.value.trim(); if(!t||!engine) return;
+ add(t,"user"); input.value="";
+ let box=add("","ai");
+ let full="";
+ let msgs=[{role:"system",content:"أنت Zide Ultra، مساعد عربي ذكي خفيف. جاوب بالعربية باختصار."},{role:"user",content:t}];
+ let res=await engine.chat.completions.create({messages:msgs,stream:true});
+ for await(const c of res){ full+=c.choices[0].delta.content||""; box.textContent=full; window.scrollTo(0,99999); }
 };
-
-// ===== العقل الذكي الجديد ULTRA =====
-const BRAIN={
-  code:{k:["كود","برمجة","html","css","javascript","python","موقع","تطبيق","لعبة","سكريبت","api"],a:(q)=>{
-    if(q.includes("صور")||q.includes("كاميرا")) return `**ذكاء يتعرف على الصور - بدون API (بـ TensorFlow.js محلي):**
-
-\`\`\`html
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"><\/script>
-<video id="v" autoplay><\/video>
-<script>
-async function start(){
-  const model = await tf.loadGraphModel('https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v2_100_224/classification/3/default/1', {fromTFHub:true});
-  const video=document.getElementById('v');
-  const stream=await navigator.mediaDevices.getUserMedia({video:true});
-  video.srcObject=stream;
-}
-start();
-<\/script>
-\`\`\`
-هذا بيشغل ذكاء حقيقي يتعرف على 1000 شي بالكاميرا وكلشي محلي!`;
-    if(q.includes("لعبة")) return `**لعبة ذكاء اصطناعي - XO لا يُهزم:**
-
-\`\`\`javascript
-// ذكاء Minimax
-function bestMove(board){
-  let best=-Infinity, move;
-  for(let i=0;i<9;i++) if(board[i]==''){
-    board[i]='O';
-    let score=minimax(board,false);
-    board[i]='';
-    if(score>best){best=score; move=i;}
-  }
-  return move;
-}
-\`\`\`
-ألصقها في موقعك وصار عندك خصم ذكي!`;
-    return `أكيد ببني لك كود كامل.\n\n**شو بدك بالضبط؟**\n1. موقع؟ لعبة؟ بوت؟\n2. بأي لغة؟\n\nاحكيلي بجملة واحدة مثل: "موقع متجر بسيط" وببنيه إلك فوراً.`;
-  }},
-  smart:{k:["ذكي","ذكاء","ai","يتعلم","يفهم","أذكى","يطور"],a:()=>`حتى تخلي ذكائك **أذكى عنجد بدون API**:
-
-**1. ذاكرة دلالية:** بدل ما تدور كلمة بكلمة، حول الجملة لأرقام (Embeddings) وقارن التشابه.
-**2. تعلم مستمر:** احفظ كل سؤال وجواب في localStorage وخليه يتعلم منك.
-**3. تفكير متعدد الخطوات:** خليه يقسم المشكلة: "شو المطلوب؟ شو المعطيات؟ شو الحل؟"
-
-الكود اللي عندك هلا بيعمل كل هذا! جربه: اسأله سؤال صعب وشوف كيف بحلل.`},
-  math:{k:["احسب","كم","*","+","/","-","=","%"],a:(q)=>{
-    try{
-      let expr=q.replace(/[^0-9+\-*/().%^]/g,"").replace("^","**");
-      if(expr.length>=2){let r=Function('"use strict";return ('+expr+')')(); if(isFinite(r)) return `🧮 **النتيجة = ${r}**\n\nالعملية: \`${expr}\``;}
-    }catch{}
-    return `ابعث العملية مباشرة مثل: 15*8+240/2`;
-  }}
-};
-
-function ultraThink(text){
-  const q=text.toLowerCase();
-  // 1. رياضيات أولوية
-  if(/[0-9]/.test(q) && /[+\-*/%^]/.test(q)){
-    const r=BRAIN.math.a(text); if(r.includes("=")) return r;
-  }
-  // 2. بحث ذكي بالنقاط
-  let best=null, bestScore=0;
-  for(let key in BRAIN){
-    let score=0;
-    for(let kw of BRAIN[key].k) if(q.includes(kw)) score++;
-    if(score>bestScore){bestScore=score; best=key;}
-  }
-  if(best && bestScore>0) return BRAIN[best].a(q);
-
-  // 3. ذاكرة سياق
-  const lastUser=history.filter(h=>h.role==="user").slice(-2).map(h=>h.text).join(" | ");
-  if(q.length<6 && lastUser) return `تمام، فهمت انك بتكمل على: "${lastUser.slice(-100)}"\n\nوضحلي الخطوة الجاي شو بدك؟`;
-
-  // 4. رد ذكي عام
-  return `فهمت: "${text}"\n\nأنا الآن في وضع Ultra الذكي:\n• بفهم قصدك حتى لو كتبت بلهجة عامية\n• بتذكر محادثتنا\n• بحلل المشكلة لخطوات\n\nحتى أساعدك بأفضل شكل، احكيلي: بدك كود، شرح، ولا خطة تنفيذ؟`;
-}
-
-function addUser(t,s=true){const m=document.createElement("div");m.className="message user";m.innerHTML=`<div class="avatar">أنت</div><div class="content"><div class="name">أنت</div><div class="bubble">${format(t)}</div></div>`;chat.appendChild(m); if(s) scrollBottom();}
-function addAI(t,s=true){const m=document.createElement("div");m.className="message ai";m.innerHTML=`<div class="avatar">Z</div><div class="content"><div class="name">Zide Ultra</div><div class="bubble">${format(t)}</div></div>`;chat.appendChild(m); if(s) scrollBottom();}
-function addTyping(){const id="t"+Date.now();const m=document.createElement("div");m.id=id;m.className="message ai";m.innerHTML=`<div class="avatar">Z</div><div class="content"><div class="name">Zide Ultra</div><div class="bubble" style="color:var(--muted)">يفكر بذكاء...</div></div>`;chat.appendChild(m); scrollBottom(); return id;}
-function removeTyping(id){document.getElementById(id)?.remove();}
-function format(t){let x=t.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); x=x.replace(/```([\s\S]*?)```/g,"<pre><code>$1</code></pre>"); x=x.replace(/`([^`]+)`/g,"<code>$1</code>"); x=x.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>"); x=x.replace(/\n/g,"<br>"); return x;}
-clearBtn.onclick=()=>{if(!confirm("مسح المحادثة؟")) return; history=[]; localStorage.removeItem("zide_history"); location.reload();}
-function scrollBottom(){window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});}
-restore();
+function add(t,r){let d=document.createElement("div");d.className="message";d.innerHTML=`<div class="avatar ${r=="ai"?"ai":""}">${r=="ai"?"Z":"أنت"}</div><div class="bubble">${t}</div>`;chat.appendChild(d);return d.querySelector(".bubble");}
 </script>
 </body>
 </html>
