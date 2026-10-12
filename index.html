@@ -2,95 +2,87 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Zide Ultra - Real 1.5B</title>
+<title>Zide Ultra MAX - 70B Cloud</title>
 <style>
-*{box-sizing:border-box}:root{--bg:#070a11;--border:rgba(255,255,255,.09);--text:#fff;--muted:#8792a8;--p:#6577ff;--pu:#ad55ff}
+*{box-sizing:border-box}:root{--bg:#070a11;--card:#101624;--border:rgba(255,255,255,.1);--text:#f5f7ff;--muted:#8792a8;--p:#6577ff;--pu:#ad55ff;--green:#62e69a}
 body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui}
-header{position:fixed;top:0;left:0;right:0;height:60px;display:flex;justify-content:space-between;align-items:center;padding:0 16px;background:rgba(7,10,17,.95);border-bottom:1px solid var(--border);z-index:10}
-.logo{display:flex;gap:8px;align-items:center;font-weight:900}
-.logoBox{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--p),var(--pu));display:grid;place-items:center}
-.chat{width:min(850px,calc(100% - 16px));margin:auto;padding:90px 0 140px}
-.welcome{text-align:center;padding-top:5vh}
-.barWrap{width:100%;max-width:500px;margin:20px auto;background:rgba(255,255,255,.08);height:6px;border-radius:10px;overflow:hidden}
-#bar{height:100%;width:0%;background:linear-gradient(90deg,var(--p),var(--pu));transition:width.3s}
-.message{display:flex;gap:10px;margin:22px 0}.avatar{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:#293349;font-weight:bold}.ai.avatar{background:linear-gradient(135deg,var(--p),var(--pu))}
-.bubble{line-height:1.9;white-space:pre-wrap;word-break:break-word}
-.user.bubble{background:rgba(255,255,255,.06);padding:12px 16px;border-radius:16px;border:1px solid var(--border)}
-pre{direction:ltr;text-align:left;background:#05070c;border:1px solid var(--border);padding:12px;border-radius:12px;overflow:auto;white-space:pre-wrap}
-.composerWrap{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);width:min(850px,calc(100% - 14px))}
-.composer{display:flex;gap:6px;padding:7px;border-radius:18px;background:#101624;border:1px solid var(--border)}
-textarea{flex:1;background:transparent;border:0;color:#fff;outline:0;resize:none;padding:12px;min-height:46px}
-.send{width:44px;height:44px;border:0;border-radius:12px;background:linear-gradient(135deg,var(--p),var(--pu));color:#fff;font-size:20px}
+header{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(7,10,17,.95);border-bottom:1px solid var(--border);z-index:10}
+.logo{display:flex;gap:10px;align-items:center;font-weight:900;font-size:19px}.logoBox{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--p),var(--pu));display:grid;place-items:center}
+.chat{width:min(900px,calc(100% - 20px));margin:auto;padding:90px 0 160px}
+.message{display:flex;gap:11px;margin:24px 0}.avatar{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:#293349;font-weight:bold;flex:0 0 36px}.ai.avatar{background:linear-gradient(135deg,var(--p),var(--pu))}
+.content{flex:1}.name{color:#8d98ad;font-size:11px;margin-bottom:6px}.bubble{line-height:1.9;font-size:15px;white-space:pre-wrap;word-break:break-word}.user.bubble{background:rgba(255,255,255,.06);padding:14px 16px;border-radius:18px;border:1px solid var(--border);display:inline-block;max-width:92%}
+pre{position:relative;direction:ltr;text-align:left;background:#05070c;border:1px solid var(--border);padding:14px;border-radius:12px;overflow:auto;white-space:pre-wrap;margin:12px 0}
+.copyBtn{position:absolute;top:6px;right:6px;padding:4px 8px;border-radius:6px;border:0;background:var(--p);color:#fff;font-size:11px;cursor:pointer}
+.composerWrap{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:min(900px,calc(100% - 16px))}
+.composer{display:flex;align-items:flex-end;gap:6px;padding:8px;border-radius:22px;background:var(--card);border:1px solid rgba(255,255,255,.12)}
+textarea{flex:1;background:transparent;border:0;color:#fff;outline:0;resize:none;padding:12px;min-height:48px;max-height:160px}
+.send{width:44px;height:44px;border:0;border-radius:12px;background:linear-gradient(135deg,var(--p),var(--pu));color:#fff;font-size:18px}
 </style>
 </head>
 <body>
-<header><div class="logo"><div class="logoBox">Z</div>Zide Ultra • 1.5B</div><div id="status" style="font-size:11px;color:#62e69a">● ثقيل وحقيقي</div></header>
-<main class="chat" id="chat">
-<section id="welcome" class="welcome">
-<h1>النسخة الثقيلة جاهزة</h1>
-<p id="loadText" style="color:var(--muted)">جاري تحميل العقل الحقيقي 1.2 جيجا أول مرة...</p>
-<div class="barWrap"><div id="bar"></div></div>
-<p style="color:var(--muted);font-size:12px">أول مرة بتأخذ 2-3 دقايق على الواي فاي، بعدها سريع</p>
-</section>
-</main>
-<div class="composerWrap"><form id="form" class="composer"><textarea id="input" placeholder="جاري التحميل..." disabled></textarea><button class="send" id="btn" disabled>↑</button></form></div>
+<header><div class="logo"><div class="logoBox">Z</div>Zide Ultra MAX • 70B</div><div id="status" style="font-size:11px;color:var(--green)">● 70B Cloud • جاهز</div></header>
+<main class="chat" id="chat"></main>
+<div class="composerWrap"><form id="form" class="composer"><textarea id="input" placeholder="احكي مع الوحش 70B..."></textarea><button class="send" id="btn">↑</button></form></div>
 
-<script type="module">
-import { CreateMLCEngine } from "https://esm.run/@mlc-ai/web-llm@0.2.79";
-const chat=document.getElementById("chat"), input=document.getElementById("input"), btn=document.getElementById("btn"), bar=document.getElementById("bar"), loadText=document.getElementById("loadText"), welcome=document.getElementById("welcome");
-let engine;
+<script>
+const API_KEY = "95c00374de1248f494a8cf657f08e0ce.grH5bfoDmnNIHccooHk2N6I3";
+const MODEL = "llama3.3:70b"; // أكبر من 50B - أو تقدر تغيره ل qwen2.5:32b أفضل للعربي
+// models متاحة: llama3.3:70b, qwen2.5:32b, deepseek-r1:32b, qwen3:32b
 
-// === النسخة الثقيلة الحقيقية - 1.5B أفضل عربي ===
-const MODEL = "Qwen2.5-1.5B-Instruct-q4f16_1-MLC"; // حوالي 1.1 جيجا - ذكي جداً للعربي
-
-async function init(){
- engine = await CreateMLCEngine(MODEL, {
-  initProgressCallback:(p)=>{
-   bar.style.width = Math.round(p.progress*100)+"%";
-   loadText.textContent = p.text + " - " + Math.round(p.progress*100)+"%";
-   if(p.progress>=1){
-    loadText.textContent="✅ جاهز! هذا ذكاء حقيقي مش تهبيل";
-    input.placeholder="اكتب أي شي... كود، موقع، شرح";
-    input.disabled=false; btn.disabled=false;
-    welcome.style.display="none";
-    add("أهلا! أنا Zide Ultra النسخة الثقيلة 1.5B\n\nجربني: اطلب 'موقع ذكاء اصطناعي' أو 'كود فحص الشبكة' ورح أبنيه لك كامل بدون تهبيل.","ai");
-   }
-  }
- });
-}
-init();
-
-document.getElementById("form").onsubmit=async e=>{
- e.preventDefault();
- let t=input.value.trim(); if(!t||!engine) return;
- add(t,"user"); input.value="";
- let box=add("","ai"); let full="";
- let msgs=[
-  {role:"system", content:"أنت Zide Ultra، مساعد ذكاء اصطناعي عربي قوي. اسمك Zide. تجاوب بالعربية العامية الأردنية/فلسطينية بشكل ذكي ومفيد. إذا طلب كود أعط كود كامل شغال. لا تقل أنك Qwen."},
-  {role:"user", content:t}
- ];
- try{
-  let stream=await engine.chat.completions.create({messages:msgs, stream:true, temperature:0.7, max_tokens:1000});
-  for await(const c of stream){
-   let d=c.choices[0]?.delta?.content||"";
-   full+=d;
-   box.innerHTML=format(full);
-   window.scrollTo(0,document.body.scrollHeight);
-  }
- }catch(err){box.textContent="خطأ: "+err.message}
-};
+const chat=document.getElementById("chat"), input=document.getElementById("input");
+let history=[];
 
 function add(t,role){
  let d=document.createElement("div"); d.className="message";
- d.innerHTML=`<div class="avatar ${role=="ai"?"ai":""}">${role=="ai"?"Z":"أنت"}</div><div class="bubble">${format(t)}</div>`;
+ d.innerHTML=`<div class="avatar ${role=="ai"?"ai":""}">${role=="ai"?"Z":"أنت"}</div><div class="content"><div class="name">${role=="ai"?"Zide MAX 70B":"أنت"}</div><div class="${role=="user"?"user bubble":"bubble"}">${format(t)}</div></div>`;
  chat.appendChild(d); window.scrollTo(0,99999);
  return d.querySelector(".bubble");
 }
 function format(t){
  let x=t.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
- x=x.replace(/```([\s\S]*?)```/g,"<pre><code>$1</code></pre>");
+ x=x.replace(/```([\s\S]*?)```/g,(m,code)=>`<pre><button class="copyBtn" onclick="navigator.clipboard.writeText(this.nextElementSibling.textContent)">نسخ</button><code>${code}</code></pre>`);
  return x.replace(/\n/g,"<br>");
 }
+
+document.getElementById("form").onsubmit=async e=>{
+ e.preventDefault();
+ let t=input.value.trim(); if(!t) return;
+ add(t,"user"); input.value=""; 
+ let box=add("...","ai");
+ history.push({role:"user",content:t});
+
+ try{
+  let res=await fetch("https://ollama.com/api/chat",{
+   method:"POST",
+   headers:{"Content-Type":"application/json","Authorization":"Bearer "+API_KEY},
+   body:JSON.stringify({
+    model:MODEL,
+    messages:[
+     {role:"system",content:"أنت Zide Ultra MAX، مساعد ذكي خارق. اسمك Zide. تحكي عربي فلسطيني/أردني بطلاقة. خبير برمجة - تعطي كود كامل شغال."},
+     ...history.slice(-10)
+    ],
+    stream:true
+   })
+  });
+  let reader=res.body.getReader(), dec=new TextDecoder(), full="";
+  while(true){
+   let {value,done}=await reader.read(); if(done) break;
+   let chunk=dec.decode(value);
+   chunk.split("\n").forEach(line=>{
+    if(!line.trim()) return;
+    try{
+     let j=JSON.parse(line);
+     let delta=j.message?.content||"";
+     full+=delta; box.innerHTML=format(full);
+     window.scrollTo(0,document.body.scrollHeight);
+    }catch{}
+   });
+  }
+  history.push({role:"assistant",content:full});
+ }catch(err){box.textContent="خطأ: "+err.message+" - تأكد المفتاح شغال"}
+};
+
+add("أهلا! 🔥 أنا Zide MAX 70B مربوط على حسابك\n\nأنا أكبر من 50B اللي طلبته - 70 مليار معلومة، بشتغل سحابي على تلفونك 0 ميجا.\n\nجربني: 'ابني موقع ذكاء اصطناعي كامل'","ai");
 </script>
 </body>
 </html>
