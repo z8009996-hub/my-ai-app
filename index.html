@@ -1,59 +1,144 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Zide Lite - 200MB</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zide Ultra - Real AI</title>
 <style>
-*{box-sizing:border-box}:root{--bg:#070a11;--border:rgba(255,255,255,.09);--text:#fff;--muted:#8792a8;--p:#6577ff;--pu:#ad55ff}
-body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui}
-header{position:fixed;top:0;left:0;right:0;height:60px;display:flex;justify-content:space-between;align-items:center;padding:0 16px;background:rgba(7,10,17,.9);border-bottom:1px solid var(--border);z-index:10}
-.chat{width:min(850px,calc(100% - 16px));margin:auto;padding:80px 0 130px}
-.message{display:flex;gap:10px;margin:20px 0}.avatar{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#293349;font-weight:bold}.ai.avatar{background:linear-gradient(135deg,var(--p),var(--pu))}
-.bubble{line-height:1.8;white-space:pre-wrap}
-.composerWrap{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);width:min(850px,calc(100% - 14px))}
-.composer{display:flex;gap:6px;padding:7px;border-radius:18px;background:#101624;border:1px solid var(--border)}
-textarea{flex:1;background:transparent;border:0;color:#fff;outline:0;resize:none;padding:12px}
-.send{width:44px;height:44px;border:0;border-radius:12px;background:linear-gradient(135deg,var(--p),var(--pu));color:#fff}
+*{box-sizing:border-box}
+:root{--bg:#070a11;--border:rgba(255,255,255,.09);--text:#f5f7ff;--muted:#8792a8;--primary:#6577ff;--purple:#ad55ff;--green:#62e69a}
+body{margin:0;min-height:100vh;color:var(--text);font-family:system-ui,Arial;background:radial-gradient(circle at 15% 0%,rgba(101,119,255,.22),transparent 32%),var(--bg)}
+header{position:fixed;top:0;right:0;left:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(7,10,17,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:20}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:22px}.logoBox{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--purple))}
+.status{color:var(--green);font-size:11px}
+.chat{width:min(850px,calc(100% - 20px));margin:auto;padding:95px 0 150px}
+.welcome{text-align:center;padding-top:6vh}.welcomeLogo{width:80px;height:80px;margin:0 auto 20px;display:grid;place-items:center;border-radius:25px;font-size:35px;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--purple));box-shadow:0 20px 60px rgba(101,119,255,.3)}
+h1{margin:0;font-size:clamp(32px,7vw,52px);letter-spacing:-2px}.welcome p{color:var(--muted);margin-top:10px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:650px;margin:30px auto}
+.card{padding:16px;border:1px solid var(--border);border-radius:15px;color:#aeb7c9;background:rgba(255,255,255,.04);text-align:right;cursor:pointer}.card:hover{background:rgba(101,119,255,.1)}
+.message{display:flex;gap:11px;margin:28px 0}.avatar{width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;border-radius:11px;font-size:11px;font-weight:bold;background:#293349}.ai.avatar{background:linear-gradient(135deg,var(--primary),var(--purple))}
+.content{flex:1;min-width:0}.name{color:#8d98ad;font-size:11px;margin-bottom:6px}.bubble{line-height:1.9;font-size:15px;overflow-wrap:anywhere;white-space:pre-wrap}
+.user.bubble{display:inline-block;max-width:92%;padding:13px 16px;border-radius:17px;background:rgba(255,255,255,.06);border:1px solid var(--border)}
+pre{direction:ltr;text-align:left;overflow:auto;padding:14px;border-radius:12px;background:#05070c;border:1px solid var(--border);white-space:pre-wrap}code{font-family:Consolas,monospace}
+.loading{width:100%;height:4px;background:rgba(255,255,255,.08);border-radius:10px;overflow:hidden;margin:15px 0}.loadingBar{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--purple));transition:width.3s}
+.composerWrap{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:min(850px,calc(100% - 16px));z-index:30}
+.composer{display:flex;align-items:flex-end;gap:7px;padding:8px;border-radius:20px;background:rgba(15,20,31,.97);border:1px solid rgba(255,255,255,.12);box-shadow:0 20px 70px rgba(0,0,0,.5)}
+textarea{flex:1;min-width:0;min-height:46px;max-height:170px;resize:none;outline:0;border:0;background:transparent;color:white;padding:13px}
+.send{width:46px;height:46px;flex:0 0 46px;border:0;border-radius:13px;background:linear-gradient(135deg,var(--primary),var(--purple));color:white;font-size:20px;cursor:pointer}
+.send:disabled{opacity:.4}
+.tool{width:45px;height:45px;border:0;border-radius:13px;background:#20283a;color:#fff;cursor:pointer}
+@media(max-width:650px){.cards{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header><div style="font-weight:900">Zide Ultra • 200MB</div><div id="status" style="font-size:11px;color:#62e69a">● أونلاين • خفيف للتلفون</div></header>
-<main class="chat" id="chat"></main>
-<div class="composerWrap"><form id="form" class="composer"><textarea id="input" placeholder="بحمل العقل 200MB..."></textarea><button class="send" id="btn" disabled>↑</button></form></div>
+<header>
+<div class="logo"><div class="logoBox">Z</div>Zide Ultra</div>
+<div class="status" id="status">● ذكاء حقيقي • بدون API</div>
+</header>
+
+<main class="chat" id="chat">
+<section class="welcome" id="welcome">
+<div class="welcomeLogo">Z</div>
+<h1 id="title">كيف أساعدك؟</h1>
+<p id="desc">Zide الحقيقي — نموذج Llama يعمل محلياً على جهازك</p>
+<div class="loading"><div class="loadingBar" id="bar"></div></div>
+<p id="loadText" style="color:var(--muted);font-size:13px">جاري تحميل العقل الثقيل أول مرة (800MB)... بيظل محفوظ بعدها</p>
+<div class="cards">
+<button class="card" data-text="ابني لي موقع ذكاء اصطناعي احترافي">💻 ابني موقع ذكاء اصطناعي</button>
+<button class="card" data-text="اشرح لي كيف يعمل الذكاء الاصطناعي ببساطة">🧠 اشرح الذكاء الاصطناعي</button>
+<button class="card" data-text="اكتب لي كود لعبة XO بذكاء اصطناعي لا يهزم">🎮 لعبة ذكية</button>
+<button class="card" data-text="ما هي أفضل طريقة لتعلم البرمجة؟">🚀 خطة تعلم</button>
+</div>
+</section>
+</main>
+
+<div class="composerWrap">
+<form class="composer" id="composer">
+<button type="button" class="tool" id="clear">🗑</button>
+<textarea id="input" rows="1" placeholder="جاري التحميل..."></textarea>
+<button type="submit" class="send" id="sendBtn" disabled>↑</button>
+</form>
+</div>
 
 <script type="module">
 import { CreateMLCEngine } from "https://esm.run/@mlc-ai/web-llm@0.2.79";
-const chat=document.getElementById("chat"), input=document.getElementById("input"), btn=document.getElementById("btn"), statusEl=document.getElementById("status");
-let engine;
 
-// هذا النموذج حجمه 200 ميجا فقط - ممتاز للتلفون
-const MODEL = "SmolLM2-360M-Instruct-q4f32_1-MLC"; // حوالي 200MB
+const chat=document.getElementById("chat"), welcome=document.getElementById("welcome"), input=document.getElementById("input"), sendBtn=document.getElementById("sendBtn"), bar=document.getElementById("bar"), loadText=document.getElementById("loadText"), statusEl=document.getElementById("status");
+let engine=null;
+let history=[];
 
-async function load(){
- engine = await CreateMLCEngine(MODEL, {
-  initProgressCallback:(p)=>{
-   input.placeholder = p.text + " " + Math.round(p.progress*100)+"%";
-   if(p.progress>=1){
-    input.placeholder="احكي مع Zide...";
-    btn.disabled=false;
-    statusEl.textContent="● جاهز • 200MB • أونلاين";
+document.querySelectorAll(".card").forEach(b=>b.onclick=()=>{if(!engine) return; input.value=b.dataset.text; composer.requestSubmit();});
+
+const selectedModel = "Llama-3.2-1B-Instruct-q4f32_1-MLC";
+
+async function init(){
+ try{
+  engine = await CreateMLCEngine(selectedModel, {
+   initProgressCallback: (p)=>{
+    bar.style.width = Math.round(p.progress*100)+"%";
+    loadText.textContent = p.text;
+    if(p.progress>=1){
+     loadText.textContent="جاهز! العقل الثقيل شغال محلي 100%";
+     input.placeholder="اكتب رسالتك إلى Zide...";
+     sendBtn.disabled=false;
+     statusEl.textContent="● جاهز • محلي 100%";
+     statusEl.style.color="#62e69a";
+    }
    }
-  }
- });
+  });
+ }catch(e){
+  loadText.textContent="فشل التحميل: "+e.message+" - جرب تفتح المتصفح Chrome وتفعل WebGPU";
+ }
 }
-load();
+init();
 
-document.getElementById("form").onsubmit=async e=>{
+const composer=document.getElementById("composer");
+composer.onsubmit=async e=>{
  e.preventDefault();
- let t=input.value.trim(); if(!t||!engine) return;
- add(t,"user"); input.value="";
- let box=add("","ai");
- let full="";
- let msgs=[{role:"system",content:"أنت Zide Ultra، مساعد عربي ذكي خفيف. جاوب بالعربية باختصار."},{role:"user",content:t}];
- let res=await engine.chat.completions.create({messages:msgs,stream:true});
- for await(const c of res){ full+=c.choices[0].delta.content||""; box.textContent=full; window.scrollTo(0,99999); }
+ const text=input.value.trim(); if(!text ||!engine) return;
+ welcome.style.display="none";
+ addMsg(text,"user"); input.value=""; sendBtn.disabled=true;
+
+ const placeholder = addMsg("","ai",true);
+ let fullText="";
+
+ const messages = [
+  {role:"system", content:"أنت Zide Ultra، مساعد ذكي عربي. اسمك Zide. تجاوب بالعربية بشكل مختصر ومفيد وذكي. لا تقل انك Llama. انت Zide. اذا طلب كود، اعطه كود كامل جاهز."},
+ ...history.slice(-6),
+  {role:"user", content:text}
+ ];
+
+ try{
+  const chunks = await engine.chat.completions.create({messages, stream:true, temperature:0.7});
+  for await(const chunk of chunks){
+   const delta = chunk.choices[0]?.delta?.content || "";
+   fullText+=delta;
+   placeholder.innerHTML = format(fullText);
+   window.scrollTo(0,document.body.scrollHeight);
+  }
+  history.push({role:"user", content:text});
+  history.push({role:"assistant", content:fullText});
+  localStorage.setItem("zide_real_history", JSON.stringify(history));
+ }catch(err){
+  placeholder.textContent="خطأ: "+err.message;
+ }
+ sendBtn.disabled=false;
 };
-function add(t,r){let d=document.createElement("div");d.className="message";d.innerHTML=`<div class="avatar ${r=="ai"?"ai":""}">${r=="ai"?"Z":"أنت"}</div><div class="bubble">${t}</div>`;chat.appendChild(d);return d.querySelector(".bubble");}
+
+function addMsg(text, role, isPlaceholder=false){
+ const div=document.createElement("div"); div.className="message "+role;
+ div.innerHTML=`<div class="avatar ${role==='ai'?'ai':''}">${role==='ai'?'Z':'أنت'}</div><div class="content"><div class="name">${role==='ai'?'Zide Ultra':'أنت'}</div><div class="bubble">${format(text)}</div></div>`;
+ if(isPlaceholder){ div.querySelector(".bubble").id="streaming"; }
+ chat.appendChild(div); window.scrollTo(0,document.body.scrollHeight);
+ return div.querySelector(".bubble");
+}
+function format(t){
+ let x=t.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+ x=x.replace(/```([\s\S]*?)```/g,"<pre><code>$1</code></pre>");
+ x=x.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>");
+ return x;
+}
+document.getElementById("clear").onclick=()=>{if(confirm("مسح؟")){localStorage.removeItem("zide_real_history"); location.reload();}};
 </script>
 </body>
 </html>
